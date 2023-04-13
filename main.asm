@@ -4,8 +4,10 @@
 .DATA
 .CODE
 
-main PROC
-
-
-end
-
+.CODE
+start:
+    main PROC
+        mov ax, @data
+        mov ds, ax
+    main ENDP
+END start
