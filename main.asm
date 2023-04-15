@@ -1,19 +1,31 @@
 INCLUDE utils.asm
+INCLUDE menu.asm
 
 .MODEL small
 .STACK
 .RADIX 16
 .DATA
-mVarsUtils
+mUtilsVars
+mMenuVars
 
+
+mStartProgram macro
+    LOCAL start, exit
+    start:
+        mPrintMsg infoMsg
+        mWaitEnter
+        mPrintMsg menuMsg
+        mWaitEnter
+    exit:
+        mActiveTextMode
+        mExit
+endm
 
 .CODE
 start:
     main PROC
         mov ax, @data
         mov ds, ax
-        mPrintMsg infoMsg
-        mWaitEnter
-        mExit
+        mStartProgram
     main ENDP
 END start

@@ -2,7 +2,7 @@
 ; Variables de propósito general, o que no van a ser de utilidad en otra parte del codigo
 ; ------------------------------------------------------------
 
-mVarsUtils macro
+mUtilsVars macro
     infoMsg DB 'Universidad de San Carlos de Guatemala', 0Dh, 0Ah,'Facultad de Ingenieria', 0Dh, 0Ah,'Escuela de Ciencias y Sistemas', 0Dh, 0Ah,'Arquitectura de computadores y ensambladores 1', 0Dh, 0Ah,'Seccion B', 0Dh, 0Ah,'Daniel Estuardo Cuque Ruiz' , 0Dh, 0Ah,'202112145', 0Dh, 0Ah, '$'
 endm
 
@@ -34,6 +34,22 @@ mPrintMsg macro str
     int 21h
 
     pop DX
+    pop AX
+endm
+
+mActiveVideoMode macro
+    push AX
+    mov AL, 13h
+    mov AH, 00
+    int 10h
+    pop AX
+endm
+
+mActiveTextMode macro
+    push AX
+    mov AL, 03h
+    mov AH, 00h
+    int 10h
     pop AX
 endm
 
