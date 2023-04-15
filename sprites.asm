@@ -1,0 +1,3 @@
+mCharVars macro
+
+endm

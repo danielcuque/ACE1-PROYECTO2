@@ -1,21 +1,24 @@
-INCLUDE utils.asm
-INCLUDE menu.asm
+INCLUDE utils.asm           ;; Funciones auxiliares
+INCLUDE sprites.asm         ;; Sprites de los personajes en el juego
+INCLUDE keyboard.asm        ;; Funciones con el teclado
+INCLUDE menu.asm            ;; Menu principal
+INCLUDE game.asm            ;; Lógica del juego
 
 .MODEL small
 .STACK
 .RADIX 16
 .DATA
+
 mUtilsVars
 mMenuVars
+mCharVars
 
 
 mStartProgram macro
     LOCAL start, exit
     start:
-        mPrintMsg infoMsg
-        mWaitEnter
-        mPrintMsg menuMsg
-        mWaitEnter
+        mActiveVideoMode
+        mStartGame
     exit:
         mActiveTextMode
         mExit

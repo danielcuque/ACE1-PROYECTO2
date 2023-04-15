@@ -1,9 +1,8 @@
-mStartProgram macro
-
+mGameVars macro
+    screenTable DB 03E8h dup(0)         ;; La pantalla es de 25*40
 endm
 
 
-mWaitEnter macro
-    LOCAL wait_enter
-    wait_enter: 
+mStartGame macro 
+    mWaitEnter
 endm
