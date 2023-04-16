@@ -58,3 +58,97 @@ EmptyScreen PROC
     mWaitEnter
     ret
 EmptyScreen ENDP
+
+;---------------------------------------------------------
+; PrintSprite
+;
+; Descripción:
+; Muestra el sprite del pacman en la pantalla
+;
+; Receives:
+; -
+;
+; Returns:
+; AX -> Posición en X actual del aceman 
+; CX -> Posición en Y actual del aceman 
+;---------------------------------------------------------
+
+PrintAceman PROC
+pintar_aceman:	mov AX, [aceman_x]
+		mov CX, [aceman_y]
+		push AX
+		push CX
+		mov DL, [sprite_aceman_actual]
+		cmp DL, 0ff
+		je sprite_aceman1
+		mov DI, offset acemanClose
+		mov DH, 00
+		mov DL, [dir_sprite_aceman]
+		add DI, DX
+		jmp cont_pintar_ace
+sprite_aceman1:	mov DI, offset acemanClose
+		mov DH, 00
+		mov DL, [dir_sprite_aceman]
+		add DI, DX
+cont_pintar_ace:
+		call PrintSprite
+		pop CX
+		pop AX
+		call DelayProc
+		mov DL, [sprite_aceman_actual]
+		not DL
+		mov [sprite_aceman_actual], DL
+		push AX
+		push CX
+		; mov DI, offset sprite_vacio
+		; call pintar_sprite
+		pop CX
+		pop AX
+		ret
+PrintAceman ENDP
+
+PrintSprite PROC
+    pintar_sprite:
+		mov BX, 0000
+		mov DL, 08
+		mul DL
+		add BX, AX
+		xchg AX, CX
+		mul DL
+		xchg AX, CX
+posicionamiento:cmp CX, 0000
+		je fin_posicionamiento
+		add BX, 140
+		loop posicionamiento
+fin_posicionamiento:
+		mov CX, 0008
+pintar_sprite_f:push CX
+		mov CX, 0008
+pintar_sprite_c:mov AL, [DI]
+		push DS
+		mov DX, 0A000
+		mov DS, DX
+		mov [BX], AL
+		inc BX
+		inc DI
+		pop DS
+		loop pintar_sprite_c
+		pop CX
+		sub BX, 08
+		add BX, 140
+		loop pintar_sprite_f
+		ret
+PrintSprite ENDP
+
+DelayProc PROC
+delay:
+		mov BP, 03000
+ciclob:		mov SI, 00010
+cicloa:		dec SI
+		cmp SI, 00
+		jne cicloa
+		dec BP
+		cmp BP, 00
+		jne ciclob
+		ret
+DelayProc ENDP

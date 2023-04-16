@@ -4,5 +4,5 @@ endm
 
 
 mStartGame macro 
-    ; call EmptyScreen
+    mWaitEnter
 endm

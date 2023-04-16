@@ -1,4 +1,75 @@
 mSpriteVars macro
-    acemanOpenLeft DB ' '
-    acemanCloseLeft DB ' '
+    acemanClose        db     00, 00, 0e, 0e, 0e, 0e, 00, 00
+                       db     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
+                       db     0e, 0e, 00, 0e, 0e, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 00, 00, 00, 00, 00
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
+                       db     00, 00, 0e, 0e, 0e, 0e, 00, 00
+                       db     00, 00, 0e, 0e, 0e, 0e, 00, 00
+                       db     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
+                       db     0e, 0e, 0e, 0e, 0e, 00, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     00, 00, 00, 00, 00, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
+                       db     00, 00, 0e, 0e, 0e, 0e, 00, 00
+                       db     00, 00, 0e, 0e, 00, 0e, 00, 00
+                       db     00, 0e, 0e, 0e, 00, 0e, 0e, 00
+                       db     0e, 0e, 0e, 0e, 00, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 00, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 00, 0e, 0e, 0e
+                       db     0e, 0e, 00, 0e, 0e, 0e, 0e, 0e
+                       db     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
+                       db     00, 00, 0e, 0e, 0e, 0e, 00, 00
+                       db     00, 00, 0e, 0e, 0e, 0e, 00, 00
+                       db     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
+                       db     0e, 0e, 00, 0e, 0e, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 00, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 00, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 00, 0e, 0e, 0e
+                       db     00, 0e, 0e, 0e, 00, 0e, 0e, 00
+                       db     00, 00, 0e, 0e, 00, 0e, 00, 00
+
+    acemanOpen         db     00, 00, 0e, 0e, 0e, 0e, 0e, 00
+                       db     00, 0e, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     0e, 0e, 00, 0e, 0e, 0e, 0e, 00
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 00, 00
+                       db     0e, 0e, 0e, 0e, 0e, 00, 00, 00
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 00, 00
+                       db     00, 0e, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     00, 00, 0e, 0e, 0e, 0e, 0e, 00
+                       db     00, 0e, 0e, 0e, 0e, 0e, 00, 00
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 0e, 00
+                       db     00, 0e, 0e, 0e, 0e, 00, 0e, 0e
+                       db     00, 00, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     00, 00, 00, 0e, 0e, 0e, 0e, 0e
+                       db     00, 00, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 0e, 00
+                       db     00, 0e, 0e, 0e, 0e, 0e, 00, 00
+                       db     00, 0e, 00, 00, 00, 00, 0e, 00
+                       db     0e, 0e, 0e, 00, 00, 00, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 00, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     0e, 0e, 00, 0e, 0e, 0e, 0e, 0e
+                       db     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
+                       db     00, 00, 0e, 0e, 0e, 0e, 00, 00
+                       db     00, 00, 0e, 0e, 0e, 0e, 00, 00
+                       db     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
+                       db     0e, 0e, 00, 0e, 0e, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 0e, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 0e, 00, 0e, 0e, 0e
+                       db     0e, 0e, 0e, 00, 00, 00, 0e, 0e
+                       db     00, 0e, 00, 00, 00, 00, 0e, 00
+    emptySprite        db     00, 00, 00, 00, 00, 00, 00, 00
+                       db     00, 00, 00, 00, 00, 00, 00, 00  
+                       db     00, 00, 00, 00, 00, 00, 00, 00  
+                       db     00, 00, 00, 00, 00, 00, 00, 00  
+                       db     00, 00, 00, 00, 00, 00, 00, 00  
+                       db     00, 00, 00, 00, 00, 00, 00, 00  
+                       db     00, 00, 00, 00, 00, 00, 00, 00  
+                       db     00, 00, 00, 00, 00, 00, 00, 00 
 endm
