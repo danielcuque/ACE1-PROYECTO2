@@ -3,6 +3,7 @@ INCLUDE sprites.asm         ;; Sprites de los personajes en el juego
 INCLUDE keyboard.asm        ;; Funciones con el teclado
 INCLUDE menu.asm            ;; Menu principal
 INCLUDE game.asm            ;; Lógica del juego
+INCLUDE files.asm           ;; Lógica para leer archivos
 
 .MODEL small
 .STACK
@@ -11,7 +12,9 @@ INCLUDE game.asm            ;; Lógica del juego
 
 mUtilsVars
 mMenuVars
-mCharVars
+mFilesVars
+mKeyboardVars
+mSpriteVars
 
 
 mStartProgram macro
@@ -27,8 +30,8 @@ endm
 .CODE
 start:
     main PROC
-        mov ax, @data
-        mov ds, ax
+        mov AX, @data
+        mov DS, AX
         mStartProgram
     main ENDP
 END start
