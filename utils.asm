@@ -1,12 +1,4 @@
 ; ------------------------------------------------------------
-; Variables de propósito general, o que no van a ser de utilidad en otra parte del codigo
-; ------------------------------------------------------------
-
-mUtilsVars macro
-    infoMsg DB 'Universidad de San Carlos de Guatemala', 0Dh, 0Ah,'Facultad de Ingenieria', 0Dh, 0Ah,'Escuela de Ciencias y Sistemas', 0Dh, 0Ah,'Arquitectura de computadores y ensambladores 1', 0Dh, 0Ah,'Seccion B', 0Dh, 0Ah,'Daniel Estuardo Cuque Ruiz' , 0Dh, 0Ah,'202112145', 0Dh, 0Ah, '$'
-endm
-
-; ------------------------------------------------------------
 ; Se espera a que el usuario presione la tecla ENTER, 
 ; de lo contrario vuelve a solicitar la tecla
 ; ------------------------------------------------------------
@@ -61,3 +53,8 @@ mExit macro
     int 21h
 endm
 
+EmptyScreen PROC
+    mPrintMsg infoMsg
+    mWaitEnter
+    ret
+EmptyScreen ENDP
