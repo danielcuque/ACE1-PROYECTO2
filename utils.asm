@@ -81,12 +81,12 @@ pintar_aceman:	mov AX, [aceman_x]
 		mov DL, [sprite_aceman_actual]
 		cmp DL, 0ff
 		je sprite_aceman1
-		mov DI, offset acemanClose
+		mov DI, offset PowerDot
 		mov DH, 00
 		mov DL, [dir_sprite_aceman]
 		add DI, DX
 		jmp cont_pintar_ace
-sprite_aceman1:	mov DI, offset acemanClose
+sprite_aceman1:	mov DI, offset GhostRed
 		mov DH, 00
 		mov DL, [dir_sprite_aceman]
 		add DI, DX
@@ -100,12 +100,27 @@ cont_pintar_ace:
 		mov [sprite_aceman_actual], DL
 		push AX
 		push CX
-		; mov DI, offset sprite_vacio
-		; call pintar_sprite
+		mov DI, offset sprite_vacio
+		call pintar_sprite
 		pop CX
 		pop AX
 		ret
 PrintAceman ENDP
+
+;---------------------------------------------------------
+; PrintSprite
+;
+; Descripción:
+; Pinta en el tablero el sprite que se le mande
+;
+; Recibe:
+; DI -> offset del sprite en memoria de 8x8
+; AX -> Posición en X
+; CX -> Posición en Y
+;
+; Retorna: -
+;---------------------------------------------------------
+
 
 PrintSprite PROC
     pintar_sprite:
@@ -116,15 +131,17 @@ PrintSprite PROC
 		xchg AX, CX
 		mul DL
 		xchg AX, CX
-posicionamiento:cmp CX, 0000
+	posicionamiento:
+		cmp CX, 0000
 		je fin_posicionamiento
 		add BX, 140
 		loop posicionamiento
-fin_posicionamiento:
-		mov CX, 0008
-pintar_sprite_f:push CX
-		mov CX, 0008
-pintar_sprite_c:mov AL, [DI]
+	fin_posicionamiento:
+			mov CX, 0008
+	pintar_sprite_f:push CX
+			mov CX, 0008
+	pintar_sprite_c:
+		mov AL, [DI]
 		push DS
 		mov DX, 0A000
 		mov DS, DX
