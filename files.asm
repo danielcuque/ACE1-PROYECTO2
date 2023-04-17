@@ -1,4 +1,3 @@
-mFilesVars macro
-        
-endm
-
+ReadFile PROC
+    
+ReadFile ENDP

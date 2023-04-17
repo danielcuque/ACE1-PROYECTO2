@@ -13,6 +13,7 @@ maxWall                equ    0ff
 .DATA
 
 testStr db 'testeando $'
+
 ; ------------------------------------------------------------
 ; Variables de propósito general, 
 ; o que no van a ser de utilidad en otra parte del codigo
@@ -35,6 +36,12 @@ handleObject DW 0
 ;---------------------------------------------------------
 
 keyBoardBuffer DB 102h dup (0ff, '$')
+
+;---------------------------------------------------------
+; Variables para el juego
+;---------------------------------------------------------
+tableGame DB 03E8h dup(0)         ;; La pantalla es de 25*40
+
 ;---------------------------------------------------------
 ; Variables para los sprites de los personajes
 ;---------------------------------------------------------
