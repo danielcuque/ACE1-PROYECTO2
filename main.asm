@@ -34,13 +34,28 @@ handleObject DW 0
 ;---------------------------------------------------------
 ; Variable para las funciones del teclado
 ;---------------------------------------------------------
-
 keyBoardBuffer DB 102h dup (0ff, '$')
 
 ;---------------------------------------------------------
 ; Variables para el juego
 ;---------------------------------------------------------
 tableGame DB 03E8h dup(0)         ;; La pantalla es de 25*40
+
+;---------------------------------------------------------
+; Variables para las palabras reservadas
+;---------------------------------------------------------
+NIVELKW                 DB 07h, '"nivel"'
+VALORDOTKW              DB 0Ah, '"valordot"'
+ACEMANINITLW            DB 0Ch, '"acemaninit"'
+XKW                     DB 03h, '"x"'
+YKW                     DB 03h, '"y"'
+WALLSKW                 DB 07h, '"walls"'
+POWERDOTSKW             DB 0Ch, '"power-dots"'
+PORTALESKW              DB 0Ah, '"portales"'
+NUMEROKW                DB 08h, '"numero"'
+AKW                     DB 01h, '"a"'
+BKW                     DB 01h, '"b"'
+
 
 ;---------------------------------------------------------
 ; Variables para los sprites de los personajes
