@@ -4,5 +4,31 @@ endm
 
 
 mStartGame macro 
-    mWaitEnter
+    ; call CreateMap
+    ; call ShowMapObjects
+    call PrintAceman
 endm
+
+
+CreateMap PROC
+    
+CreateMap ENDP
+
+;---------------------------------------------------------
+; ShowMapObjects
+;
+; Descripción:
+; Pinta objetos en el mapa del juego
+;
+; Recibe:
+; AX -> Pos X del objeto
+; CX -> Pos Y del objeto
+; DH -> Tipo de objeto a pintar
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
+ShowMapObjects PROC USES AX CX
+    
+ShowMapObjects ENDP

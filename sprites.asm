@@ -7,6 +7,7 @@ mSpriteVars MACRO
                        DB     0e, 0e, 0e, 0e, 0e, 0e, 0e, 0e
                        DB     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
                        DB     00, 00, 0e, 0e, 0e, 0e, 00, 00
+        ;; Aceman izquierda
                        DB     00, 00, 0e, 0e, 0e, 0e, 00, 00
                        DB     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
                        DB     0e, 0e, 0e, 0e, 0e, 00, 0e, 0e
@@ -15,6 +16,7 @@ mSpriteVars MACRO
                        DB     0e, 0e, 0e, 0e, 0e, 0e, 0e, 0e
                        DB     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
                        DB     00, 00, 0e, 0e, 0e, 0e, 00, 00
+        ;; Aceman arriba
                        DB     00, 00, 0e, 0e, 00, 0e, 00, 00
                        DB     00, 0e, 0e, 0e, 00, 0e, 0e, 00
                        DB     0e, 0e, 0e, 0e, 00, 0e, 0e, 0e
@@ -23,6 +25,7 @@ mSpriteVars MACRO
                        DB     0e, 0e, 00, 0e, 0e, 0e, 0e, 0e
                        DB     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
                        DB     00, 00, 0e, 0e, 0e, 0e, 00, 00
+        ;; Aceman abajo
                        DB     00, 00, 0e, 0e, 0e, 0e, 00, 00
                        DB     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
                        DB     0e, 0e, 00, 0e, 0e, 0e, 0e, 0e
@@ -40,6 +43,7 @@ mSpriteVars MACRO
                        DB     0e, 0e, 0e, 0e, 0e, 0e, 00, 00
                        DB     00, 0e, 0e, 0e, 0e, 0e, 0e, 0e
                        DB     00, 00, 0e, 0e, 0e, 0e, 0e, 00
+        ;; Aceman izquierda
                        DB     00, 0e, 0e, 0e, 0e, 0e, 00, 00
                        DB     0e, 0e, 0e, 0e, 0e, 0e, 0e, 00
                        DB     00, 0e, 0e, 0e, 0e, 00, 0e, 0e
@@ -48,6 +52,7 @@ mSpriteVars MACRO
                        DB     00, 00, 0e, 0e, 0e, 0e, 0e, 0e
                        DB     0e, 0e, 0e, 0e, 0e, 0e, 0e, 00
                        DB     00, 0e, 0e, 0e, 0e, 0e, 00, 00
+        ;; Aceman arriba
                        DB     00, 0e, 00, 00, 00, 00, 0e, 00
                        DB     0e, 0e, 0e, 00, 00, 00, 0e, 0e
                        DB     0e, 0e, 0e, 0e, 00, 0e, 0e, 0e
@@ -56,6 +61,7 @@ mSpriteVars MACRO
                        DB     0e, 0e, 00, 0e, 0e, 0e, 0e, 0e
                        DB     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
                        DB     00, 00, 0e, 0e, 0e, 0e, 00, 00
+        ;; Aceman abajo     
                        DB     00, 00, 0e, 0e, 0e, 0e, 00, 00
                        DB     00, 0e, 0e, 0e, 0e, 0e, 0e, 00
                        DB     0e, 0e, 00, 0e, 0e, 0e, 0e, 0e

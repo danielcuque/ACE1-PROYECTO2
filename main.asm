@@ -1,21 +1,18 @@
-
 INCLUDE sprites.asm         ;; Sprites de los personajes en el juego
-INCLUDE keyboard.asm        ;; Funciones con el teclado
-INCLUDE menu.asm            ;; Menu principal
-INCLUDE game.asm            ;; Lógica del juego
-INCLUDE files.asm           ;; Lógica para leer archivos
 
 .MODEL small
 .STACK
 .RADIX 16
-derecha                equ    00
-izquierda              equ    40
-arriba                 equ    80
-abajo                  equ    0c0
-no_movimiento          equ    0ff
-pared_maxima           equ    0ff
+
+rightKey               equ    00
+leftKey                equ    40
+aboveKey               equ    80
+belowKey               equ    0c0
+stopAceman             equ    0ff
+maxWall                equ    0ff
 .DATA
 
+testStr db 'testeando $'
 ; ------------------------------------------------------------
 ; Variables de propósito general, 
 ; o que no van a ser de utilidad en otra parte del codigo
@@ -43,20 +40,19 @@ keyBoardBuffer DB 102h dup (0ff, '$')
 ;---------------------------------------------------------
 mSpriteVars
 
-sprite_aceman_actual   db     00
-movimiento_aceman      db     derecha
-movimiento_aceman_x    db     02
-movimiento_aceman_y    db     00
-aceman_x               dw     0001
-aceman_y               dw     0002
-dir_sprite_aceman      db     derecha
+sprite_aceman_actual   DB     00
+movimiento_aceman      DB     rightKey
+movimiento_aceman_x    DB     02
+movimiento_aceman_y    DB     00
+aceman_x               DW     0001
+aceman_y               DW     0002
+dir_sprite_aceman      DB     rightKey
 
 
 mStartProgram macro
     LOCAL start, exit
     start:
         mActiveVideoMode
-        call PrintAceman
         mStartGame
     exit:
         mActiveTextMode
@@ -64,7 +60,13 @@ mStartProgram macro
 endm
 
 .CODE
-INCLUDE utils.asm
+
+INCLUDE utils.asm           ;; Funciones auxiliares que pueden ser usadas en cualquier parte del programa
+INCLUDE keyboard.asm        ;; Funciones con el teclado
+INCLUDE menu.asm            ;; Menu principal
+INCLUDE game.asm            ;; Lógica del juego
+INCLUDE files.asm           ;; Lógica para leer archivos
+
 start:
     main PROC
         mov AX, @data

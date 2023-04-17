@@ -29,6 +29,11 @@ mPrintMsg macro str
     pop AX
 endm
 
+mTest macro
+	mPrintMsg testStr
+	mWaitEnter	
+endm
+
 mActiveVideoMode macro
     push AX
     mov AL, 13h
@@ -74,37 +79,50 @@ EmptyScreen ENDP
 ;---------------------------------------------------------
 
 PrintAceman PROC
-pintar_aceman:	mov AX, [aceman_x]
-		mov CX, [aceman_y]
-		push AX
+	getCloseAceman:	
+		mov AX, [aceman_x]					;; Cargamos la posición en X del aceman
+		mov CX, [aceman_y]					;; Cargamos la posición en Y del aceman
+
+		push AX								;; Guardamos en la pila las posiciones
 		push CX
-		mov DL, [sprite_aceman_actual]
-		cmp DL, 0ff
-		je sprite_aceman1
-		mov DI, offset PowerDot
+		
+		mov DL, [sprite_aceman_actual]  	;; Preguntamos si el aceman tiene la boca abierta o cerrada
+		cmp DL, 0ff							;; Si es FF entonces saltamos al aceman con boca abierta
+		je getOpenAceman			
+
+		mov DI, offset acemanClose			;; De lo contrario pintamos el aceman con boca cerrada
+		mov DH, 00							;; Reseteamos DX
+		mov DL, [dir_sprite_aceman]			;; Guardamos la dirección del aceman (arriba, abajo, etc)
+		add DI, DX							;; Con esto nos movemos a la posición del sprite del aceman dependiendo de su dirección
+		jmp getAceman						;; Nos saltamos a donde se pinta el aceman
+
+	getOpenAceman:	
+		mov DI, offset acemanOpen			;; Repetimos el mismo proceso para obtener el sprite dependiendo de su dirección
 		mov DH, 00
 		mov DL, [dir_sprite_aceman]
 		add DI, DX
-		jmp cont_pintar_ace
-sprite_aceman1:	mov DI, offset GhostRed
-		mov DH, 00
-		mov DL, [dir_sprite_aceman]
-		add DI, DX
-cont_pintar_ace:
-		call PrintSprite
-		pop CX
-		pop AX
-		call DelayProc
-		mov DL, [sprite_aceman_actual]
-		not DL
-		mov [sprite_aceman_actual], DL
-		push AX
-		push CX
-		mov DI, offset sprite_vacio
-		call pintar_sprite
-		pop CX
-		pop AX
-		ret
+		
+	getAceman:
+			call PrintSprite				;; Utilizamos el proc que pinta el sprite
+
+			pop CX
+			pop AX
+
+			call DelayProc					;; Hacemos un delay para que se pueda ver la transición
+			mov DL, [sprite_aceman_actual]	;; Cambiamos el estado del aceman para que en la siguiente iteración tenga la boca en el estado contrario
+			not DL							;; Negamos 0 o FF
+
+			mov [sprite_aceman_actual], DL	;; Guardamos el valor engado en la variable
+
+			push AX							;; Guardamos los registros
+			push CX
+
+			mov DI, offset emptySprite		;; Pintamos un sprite vacío en donde estaba el aceman
+			call PrintSprite
+
+			pop CX
+			pop AX
+			ret
 PrintAceman ENDP
 
 ;---------------------------------------------------------
@@ -120,8 +138,6 @@ PrintAceman ENDP
 ;
 ; Retorna: -
 ;---------------------------------------------------------
-
-
 PrintSprite PROC
     pintar_sprite:
 		mov BX, 0000
