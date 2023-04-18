@@ -8,7 +8,6 @@ rightKey               equ    00
 leftKey                equ    40
 aboveKey               equ    80
 belowKey               equ    0c0
-stopAceman             equ    0ff
 maxWall                equ    0ff
 .DATA
 
@@ -32,14 +31,15 @@ fileLineBuffer DB 102h dup('$')
 handleObject DW 0       
 
 ;---------------------------------------------------------
-; Variable para las funciones del teclado
+; Variable para convertir numeros
 ;---------------------------------------------------------
-keyBoardBuffer DB 102h dup (0ff, '$')
+numberGotten DW 0
+recoveredStr DB 7 DUP('$')
 
 ;---------------------------------------------------------
 ; Variables para el juego
 ;---------------------------------------------------------
-tableGame DB 03E8h dup(0)         ;; La pantalla es de 25*40
+tableGame DB 03E8h dup(0)         ;; La pantalla es de 25 * 40
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
@@ -62,13 +62,16 @@ BKW                     DB 01h, '"b"'
 ;---------------------------------------------------------
 mSpriteVars
 
-sprite_aceman_actual        DB     00
+;; Para Aceman
+currentAcemanSprite         DB      00
 currentAcemanDirection      DB     rightKey
 currentAcemanPosition_x     DB     02
 currentAcemanPosition_y     DB     00
 aceman_x                    DW     0001
 aceman_y                    DW     0002
 dir_sprite_aceman           DB     rightKey
+
+;; Para fantasmas
 
 
 mStartProgram macro
@@ -84,7 +87,6 @@ endm
 .CODE
 
 INCLUDE utils.asm           ;; Funciones auxiliares que pueden ser usadas en cualquier parte del programa
-INCLUDE keyboard.asm        ;; Funciones con el teclado
 INCLUDE menu.asm            ;; Menu principal
 INCLUDE game.asm            ;; Lógica del juego
 INCLUDE files.asm           ;; Lógica para leer archivos

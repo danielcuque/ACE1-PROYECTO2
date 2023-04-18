@@ -83,10 +83,9 @@ PrintAceman PROC
 		mov AX, [aceman_x]					;; Cargamos la posición en X del aceman
 		mov CX, [aceman_y]					;; Cargamos la posición en Y del aceman
 
-		; push AX								;; Guardamos en la pila las posiciones
-		; push CX
+
 		
-		mov DL, [sprite_aceman_actual]  	;; Preguntamos si el aceman tiene la boca abierta o cerrada
+		mov DL, [currentAcemanSprite]  	;; Preguntamos si el aceman tiene la boca abierta o cerrada
 		cmp DL, 0ff							;; Si es FF entonces saltamos al aceman con boca abierta
 		je getOpenAceman			
 
@@ -105,19 +104,15 @@ PrintAceman PROC
 	getAceman:
 			call PrintSprite				;; Utilizamos el proc que pinta el sprite
 
-			; pop CX
-			; pop AX
-
 			call DelayProc					;; Hacemos un delay para que se pueda ver la transición
-			mov DL, [sprite_aceman_actual]	;; Cambiamos el estado del aceman para que en la siguiente iteración tenga la boca en el estado contrario
+
+			mov DL, [currentAcemanSprite]	;; Cambiamos el estado del aceman para que en la siguiente iteración tenga la boca en el estado contrario
 			not DL							;; Negamos 0 o FF
 
-			mov [sprite_aceman_actual], DL	;; Guardamos el valor engado en la variable
+			mov [currentAcemanSprite], DL	;; Guardamos el valor engado en la variable
 
 			mov DI, offset wallSprite		;; Pintamos un sprite vacío en donde estaba el aceman
 			call PrintSprite
-
-			
 			ret
 PrintAceman ENDP
 
@@ -191,68 +186,11 @@ DelayProc PROC
 DelayProc ENDP
 
 
-;---------------------------------------------------------
-; ChangeAcemanDirection
-;
-; Descripción:
-; Obtiene el valor que se ingresa por teclado
-;
-; Recibe:
-; -
-;
-; Retorna:
-; Cambio de direcciones
-;---------------------------------------------------------
-ChangeAcemanDirection PROC USES AX CX
-	mov AH, 01									;; Generamos la interrupción para obtener entradas del teclado
-	int 16h
-
-	jz endProc									;; Si la bandera de carry es zero entonces retornamos
-
-	cmp AH, 48h									;; 48h es para la tecla de arriba
-	je aboveMove
-
-	cmp AH, 50h
-	je belowMove
-
-	cmp AH, 4Bh
-	je leftMove
-
-	cmp AH, 4Dh
-	je rigthMove
-	jmp emptyBuffer
+IsNumber PROC
+	
+IsNumber ENDP
 
 
-	aboveMove:
-		mov AH, 00
-		int 16h
-		mov currentAcemanDirection, aboveKey
-		mov dir_sprite_aceman, aboveKey
-		jmp endProc
-
-	belowMove:
-		mov AH, 00
-		int 16h
-		mov currentAcemanDirection, belowKey
-		mov dir_sprite_aceman, belowKey
-		jmp endProc
-	leftMove:	
-		mov AH, 00
-		int 16h
-		mov currentAcemanDirection, leftKey
-		mov dir_sprite_aceman, leftKey
-		jmp endProc
-	rigthMove:
-		mov AH, 00
-		int 16h
-		mov currentAcemanDirection, rightKey
-		mov dir_sprite_aceman, rightKey
-		jmp endProc
-
-	emptyBuffer:
-		mov AH, 00
-		int 16
-	endProc:
-		ret
-ChangeAcemanDirection ENDP
-
+ConvertToStr PROC
+	
+ConvertToStr ENDP

@@ -1,5 +1,4 @@
 mStartGame macro 
-	mPrintMsg testStr
     call CreateMap
     call PrintMapObject    
 	ciclo:
@@ -15,104 +14,195 @@ endm
 ;---------------------------------------------------------
 
 CreateMap PROC
-		mov AX, 0000			; X
-		mov CX, 0001			; Y
-		mov DH, 01              ; Codigo  
-		call InsertMapObject
-		mov AX, 0012
-		mov CX, 0001
-		mov DH, 02
-		call InsertMapObject
-		mov AX, 0011
-		mov CX, 0001
-		mov DH, 03
-		call InsertMapObject
-		mov AX, 0013
-		mov CX, 0001
-		mov DH, 04
-		call InsertMapObject
-		mov AX, 0014
-		mov CX, 0001
-		mov DH, 05
-		call InsertMapObject
-		mov AX, 0015
-		mov CX, 0001
-		mov DH, 06
-		call InsertMapObject
-		mov AX, 0016
-		mov CX, 0001
-		mov DH, 07
-		call InsertMapObject
-		mov AX, 0017
-		mov CX, 0001
-		mov DH, 08
-		call InsertMapObject
-		mov AX, 0018
-		mov CX, 0001
-		mov DH, 09
-		call InsertMapObject
-		mov AX, 0001
-		mov CX, 0017
-		mov DH, 0a
-		call InsertMapObject
-		mov AX, 0002
-		mov CX, 0017
-		mov DH, 0b
-		call InsertMapObject
-		mov AX, 0003
-		mov CX, 0017
-		mov DH, 0c
-		call InsertMapObject
-		mov AX, 0004
-		mov CX, 0017
-		mov DH, 0d
-		call InsertMapObject
-		mov AX, 0005
-		mov CX, 0017
-		mov DH, 0e
-		call InsertMapObject
-		mov AX, 0012
-		mov CX, 0017
-		mov DH, 0f
-		call InsertMapObject
-		mov AX, 000a
-		mov CX, 0009
-		mov DH, 01
-		call InsertMapObject
-		mov AX, 000a
-		mov CX, 000f
-		mov DH, 0e
-		call InsertMapObject
-		mov AX, 0002
-		mov CX, 0003
-		mov DH, 01
-		call InsertMapObject
-		mov AX, 0002
-		mov CX, 0015
-		mov DH, 13h
-		call InsertMapObject
-		mov AX, 0005
-		mov CX, 0015
-		mov DH, 14h
-		call InsertMapObject
-		mov AX, 0006
-		mov CX, 0015
-		mov DH, 15h
-		call InsertMapObject
-		mov DH, 04
-		mov AX, 0001
-		mov CX, 0001
-		xchg CX, BX
-		mov CX, 11
-		ret
+	crear_mapa_quemado:
+			mov AX, 0000
+			mov CX, 0001
+			mov DH, 01                ;; código del objeto
+			call InsertMapObject
+			mov AX, 0012
+			mov CX, 0001
+			mov DH, 02
+			call InsertMapObject
+			mov AX, 0000
+			mov CX, 0017
+			mov DH, 0e
+			call InsertMapObject
+			mov AX, 0012
+			mov CX, 0017
+			mov DH, 0f
+			call InsertMapObject
+			mov AX, 000a
+			mov CX, 0009
+			mov DH, 01
+			call InsertMapObject
+			mov AX, 000a
+			mov CX, 000f
+			mov DH, 0e
+			call InsertMapObject
+			mov AX, 0002
+			mov CX, 0003
+			mov DH, 01
+			call InsertMapObject
+			mov AX, 0002
+			mov CX, 0015
+			mov DH, 0e
+			call InsertMapObject
+			mov DH, 04
+			mov AX, 0001
+			mov CX, 0001
+			xchg CX, BX
+			mov CX, 11
+	mapa_quemadoA:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoA
+			mov AX, 0001
+			mov CX, 0017
+			xchg CX, BX
+			mov CX, 11
+	mapa_quemadoB:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoB
+			mov AX, 000b
+			mov CX, 0009
+			xchg CX, BX
+			mov CX, 04
+	mapa_quemadoC:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoC
+			mov AX, 000b
+			mov CX, 000f
+			xchg CX, BX
+			mov CX, 04
+	mapa_quemadoD:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoD
+			mov DH, 03
+			mov AX, 0000
+			mov CX, 0002
+			xchg CX, BX
+			mov CX, 0015
+	mapa_quemadoE:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc CX
+			xchg CX, BX
+			loop mapa_quemadoE
+			mov AX, 0012
+			mov CX, 0002
+			xchg CX, BX
+			mov CX, 0015
+	mapa_quemadoF:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc CX
+			xchg CX, BX
+			loop mapa_quemadoF
+			mov DH, 04
+			mov AX, 0003
+			mov CX, 0003
+			xchg CX, BX
+			mov CX, 04
+	mapa_quemadoG:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoG
+			mov AX, 0003
+			mov CX, 0015
+			xchg CX, BX
+			mov CX, 04
+	mapa_quemadoH:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoH
+			mov DH, 03
+			mov AX, 0002
+			mov CX, 0004
+			xchg CX, BX
+			mov CX, 0006
+	mapa_quemadoI:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc CX
+			xchg CX, BX
+			loop mapa_quemadoI
+			mov AX, 0002
+			mov CX, 000f
+			xchg CX, BX
+			mov CX, 0006
+	mapa_quemadoJ:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc CX
+			xchg CX, BX
+			loop mapa_quemadoJ
+			mov AX, 000a
+			mov CX, 000a
+			xchg CX, BX
+			mov CX, 0005
+	mapa_quemadoK:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc CX
+			xchg CX, BX
+			loop mapa_quemadoK
+			ret
 CreateMap ENDP
 
 
 PrintMapObject PROC
-    start:
-		mov CX, 0h					;; Dejamos el numero de columna en 0
+		mov CX, 0h							;; Dejamos el numero de columna en 0
+		mov DI, offset tableGame
 	printRow:
-		mov AX, 0h					;; Cada vez que se pinte una fila, la pos X regresa a 0
+		mov AX, 0h							;; Cada vez que se pinte una fila, la pos X regresa a 0
 
 	printCol:
 		call GetMapObject
@@ -202,8 +292,8 @@ InsertMapObject ENDP
 ; Obtiene el valor que se encuentra dentro del tablero de juego
 ;
 ; Recibe:
-; AX -> X + 1 del aceman
-; CX -> Y + 1 del aceman
+; AX -> X + 1 del objeto
+; CX -> Y + 1 del objeto
 ;
 ; Retorna:
 ; DL -> Valor del objeto (wall, acedot, powerdot)
@@ -211,14 +301,14 @@ InsertMapObject ENDP
 
 
 GetMapObject PROC USES AX CX
-    mov DI, offset tableGame
-    mov DL, 28          ;; Hacer y_futura * 40d
-    xchg AX, CX
+    mov DI, offset tableGame	;; Obtenemos la dirección de memoria donde se almacena todo
+    mov DL, 28h          		;; Hacer y_futura * 40d
+    xchg AX, CX					;; Primero calculamos la posición Y que está en CX
     mul DL
-    xchg AX, CX
-    add DI, AX          ;; Hacer row major: offset + x_futura + y_futura * 40d
+    xchg AX, CX					;; Ahora regresamos el valor a CX que estaba como resultado de la multiplicacion
+    add DI, AX          		;; Hacer row major: offset + x_futura + y_futura * 40d
     add DI, CX
-    mov DL, [DI]
+    mov DL, [DI]				;; Cargamos ese valor en DL
     ret
 GetMapObject ENDP
 
@@ -240,7 +330,7 @@ GetMapObject ENDP
 ;---------------------------------------------------------
 
 MoveAceman PROC
-	mov DH, currentAcemanDirection	;; Preguntamos la direccion que tiene el aceman (der, izq, etc)
+	mov DH, currentAcemanDirection		;; Preguntamos la direccion que tiene el aceman (der, izq, etc)
 
 	checkBelow:
 		cmp DH, belowKey				;; Comparamos si va hacia abajo
@@ -301,3 +391,72 @@ MoveAceman PROC
 	endProc:
 		ret
 MoveAceman ENDP
+
+;---------------------------------------------------------
+; ChangeAcemanDirection
+;
+; Descripción:
+; Obtiene el valor que se ingresa por teclado
+;
+; Recibe:
+; -
+;
+; Retorna:
+; Cambio de direcciones
+;---------------------------------------------------------
+ChangeAcemanDirection PROC USES AX CX
+	mov AH, 01									;; Generamos la interrupción para obtener entradas del teclado
+	int 16h
+
+	jz endProc									;; Si la bandera de carry es zero entonces retornamos
+
+	cmp AH, 48h									;; 48h es para la tecla de arriba
+	je aboveMove
+
+	cmp AH, 50h
+	je belowMove
+
+	cmp AH, 4Bh
+	je leftMove
+
+	cmp AH, 4Dh
+	je rigthMove
+	jmp emptyBuffer
+
+
+	aboveMove:
+		mov AH, 00
+		int 16h
+		mov currentAcemanDirection, aboveKey
+		mov dir_sprite_aceman, aboveKey
+		jmp endProc
+
+	belowMove:
+		mov AH, 00
+		int 16h
+		mov currentAcemanDirection, belowKey
+		mov dir_sprite_aceman, belowKey
+		jmp endProc
+	leftMove:	
+		mov AH, 00
+		int 16h
+		mov currentAcemanDirection, leftKey
+		mov dir_sprite_aceman, leftKey
+		jmp endProc
+	rigthMove:
+		mov AH, 00
+		int 16h
+		mov currentAcemanDirection, rightKey
+		mov dir_sprite_aceman, rightKey
+		jmp endProc
+
+	emptyBuffer:
+		mov AH, 00
+		int 16
+	endProc:
+		ret
+ChangeAcemanDirection ENDP
+
+MoveGhost PROC
+	
+MoveGhost ENDP
