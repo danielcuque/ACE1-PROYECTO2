@@ -4,6 +4,8 @@ mStartGame macro
     call PrintMapObject    
 	ciclo:
 		call PrintAceman
+		call ChangeAcemanDirection
+		call MoveAceman
 		jmp ciclo
 endm
 
@@ -118,19 +120,19 @@ PrintMapObject PROC
 		jg isNotWall
 
 		push AX
-			mov DI, offset wallSprite	;; Nuestro sprites de muros va a seguir la misma logica que el del pacman
-										;; Hacemos offset en el sprite de muros para que empieze en el primer tipo de wall que es un vacío
-										;; Luego dependiendo de lo que venga en el mapa, se hace offset + 64*tipo para acceder al tipo de muro
-			mov AX, DX					;; En DL, está almacenado el valor del tipo de muro que es
-			mov BX, 40h					;; Cargamos a BX con 40h/64d
-			mul BX						;; Multiplicamos tipo * 40
-			add DI, AX					;; Nos posicionamos en el sprite deseado
+			mov DI, offset wallSprite		;; Nuestro sprites de muros va a seguir la misma logica que el del pacman
+											;; Hacemos offset en el sprite de muros para que empieze en el primer tipo de wall que es un vacío
+											;; Luego dependiendo de lo que venga en el mapa, se hace offset + 64*tipo para acceder al tipo de muro
+			mov AX, DX						;; En DL, está almacenado el valor del tipo de muro que es
+			mov BX, 40h						;; Cargamos a BX con 40h/64d
+			mul BX							;; Multiplicamos tipo * 40
+			add DI, AX						;; Nos posicionamos en el sprite deseado
 		pop AX
 
 		jmp printObject
 
 		isNotWall:
-			mov DI, offset AceDot
+			mov DI, offset AceDot			;; Luego validamos el resto de objetos que pueden existir en el juego
 			cmp DL, 13h
 			je printObject
 
@@ -219,3 +221,83 @@ GetMapObject PROC USES AX CX
     mov DL, [DI]
     ret
 GetMapObject ENDP
+
+;---------------------------------------------------------
+; MoveAceman
+;
+; Descripción:
+; Mueve el aceman a través del tablero si es posible
+;
+; Recibe:
+; AX ->  X actual del aceman
+; CX ->  Y actual del aceman
+;
+; Retorna:
+; AX -> Nueva pos X del aceman
+; CX -> Nueva pos Y del aceman
+; var aceman_x -> nueva pos x del aceman
+; var aceman_y ->  nueva pos y del aceman
+;---------------------------------------------------------
+
+MoveAceman PROC
+	mov DH, currentAcemanDirection	;; Preguntamos la direccion que tiene el aceman (der, izq, etc)
+
+	checkBelow:
+		cmp DH, belowKey				;; Comparamos si va hacia abajo
+		jne checkAbove					;; Si no es igual, entonces chequeamos el resto de direcciones
+		inc CX							;; Incrementamos la posición siguiente para poder obtener el objeto que le sigue al aceman
+		call GetMapObject				;; Obtenemos ese objeto a través de la pos AX, CX
+		cmp DL, 01						;; Si no es un muro, entonces avanzamos
+		jb makeBelowMove
+		
+		cmp DL, maxWall
+		ja makeBelowMove				;; También necesitamos comparar si llegó al límite de las paredes
+		dec CX							;; Si llegó, entonces no avanzamos y retornamos la función
+		ret
+	makeBelowMove:
+		mov aceman_y, CX				;; Cargamos la nueva posición en Y
+		ret
+	checkAbove:
+		cmp DH, aboveKey
+		jne checkRight
+		dec CX							;; Para ir hacia arriba, necesitamos decrementar la pos Y
+		call GetMapObject
+		cmp DL, 01
+		jb makeAboveMove
+		cmp DL, maxWall
+		ja makeAboveMove
+		inc CX							
+		ret
+	makeAboveMove:
+		mov aceman_y, CX
+		ret
+	checkRight:
+		cmp DH, rightKey
+		jne checkLeft
+		inc AX
+		call GetMapObject
+		cmp DL, 01
+		jb makeRightMove
+		cmp DL, maxWall
+		ja makeRightMove
+		dec AX
+		ret
+	makeRightMove:
+		mov aceman_x, AX
+		ret
+	checkLeft:
+		cmp DH, leftKey
+		jne endProc
+		dec AX
+		call GetMapObject
+		cmp DL, 01
+		jb makeLeftMove
+		cmp DL, maxWall
+		ja makeLeftMove
+		inc AX
+		ret
+	makeLeftMove:
+		mov aceman_x, AX
+	endProc:
+		ret
+MoveAceman ENDP

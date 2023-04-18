@@ -62,13 +62,13 @@ BKW                     DB 01h, '"b"'
 ;---------------------------------------------------------
 mSpriteVars
 
-sprite_aceman_actual   DB     00
-movimiento_aceman      DB     rightKey
-movimiento_aceman_x    DB     02
-movimiento_aceman_y    DB     00
-aceman_x               DW     0001
-aceman_y               DW     0002
-dir_sprite_aceman      DB     rightKey
+sprite_aceman_actual        DB     00
+currentAcemanDirection      DB     rightKey
+currentAcemanPosition_x     DB     02
+currentAcemanPosition_y     DB     00
+aceman_x                    DW     0001
+aceman_y                    DW     0002
+dir_sprite_aceman           DB     rightKey
 
 
 mStartProgram macro

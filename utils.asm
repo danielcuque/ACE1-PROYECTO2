@@ -189,3 +189,70 @@ DelayProc PROC
 		jne ciclob
 		ret
 DelayProc ENDP
+
+
+;---------------------------------------------------------
+; ChangeAcemanDirection
+;
+; Descripción:
+; Obtiene el valor que se ingresa por teclado
+;
+; Recibe:
+; -
+;
+; Retorna:
+; Cambio de direcciones
+;---------------------------------------------------------
+ChangeAcemanDirection PROC USES AX CX
+	mov AH, 01									;; Generamos la interrupción para obtener entradas del teclado
+	int 16h
+
+	jz endProc									;; Si la bandera de carry es zero entonces retornamos
+
+	cmp AH, 48h									;; 48h es para la tecla de arriba
+	je aboveMove
+
+	cmp AH, 50h
+	je belowMove
+
+	cmp AH, 4Bh
+	je leftMove
+
+	cmp AH, 4Dh
+	je rigthMove
+	jmp emptyBuffer
+
+
+	aboveMove:
+		mov AH, 00
+		int 16h
+		mov currentAcemanDirection, aboveKey
+		mov dir_sprite_aceman, aboveKey
+		jmp endProc
+
+	belowMove:
+		mov AH, 00
+		int 16h
+		mov currentAcemanDirection, belowKey
+		mov dir_sprite_aceman, belowKey
+		jmp endProc
+	leftMove:	
+		mov AH, 00
+		int 16h
+		mov currentAcemanDirection, leftKey
+		mov dir_sprite_aceman, leftKey
+		jmp endProc
+	rigthMove:
+		mov AH, 00
+		int 16h
+		mov currentAcemanDirection, rightKey
+		mov dir_sprite_aceman, rightKey
+		jmp endProc
+
+	emptyBuffer:
+		mov AH, 00
+		int 16
+	endProc:
+		ret
+ChangeAcemanDirection ENDP
+
