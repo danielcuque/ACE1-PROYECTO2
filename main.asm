@@ -43,6 +43,7 @@ counterToGetIndexGotten DW 0
 tableGame DB 03E8h dup(0)         ;; La pantalla es de 25 * 40
 totalPoints DW 0h
 aceDotPoints DW 01h
+totalDots DW 06h
 
 isGhostBlue DW 0FFh                ;; 00 = no se puede comer | ff = se puede comer y pintar azul
 

@@ -111,6 +111,8 @@ PrintAceman ENDP
 
 mPrintGhots macro x_pos, y_pos, ghost
 	LOCAL print, printGhostBlue
+	push AX
+	push CX
 	mov AX, x_pos
 	mov CX, y_pos
 
@@ -124,6 +126,16 @@ mPrintGhots macro x_pos, y_pos, ghost
 		mov DI, offset GhostBlue
 	print:
 		call PrintSprite
+
+	pop CX
+	pop	AX
+endm
+
+mPrintAllGhots macro
+	mPrintGhots redGhost_x, redGhost_y, GhostRed
+	mPrintGhots orangeGhost_x, orangeGhost_y, GhostOrange
+	mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
+	mPrintGhots magentaGhost_x, magentaGhost_y, GhostMagenta
 endm
 
 ;---------------------------------------------------------

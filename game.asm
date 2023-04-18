@@ -2,15 +2,15 @@ mStartGame macro
     call CreateMap
     call PrintMapObject    
 	mPrintTotalPoints
-	mPrintGhots redGhost_x, redGhost_y, GhostRed
-	mPrintGhots orangeGhost_x, orangeGhost_y, GhostOrange
-	mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
-	mPrintGhots magentaGhost_x, magentaGhost_y, GhostMagenta
-	ciclo:
+	mPrintAllGhots
+	continueGame:
 		call PrintAceman
 		call ChangeAcemanDirection
 		call MoveAceman
-		jmp ciclo
+		cmp totalDots, 0000h
+		je endGame
+		jmp continueGame
+	endGame:
 endm
 
 ;---------------------------------------------------------
@@ -606,6 +606,7 @@ SumAceDotPoints PROC USES BX
 	add BX, aceDotPoints		;; Le sumo a BX el valor del puntaje de los acedots
 	xchg BX, totalPoints		;; Devuelvo el valor a la variable de puntaje total
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
+	sub totalDots, 01h
 	ret
 SumAceDotPoints ENDP
 
@@ -632,6 +633,7 @@ SumPowerDotPoints PROC USES AX BX
 	add totalPoints, BX
 
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
+	sub totalDots, 01h
 	ret
 SumPowerDotPoints ENDP
 
