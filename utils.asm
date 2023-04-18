@@ -340,12 +340,4 @@ mPrintTotalPoints macro
 	pop AX
 endm
 
-mPrintTime macro
-	mov AH, 02				;;
-	mov DH, 00				;;
-	mov DL, 1Fh				;;
-	mov BH, 00				;;
-	int 10
-	mPrintMsg timeStr
-endm
 

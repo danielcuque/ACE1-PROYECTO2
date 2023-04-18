@@ -116,6 +116,7 @@ endm
 
 INCLUDE utils.asm           ;; Funciones auxiliares que pueden ser usadas en cualquier parte del programa
 INCLUDE menu.asm            ;; Menu principal
+INCLUDE time.asm     ;; Lógica para el crónometro
 INCLUDE game.asm            ;; Lógica del juego
 INCLUDE files.asm           ;; Lógica para leer archivos
 
