@@ -357,34 +357,67 @@ MoveAceman PROC
 		jb makeBelowMove
 
 		cmp DL, 13h
-		je addAceDotPoints
+		je addAceDotPointsBelow
 
 		cmp DL, 14h
-		je addPowerDotPoints
+		je addPowerDotPointsBelow
 		
 		cmp DL, maxWall
 		ja makeBelowMove				;; También necesitamos comparar si llegó al límite de las paredes
 		dec CX							;; Si llegó, entonces no avanzamos y retornamos la función
 		ret
-	addAceDotPoints:
+	addAceDotPointsBelow:
 		call SumAceDotPoints
-		jmp makeBelowMove
-	addPowerDotPoints:
+		jmp deleteDotBelow
+
+	addPowerDotPointsBelow:
 		call SumPowerDotPoints
+
+	deleteDotBelow:
+		push DX
+			mov DL, 00
+			call InsertMapObject
+		pop DX
 	makeBelowMove:
 		mov aceman_y, CX				;; Cargamos la nueva posición en Y
 		ret
+
+
 	checkAbove:
 		cmp DH, aboveKey
 		jne checkRight
+
 		dec CX							;; Para ir hacia arriba, necesitamos decrementar la pos Y
+
 		call GetMapObject
+
 		cmp DL, 01
 		jb makeAboveMove
+		
+		cmp DL, 13h
+		je addAceDotPointsAbove
+
+		cmp DL, 14h
+		je addPowerDotPointsAbove
+
+		
 		cmp DL, maxWall
 		ja makeAboveMove
 		inc CX							
 		ret
+	addAceDotPointsAbove:
+		call SumAceDotPoints
+		jmp deleteDotBelow
+
+	addPowerDotPointsAbove:
+		call SumPowerDotPoints
+
+	deleteDotAbove:
+		push DX
+			mov DL, 00
+			call InsertMapObject
+		pop DX
+
 	makeAboveMove:
 		mov aceman_y, CX
 		ret
@@ -532,6 +565,24 @@ SumPowerDotPoints PROC USES AX BX
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
 	ret
 SumPowerDotPoints ENDP
+
+;---------------------------------------------------------
+; Aumentar puntaje
+;
+; Descripción:
+; Aumenta el puntaje dentro del juego
+;
+; Recibe:
+; AX -> Pos X
+; CX -> Pos Y
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+mAddTotalPoints macro
+
+endm
+
 
 
 MoveGhost PROC
