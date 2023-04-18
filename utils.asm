@@ -78,7 +78,7 @@ PrintAceman PROC
 		mov AX, aceman_x					;; Cargamos la posición en X del aceman
 		mov CX, aceman_y					;; Cargamos la posición en Y del aceman
 
-		mov DL, currentAcemanSprite  	;; Preguntamos si el aceman tiene la boca abierta o cerrada
+		mov DL, currentAcemanSprite  		;; Preguntamos si el aceman tiene la boca abierta o cerrada
 		cmp DL, 0ff							;; Si es FF entonces saltamos al aceman con boca abierta
 		je getOpenAceman			
 
@@ -108,6 +108,23 @@ PrintAceman PROC
 			call PrintSprite
 			ret
 PrintAceman ENDP
+
+mPrintGhots macro x_pos, y_pos, ghost
+	LOCAL print, printGhostBlue
+	mov AX, x_pos
+	mov CX, y_pos
+
+	cmp isGhostBlue, 00
+	jne printGhostBlue
+
+	mov DI, offset ghost
+	jmp print
+
+	printGhostBlue:
+		mov DI, offset GhostBlue
+	print:
+		call PrintSprite
+endm
 
 ;---------------------------------------------------------
 ; PrintSprite
@@ -223,6 +240,7 @@ NumToStr PROC USES AX BX CX DX SI DI
 	mov BX, 0Ah                             ;; Cargamos a BX con 10
     xor CX, CX                              ;; Limpiamos a cx
     mov AX, numberGotten                    ;; Le cargamos a AX el valor del numero que queremos convertir
+	mov counterToGetIndexGotten, 0
 
     extract:
         xor DX, DX                          ;; Limpio a DX
@@ -238,7 +256,7 @@ NumToStr PROC USES AX BX CX DX SI DI
 
     mov SI, 0                               ;; Colocamos a SI
 
-    mov DX, 06h                             ;; Inicialmente serán 6, ya que si recibimos el valor de 1, entonces queremos que se muestre como 000001
+    mov DX, 07h                             ;; Inicialmente serán 6, ya que si recibimos el valor de 1, entonces queremos que se muestre como 000001
     sub DX, CX                              ;; El valor de CX nos ayudará a saber el tamaño del numero, para el caso de 1, será 6 - 1 = 5
                                             ;; Por lo que agregaremos 5 0s
     mov counterToGetIndexGotten, DX	        ;; Muevo el valor en el que se quedó DX para poder correrme a esa posición de la cadena
@@ -254,7 +272,7 @@ NumToStr PROC USES AX BX CX DX SI DI
     continueStore:
         pop DX                              ;; Sacamos el valor de DX que estaba en el top para poder regresarlo a como estaba
         mov SI, 0                           ;; Inicializo a SI en 0
-        add SI, counterToGetIndexGotten   ;; Nos movemos con SI, hacia el numero en memoria que le corresponde a la cadena
+        add SI, counterToGetIndexGotten     ;; Nos movemos con SI, hacia el numero en memoria que le corresponde a la cadena
 
     store:
         pop DX                              ;; Despues tengo que hacer la misma cantidad de pops que de push, e ir sacando los valores de DX 
@@ -264,6 +282,23 @@ NumToStr PROC USES AX BX CX DX SI DI
         loop store                          ;; Se ejecuta el loop hasta que CX llegue a 0
 	ret
 NumToStr ENDP
+
+;---------------------------------------------------------
+; StrToNum
+;
+; Descripción:
+; Convierte el numero almacenado en recoveredStr en un numero
+;
+; Recibe:
+; recoveredStr
+;
+; Retorna:
+; numberGotten
+;---------------------------------------------------------
+StrToNum PROC
+	
+	ret
+StrToNum ENDP
 
 mPrintNumberConverted macro
     call NumToStr

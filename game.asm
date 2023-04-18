@@ -2,6 +2,10 @@ mStartGame macro
     call CreateMap
     call PrintMapObject    
 	mPrintTotalPoints
+	mPrintGhots redGhost_x, redGhost_y, GhostRed
+	mPrintGhots orangeGhost_x, orangeGhost_y, GhostOrange
+	mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
+	mPrintGhots magentaGhost_x, magentaGhost_y, GhostMagenta
 	ciclo:
 		call PrintAceman
 		call ChangeAcemanDirection
@@ -82,149 +86,149 @@ CreateMap PROC
 		mov CX, 0001
 		xchg CX, BX
 		mov CX, 11
-mapa_quemadoA:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc AX
-		xchg CX, BX
-		loop mapa_quemadoA
-		mov AX, 0001
-		mov CX, 0017
-		xchg CX, BX
-		mov CX, 11
-mapa_quemadoB:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc AX
-		xchg CX, BX
-		loop mapa_quemadoB
-		mov AX, 000b
-		mov CX, 0009
-		xchg CX, BX
-		mov CX, 04
-mapa_quemadoC:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc AX
-		xchg CX, BX
-		loop mapa_quemadoC
-		mov AX, 000b
-		mov CX, 000f
-		xchg CX, BX
-		mov CX, 04
-mapa_quemadoD:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc AX
-		xchg CX, BX
-		loop mapa_quemadoD
-		mov DH, 03
-		mov AX, 0000
-		mov CX, 0002
-		xchg CX, BX
-		mov CX, 0015
-mapa_quemadoE:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc CX
-		xchg CX, BX
-		loop mapa_quemadoE
-		mov AX, 0012
-		mov CX, 0002
-		xchg CX, BX
-		mov CX, 0015
-mapa_quemadoF:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc CX
-		xchg CX, BX
-		loop mapa_quemadoF
-		mov DH, 04
-		mov AX, 0003
-		mov CX, 0003
-		xchg CX, BX
-		mov CX, 04
-mapa_quemadoG:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc AX
-		xchg CX, BX
-		loop mapa_quemadoG
-		mov AX, 0003
-		mov CX, 0015
-		xchg CX, BX
-		mov CX, 04
-mapa_quemadoH:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc AX
-		xchg CX, BX
-		loop mapa_quemadoH
-		mov DH, 03
-		mov AX, 0002
-		mov CX, 0004
-		xchg CX, BX
-		mov CX, 0006
-mapa_quemadoI:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc CX
-		xchg CX, BX
-		loop mapa_quemadoI
-		mov AX, 0002
-		mov CX, 000f
-		xchg CX, BX
-		mov CX, 0006
-mapa_quemadoJ:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc CX
-		xchg CX, BX
-		loop mapa_quemadoJ
-		mov AX, 000a
-		mov CX, 000a
-		xchg CX, BX
-		mov CX, 0005
-mapa_quemadoK:	xchg CX, BX
-		push AX
-		push CX
-		call InsertMapObject
-		pop CX
-		pop AX
-		inc CX
-		xchg CX, BX
-		loop mapa_quemadoK
-		ret
+	mapa_quemadoA:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoA
+			mov AX, 0001
+			mov CX, 0017
+			xchg CX, BX
+			mov CX, 11
+	mapa_quemadoB:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoB
+			mov AX, 000b
+			mov CX, 0009
+			xchg CX, BX
+			mov CX, 04
+	mapa_quemadoC:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoC
+			mov AX, 000b
+			mov CX, 000f
+			xchg CX, BX
+			mov CX, 04
+	mapa_quemadoD:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoD
+			mov DH, 03
+			mov AX, 0000
+			mov CX, 0002
+			xchg CX, BX
+			mov CX, 0015
+	mapa_quemadoE:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc CX
+			xchg CX, BX
+			loop mapa_quemadoE
+			mov AX, 0012
+			mov CX, 0002
+			xchg CX, BX
+			mov CX, 0015
+	mapa_quemadoF:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc CX
+			xchg CX, BX
+			loop mapa_quemadoF
+			mov DH, 04
+			mov AX, 0003
+			mov CX, 0003
+			xchg CX, BX
+			mov CX, 04
+	mapa_quemadoG:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoG
+			mov AX, 0003
+			mov CX, 0015
+			xchg CX, BX
+			mov CX, 04
+	mapa_quemadoH:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc AX
+			xchg CX, BX
+			loop mapa_quemadoH
+			mov DH, 03
+			mov AX, 0002
+			mov CX, 0004
+			xchg CX, BX
+			mov CX, 0006
+	mapa_quemadoI:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc CX
+			xchg CX, BX
+			loop mapa_quemadoI
+			mov AX, 0002
+			mov CX, 000f
+			xchg CX, BX
+			mov CX, 0006
+	mapa_quemadoJ:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc CX
+			xchg CX, BX
+			loop mapa_quemadoJ
+			mov AX, 000a
+			mov CX, 000a
+			xchg CX, BX
+			mov CX, 0005
+	mapa_quemadoK:	xchg CX, BX
+			push AX
+			push CX
+			call InsertMapObject
+			pop CX
+			pop AX
+			inc CX
+			xchg CX, BX
+			loop mapa_quemadoK
+			ret
 CreateMap ENDP
 
 

@@ -44,6 +44,8 @@ tableGame DB 03E8h dup(0)         ;; La pantalla es de 25 * 40
 totalPoints DW 0h
 aceDotPoints DW 01h
 
+isGhostBlue DW 0FFh                ;; 00 = no se puede comer | ff = se puede comer y pintar azul
+
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
 ;---------------------------------------------------------
@@ -75,6 +77,17 @@ aceman_y                    DW     0002
 dir_sprite_aceman           DB     rightKey
 
 ;; Para fantasmas
+redGhost_x                  DW      09h      
+redGhost_y                  DW      13h
+
+orangeGhost_x               DW      0Bh
+orangeGhost_y               DW      13h
+
+magentaGhost_x              DW      09h
+magentaGhost_y              DW      15h
+
+cyanGhost_x                 DW      0Bh
+cyanGhost_y                 DW      15h
 
 
 mStartProgram macro
