@@ -29,11 +29,6 @@ mPrintMsg macro str
     pop AX
 endm
 
-mTest macro
-	mPrintMsg testStr
-	mWaitEnter	
-endm
-
 mActiveVideoMode macro
     push AX
     mov AL, 13h
@@ -80,25 +75,23 @@ EmptyScreen ENDP
 
 PrintAceman PROC
 	getCloseAceman:	
-		mov AX, [aceman_x]					;; Cargamos la posición en X del aceman
-		mov CX, [aceman_y]					;; Cargamos la posición en Y del aceman
+		mov AX, aceman_x					;; Cargamos la posición en X del aceman
+		mov CX, aceman_y					;; Cargamos la posición en Y del aceman
 
-
-		
-		mov DL, [currentAcemanSprite]  	;; Preguntamos si el aceman tiene la boca abierta o cerrada
+		mov DL, currentAcemanSprite  	;; Preguntamos si el aceman tiene la boca abierta o cerrada
 		cmp DL, 0ff							;; Si es FF entonces saltamos al aceman con boca abierta
 		je getOpenAceman			
 
 		mov DI, offset acemanClose			;; De lo contrario pintamos el aceman con boca cerrada
 		mov DH, 00							;; Reseteamos DX
-		mov DL, [dir_sprite_aceman]			;; Guardamos la dirección del aceman (arriba, abajo, etc)
+		mov DL, dir_sprite_aceman			;; Guardamos la dirección del aceman (arriba, abajo, etc)
 		add DI, DX							;; Con esto nos movemos a la posición del sprite del aceman dependiendo de su dirección
 		jmp getAceman						;; Nos saltamos a donde se pinta el aceman
 
 	getOpenAceman:	
 		mov DI, offset acemanOpen			;; Repetimos el mismo proceso para obtener el sprite dependiendo de su dirección
 		mov DH, 00
-		mov DL, [dir_sprite_aceman]
+		mov DL, dir_sprite_aceman
 		add DI, DX
 		
 	getAceman:
@@ -106,10 +99,10 @@ PrintAceman PROC
 
 			call DelayProc					;; Hacemos un delay para que se pueda ver la transición
 
-			mov DL, [currentAcemanSprite]	;; Cambiamos el estado del aceman para que en la siguiente iteración tenga la boca en el estado contrario
+			mov DL, currentAcemanSprite	;; Cambiamos el estado del aceman para que en la siguiente iteración tenga la boca en el estado contrario
 			not DL							;; Negamos 0 o FF
 
-			mov [currentAcemanSprite], DL	;; Guardamos el valor engado en la variable
+			mov currentAcemanSprite, DL	;; Guardamos el valor engado en la variable
 
 			mov DI, offset wallSprite		;; Pintamos un sprite vacío en donde estaba el aceman
 			call PrintSprite
@@ -200,7 +193,7 @@ DelayProc ENDP
 
 ResetPointer PROC
 	mov AH, 02
-	mov DH, 01
+	mov DH, 00
 	mov DL, 00
 	mov BH, 00
 	int 10
@@ -212,7 +205,91 @@ IsNumber PROC
 	
 IsNumber ENDP
 
+;---------------------------------------------------------
+; NumToStr
+;
+; Descripción:
+; Convierte un un numero usando numberGotten a Str
+;
+; Recibe:
+; NumberGotten cargado
+;
+; Retorna:
+; recoveredStr
+;---------------------------------------------------------
 
-ConvertToStr PROC
-	
-ConvertToStr ENDP
+NumToStr PROC USES AX BX CX DX SI DI
+
+	mov BX, 0Ah                             ;; Cargamos a BX con 10
+    xor CX, CX                              ;; Limpiamos a cx
+    mov AX, numberGotten                    ;; Le cargamos a AX el valor del numero que queremos convertir
+
+    extract:
+        xor DX, DX                          ;; Limpio a DX
+        div BX                              ;; Obtengo el residuo de la division 
+        add DX, 30h                         ;; Le sumo a DX el valor de 30 hexa para que el residuo se mueva hacia la posicion del no. ASCII
+        push DX                             ;; Meto ese valor de DX en el top de la pila
+        inc CX                              ;; Incremento a CX en 1 para asi poder ejecutar el loop
+        cmp AX, 0                           ;; Si ax no es 0, entonces sigo ejecutando el bloque de codigo
+        jne extract
+
+    ;; En esta sección vamos a añadir los 0s que faltan al numero hacia la izquierda
+    push DX                                 ;; Primero guardamos la informacion de DX para poder utilizarlo como registro de cuantos 0s faltan
+
+    mov SI, 0                               ;; Colocamos a SI
+
+    mov DX, 06h                             ;; Inicialmente serán 6, ya que si recibimos el valor de 1, entonces queremos que se muestre como 000001
+    sub DX, CX                              ;; El valor de CX nos ayudará a saber el tamaño del numero, para el caso de 1, será 6 - 1 = 5
+                                            ;; Por lo que agregaremos 5 0s
+    mov counterToGetIndexGotten, DX	        ;; Muevo el valor en el que se quedó DX para poder correrme a esa posición de la cadena
+
+    addZeroToLeft:
+        cmp DX, 00h                         ;; Comparo si DX no es 0, si es cero, significa que el num es de 5 cifras
+        je continueStore                    ;; Saltamos a otra etiqueta
+        mov recoveredStr[SI], 30h           ;; Si no es asi, entonces modificamos la etiqueta recovered Str donde insertará los 0s que hagan falta
+        dec DX                              ;; Decrementamos a DX para que poder acabar el ciclo
+        inc SI                              ;; Incrementamos SI para avanzar en la cadena
+        jmp addZeroToLeft                   ;; Creamos un pseudo loop para insertar los 0s
+
+    continueStore:
+        pop DX                              ;; Sacamos el valor de DX que estaba en el top para poder regresarlo a como estaba
+        mov SI, 0                           ;; Inicializo a SI en 0
+        add SI, counterToGetIndexGotten   ;; Nos movemos con SI, hacia el numero en memoria que le corresponde a la cadena
+
+    store:
+        pop DX                              ;; Despues tengo que hacer la misma cantidad de pops que de push, e ir sacando los valores de DX 
+        mov recoveredStr[SI], DL            ;; El resultado de las operaciones se almacenan en la parte baja de DX por lo que 
+                                            ;; usamos D low (DL) 
+        inc SI                              ;; Incrementamos en 1 la dirección de memoria para acceder al byte que le corresponde int SI += 1
+        loop store                          ;; Se ejecuta el loop hasta que CX llegue a 0
+	ret
+NumToStr ENDP
+
+mPrintNumberConverted macro
+    call NumToStr
+	call ResetPointer
+    mPrintMsg recoveredStr
+endm
+
+;---------------------------------------------------------
+; mPrintTotalPoints
+;
+; Descripción:
+; Convierte la variable que se encuentra en totalPoints a string para poder mostrarla en pantalla
+;
+; Recibe:
+; -
+;
+; Retorna:
+; número convertido a str
+;---------------------------------------------------------
+
+mPrintTotalPoints macro
+	push AX
+		mov AX, totalPoints
+		xchg AX, numberGotten
+		mPrintNumberConverted
+		mov numberGotten, 00
+	pop AX
+endm
+

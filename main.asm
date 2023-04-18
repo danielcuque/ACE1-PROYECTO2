@@ -34,7 +34,8 @@ handleObject DW 0
 ; Variable para convertir numeros
 ;---------------------------------------------------------
 numberGotten DW 0
-recoveredStr DB 7 DUP('$')
+recoveredStr DB 9 DUP('$')
+counterToGetIndexGotten DW 0
 
 ;---------------------------------------------------------
 ; Variables para el juego

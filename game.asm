@@ -1,8 +1,7 @@
 mStartGame macro 
     call CreateMap
     call PrintMapObject    
-	call ResetPointer
-	mPrintMsg testStr
+	mPrintTotalPoints
 	ciclo:
 		call PrintAceman
 		call ChangeAcemanDirection
@@ -358,19 +357,20 @@ MoveAceman PROC
 		jb makeBelowMove
 
 		cmp DL, 13h
-		je addPointBelow
+		je addAceDotPoints
+
+		cmp DL, 14h
+		je addPowerDotPoints
 		
 		cmp DL, maxWall
 		ja makeBelowMove				;; También necesitamos comparar si llegó al límite de las paredes
 		dec CX							;; Si llegó, entonces no avanzamos y retornamos la función
 		ret
-	addPointBelow:
-		push BX
-			mov BX, 00
-			xchg BX, totalPoints
-			add BX, aceDotPoints
-			xchg BX, totalPoints
-		pop BX
+	addAceDotPoints:
+		call SumAceDotPoints
+		jmp makeBelowMove
+	addPowerDotPoints:
+		call SumPowerDotPoints
 	makeBelowMove:
 		mov aceman_y, CX				;; Cargamos la nueva posición en Y
 		ret
@@ -483,6 +483,56 @@ ChangeAcemanDirection PROC USES AX CX
 	endProc:
 		ret
 ChangeAcemanDirection ENDP
+
+;---------------------------------------------------------
+; SumAceDotPoints
+;
+; Descripción:
+; Hace la operación de sumar el valor de los aceDots al puntaje total
+;
+; Recibe:
+; totalPoints -> puntaje total
+; aceDotsPoints ->  valor del puntaje de los acedots
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
+SumAceDotPoints PROC USES BX
+	mov BX, 00					;; Limpiamos BX
+	mov BX, totalPoints		;; El valor del puntaje se cambia a BX
+	add BX, aceDotPoints		;; Le sumo a BX el valor del puntaje de los acedots
+	xchg BX, totalPoints		;; Devuelvo el valor a la variable de puntaje total
+	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
+	ret
+SumAceDotPoints ENDP
+
+;---------------------------------------------------------
+; SumPowerDotPoints
+;
+; Descripción:
+; Calcula el valor de los Power Dots en base a los acedots
+;
+; Recibe:
+; totalPoints -> puntaje total
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+SumPowerDotPoints PROC USES AX BX
+	mov AX, 00h
+	mov BX, 00h
+
+	mov AX, aceDotPoints
+
+	mov BX, 05h
+	mul BX
+	add totalPoints, BX
+
+	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
+	ret
+SumPowerDotPoints ENDP
+
 
 MoveGhost PROC
 	
