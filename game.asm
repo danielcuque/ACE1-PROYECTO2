@@ -1,8 +1,10 @@
 mStartGame macro 
+	mPrintMsg testStr
     call CreateMap
-    call PrintMapObject
-	mWaitEnter
-    
+    call PrintMapObject    
+	ciclo:
+		call PrintAceman
+		jmp ciclo
 endm
 
 ;---------------------------------------------------------
@@ -11,15 +13,59 @@ endm
 ;---------------------------------------------------------
 
 CreateMap PROC
-		mov AX, 0000
-		mov CX, 0001
-		mov DH, 01                ;; código del objeto
+		mov AX, 0000			; X
+		mov CX, 0001			; Y
+		mov DH, 01              ; Codigo  
 		call InsertMapObject
 		mov AX, 0012
 		mov CX, 0001
 		mov DH, 02
 		call InsertMapObject
-		mov AX, 0000
+		mov AX, 0011
+		mov CX, 0001
+		mov DH, 03
+		call InsertMapObject
+		mov AX, 0013
+		mov CX, 0001
+		mov DH, 04
+		call InsertMapObject
+		mov AX, 0014
+		mov CX, 0001
+		mov DH, 05
+		call InsertMapObject
+		mov AX, 0015
+		mov CX, 0001
+		mov DH, 06
+		call InsertMapObject
+		mov AX, 0016
+		mov CX, 0001
+		mov DH, 07
+		call InsertMapObject
+		mov AX, 0017
+		mov CX, 0001
+		mov DH, 08
+		call InsertMapObject
+		mov AX, 0018
+		mov CX, 0001
+		mov DH, 09
+		call InsertMapObject
+		mov AX, 0001
+		mov CX, 0017
+		mov DH, 0a
+		call InsertMapObject
+		mov AX, 0002
+		mov CX, 0017
+		mov DH, 0b
+		call InsertMapObject
+		mov AX, 0003
+		mov CX, 0017
+		mov DH, 0c
+		call InsertMapObject
+		mov AX, 0004
+		mov CX, 0017
+		mov DH, 0d
+		call InsertMapObject
+		mov AX, 0005
 		mov CX, 0017
 		mov DH, 0e
 		call InsertMapObject
@@ -41,7 +87,15 @@ CreateMap PROC
 		call InsertMapObject
 		mov AX, 0002
 		mov CX, 0015
-		mov DH, 0e
+		mov DH, 13h
+		call InsertMapObject
+		mov AX, 0005
+		mov CX, 0015
+		mov DH, 14h
+		call InsertMapObject
+		mov AX, 0006
+		mov CX, 0015
+		mov DH, 15h
 		call InsertMapObject
 		mov DH, 04
 		mov AX, 0001
@@ -69,7 +123,7 @@ PrintMapObject PROC
 										;; Luego dependiendo de lo que venga en el mapa, se hace offset + 64*tipo para acceder al tipo de muro
 			mov AX, DX					;; En DL, está almacenado el valor del tipo de muro que es
 			mov BX, 40h					;; Cargamos a BX con 40h/64d
-			mul BX						;; Multiplicamos tipo*40
+			mul BX						;; Multiplicamos tipo * 40
 			add DI, AX					;; Nos posicionamos en el sprite deseado
 		pop AX
 
@@ -77,13 +131,25 @@ PrintMapObject PROC
 
 		isNotWall:
 			mov DI, offset AceDot
+			cmp DL, 13h
+			je printObject
+
+			mov DI, offset PowerDot
+			cmp DL, 14h
+			je printObject
+
+			mov DI, offset PortalSprite
+			cmp DL, 15h
+			jge printObject
+
+			jmp skipObject
 
 	printObject:
 		
 		call PrintSprite
-		
+	
+	skipObject:
 		inc AX
-
 		cmp AX, 28h					;; Comparamos si llegamos a la ultima fila
 		jne printCol				;; Si no llegamos, seguimos iterando
 

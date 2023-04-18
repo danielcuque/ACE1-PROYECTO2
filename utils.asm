@@ -83,8 +83,8 @@ PrintAceman PROC
 		mov AX, [aceman_x]					;; Cargamos la posición en X del aceman
 		mov CX, [aceman_y]					;; Cargamos la posición en Y del aceman
 
-		push AX								;; Guardamos en la pila las posiciones
-		push CX
+		; push AX								;; Guardamos en la pila las posiciones
+		; push CX
 		
 		mov DL, [sprite_aceman_actual]  	;; Preguntamos si el aceman tiene la boca abierta o cerrada
 		cmp DL, 0ff							;; Si es FF entonces saltamos al aceman con boca abierta
@@ -105,8 +105,8 @@ PrintAceman PROC
 	getAceman:
 			call PrintSprite				;; Utilizamos el proc que pinta el sprite
 
-			pop CX
-			pop AX
+			; pop CX
+			; pop AX
 
 			call DelayProc					;; Hacemos un delay para que se pueda ver la transición
 			mov DL, [sprite_aceman_actual]	;; Cambiamos el estado del aceman para que en la siguiente iteración tenga la boca en el estado contrario
@@ -114,14 +114,10 @@ PrintAceman PROC
 
 			mov [sprite_aceman_actual], DL	;; Guardamos el valor engado en la variable
 
-			push AX							;; Guardamos los registros
-			push CX
-
 			mov DI, offset wallSprite		;; Pintamos un sprite vacío en donde estaba el aceman
 			call PrintSprite
 
-			pop CX
-			pop AX
+			
 			ret
 PrintAceman ENDP
 
@@ -140,23 +136,29 @@ PrintAceman ENDP
 ;---------------------------------------------------------
 PrintSprite PROC USES AX CX
     start:
-		mov BX, 0000
-		mov DL, 08
-		mul DL
-		add BX, AX
+		mov BX, 0h					;; Limpiamos al registro BX
+		mov DL, 08h					;; Cargamos a DL 8
+		mul DL						;; Multiplicamos Posx * 8 para hacer row major con la matriz de pixeles
+		add BX, AX					;; 
+		xchg AX, CX					;; Intercambiamos el valor de las posiciones
+		mul DL						;; Multiplicamos nuevamente * 8 las filas
 		xchg AX, CX
-		mul DL
-		xchg AX, CX
-	posicionamiento:
-		cmp CX, 0000
-		je fin_posicionamiento
-		add BX, 140
-		loop posicionamiento
-	fin_posicionamiento:
-			mov CX, 0008
-	pintar_sprite_f:push CX
-			mov CX, 0008
-	pintar_sprite_c:
+
+	putSprite:
+		cmp CX, 0h
+		je endPut
+
+		add BX, 140h
+		loop putSprite
+
+	endPut:
+			mov CX, 8h
+			
+	printSpriteRow:
+			push CX
+			mov CX, 8h
+			
+	printSpriteCol:
 		mov AL, [DI]
 		push DS
 		mov DX, 0A000
@@ -165,11 +167,11 @@ PrintSprite PROC USES AX CX
 		inc BX
 		inc DI
 		pop DS
-		loop pintar_sprite_c
+		loop printSpriteCol
 		pop CX
-		sub BX, 08
-		add BX, 140
-		loop pintar_sprite_f
+		sub BX, 08h
+		add BX, 140h
+		loop printSpriteRow
 		ret
 PrintSprite ENDP
 
