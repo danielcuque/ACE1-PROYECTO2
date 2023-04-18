@@ -27,9 +27,27 @@ CreateMap PROC
 		mov CX, 0006
 		mov DH, 14h                ;; código del objeto
 		call InsertMapObject
-		mov AX, 0007
-		mov CX, 0007
-		mov DH, 15h                ;; código del objeto
+		mov AX, 0008
+		mov CX, 0009
+		mov DH, 13h                ;; código del objeto
+		call InsertMapObject
+		mov AX, 0009
+		mov CX, 0009
+		mov DH, 14h                ;; código del objeto
+		call InsertMapObject
+		mov AX, 0002
+		mov CX, 0002
+		mov DH, 14h                ;; código del objeto
+		call InsertMapObject
+	
+		mov AX, 0002
+		mov CX, 0003
+		mov DH, 14h                ;; código del objeto
+		call InsertMapObject
+	
+		mov AX, 0004
+		mov CX, 0002
+		mov DH, 14h                ;; código del objeto
 		call InsertMapObject
 		mov AX, 0012
 		mov CX, 0001
@@ -422,30 +440,77 @@ MoveAceman PROC
 		mov aceman_y, CX
 		ret
 	checkRight:
+
 		cmp DH, rightKey
 		jne checkLeft
+
 		inc AX
+
 		call GetMapObject
+
 		cmp DL, 01
 		jb makeRightMove
+
+		cmp DL, 13h
+		je addAceDotPointsRight
+
+		cmp DL, 14h
+		je addPowerDotPointsRight
+
 		cmp DL, maxWall
 		ja makeRightMove
 		dec AX
 		ret
+	addAceDotPointsRight:
+		call SumAceDotPoints
+		jmp deleteDotRight
+	addPowerDotPointsRight:
+		call SumPowerDotPoints
+		
+	deleteDotRight:
+		push DX
+			mov DL, 00
+			call InsertMapObject
+		pop DX
+
 	makeRightMove:
 		mov aceman_x, AX
 		ret
+
 	checkLeft:
 		cmp DH, leftKey
 		jne endProc
+
 		dec AX
+
 		call GetMapObject
+
 		cmp DL, 01
 		jb makeLeftMove
+
+		cmp DL, 13h
+		je addAceDotPointsLeft
+
+		cmp DL, 14h
+		je addPowerDotPointsLeft
+
 		cmp DL, maxWall
 		ja makeLeftMove
 		inc AX
 		ret
+	addAceDotPointsLeft:
+		call SumAceDotPoints
+		jmp deleteDotLeft
+
+	addPowerDotPointsLeft:
+		call SumPowerDotPoints
+
+	deleteDotLeft:
+		push DX
+			mov DL, 00
+			call InsertMapObject
+		pop DX
+
 	makeLeftMove:
 		mov aceman_x, AX
 	endProc:
