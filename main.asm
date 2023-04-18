@@ -40,6 +40,8 @@ recoveredStr DB 7 DUP('$')
 ; Variables para el juego
 ;---------------------------------------------------------
 tableGame DB 03E8h dup(0)         ;; La pantalla es de 25 * 40
+totalPoints DW 0h
+aceDotPoints DW 01h
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas

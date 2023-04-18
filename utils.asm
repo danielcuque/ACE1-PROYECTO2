@@ -185,6 +185,28 @@ DelayProc PROC
 		ret
 DelayProc ENDP
 
+;---------------------------------------------------------
+; ResetPointer
+;
+; Descripción:
+; Mueve el puntero hacia el inicio de la pantalla
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
+ResetPointer PROC
+	mov AH, 02
+	mov DH, 01
+	mov DL, 00
+	mov BH, 00
+	int 10
+	ret
+ResetPointer ENDP
+
 
 IsNumber PROC
 	

@@ -1,6 +1,8 @@
 mStartGame macro 
     call CreateMap
     call PrintMapObject    
+	call ResetPointer
+	mPrintMsg testStr
 	ciclo:
 		call PrintAceman
 		call ChangeAcemanDirection
@@ -14,9 +16,21 @@ endm
 ;---------------------------------------------------------
 
 CreateMap PROC
-	mov AX, 0000
+		mov AX, 0000
 		mov CX, 0001
 		mov DH, 01                ;; código del objeto
+		call InsertMapObject
+		mov AX, 0005
+		mov CX, 0005
+		mov DH, 13h                ;; código del objeto
+		call InsertMapObject
+		mov AX, 0006
+		mov CX, 0006
+		mov DH, 14h                ;; código del objeto
+		call InsertMapObject
+		mov AX, 0007
+		mov CX, 0007
+		mov DH, 15h                ;; código del objeto
 		call InsertMapObject
 		mov AX, 0012
 		mov CX, 0001
@@ -335,15 +349,28 @@ MoveAceman PROC
 	checkBelow:
 		cmp DH, belowKey				;; Comparamos si va hacia abajo
 		jne checkAbove					;; Si no es igual, entonces chequeamos el resto de direcciones
+
 		inc CX							;; Incrementamos la posición siguiente para poder obtener el objeto que le sigue al aceman
+
 		call GetMapObject				;; Obtenemos ese objeto a través de la pos AX, CX
+
 		cmp DL, 01						;; Si no es un muro, entonces avanzamos
 		jb makeBelowMove
+
+		cmp DL, 13h
+		je addPointBelow
 		
 		cmp DL, maxWall
 		ja makeBelowMove				;; También necesitamos comparar si llegó al límite de las paredes
 		dec CX							;; Si llegó, entonces no avanzamos y retornamos la función
 		ret
+	addPointBelow:
+		push BX
+			mov BX, 00
+			xchg BX, totalPoints
+			add BX, aceDotPoints
+			xchg BX, totalPoints
+		pop BX
 	makeBelowMove:
 		mov aceman_y, CX				;; Cargamos la nueva posición en Y
 		ret
