@@ -314,7 +314,6 @@ StrToNum ENDP
 
 mPrintNumberConverted macro
     call NumToStr
-	call ResetPointer
     mPrintMsg recoveredStr
 endm
 
@@ -335,8 +334,18 @@ mPrintTotalPoints macro
 	push AX
 		mov AX, totalPoints
 		xchg AX, numberGotten
+		call ResetPointer
 		mPrintNumberConverted
 		mov numberGotten, 00
 	pop AX
+endm
+
+mPrintTime macro
+	mov AH, 02				;;
+	mov DH, 00				;;
+	mov DL, 1Fh				;;
+	mov BH, 00				;;
+	int 10
+	mPrintMsg timeStr
 endm
 

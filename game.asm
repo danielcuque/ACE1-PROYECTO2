@@ -4,6 +4,7 @@ mStartGame macro
 	mPrintTotalPoints
 	mPrintAllGhots
 	continueGame:
+		mPrintTime
 		call PrintAceman
 		call ChangeAcemanDirection
 		call MoveAceman

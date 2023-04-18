@@ -38,6 +38,17 @@ recoveredStr DB 9 DUP('$')
 counterToGetIndexGotten DW 0
 
 ;---------------------------------------------------------
+; Variables para el cronómetro
+;---------------------------------------------------------
+timeStr DB '00:00:000$'
+
+minutesNumber DW 0
+secondsNumber Dw 0
+milisecondsNumber DW 0
+
+currentTime DW 00
+
+;---------------------------------------------------------
 ; Variables para el juego
 ;---------------------------------------------------------
 tableGame DB 03E8h dup(0)         ;; La pantalla es de 25 * 40
