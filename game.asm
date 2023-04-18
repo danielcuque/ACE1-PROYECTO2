@@ -1,22 +1,17 @@
-mGameVars macro
-    
-endm
-
-
 mStartGame macro 
     call CreateMap
-    call InsertMapObject
-    call PrintAceman
-    mWaitEnter
+    call PrintMapObject
+	mWaitEnter
+    
 endm
 
 ;---------------------------------------------------------
 ; Descripción:
-; Crea un mapa quemado con finalidad de test, quitar al final
+; Crear un mapa quemado con finalidad de test, quitar al final
 ;---------------------------------------------------------
 
 CreateMap PROC
-    mov AX, 0000
+		mov AX, 0000
 		mov CX, 0001
 		mov DH, 01                ;; código del objeto
 		call InsertMapObject
@@ -53,61 +48,48 @@ CreateMap PROC
 		mov CX, 0001
 		xchg CX, BX
 		mov CX, 11
+		ret
 CreateMap ENDP
 
+
 PrintMapObject PROC
-    pintar_mapa_objetos:
-		mov AX, 0000
-		mov CX, 0000
-		mov DI, offset tableGame
-;;(ciclo-exterior
-		xchg CX, SI
-		mov CX, 19
-objetos_filas:	mov AX, 0000
-		push CX
-		xchg CX, SI
-;;  (ciclo-interior
-		xchg CX, BX
-		mov CX, 28
-objetos_cols:	push CX
-		xchg CX, BX
+    start:
+		mov CX, 0h					;; Dejamos el numero de columna en 0
+	printRow:
+		mov AX, 0h					;; Cada vez que se pinte una fila, la pos X regresa a 0
+
+	printCol:
 		call GetMapObject
-		mov DI, offset wallType1
-		cmp DL, 01
-		je pintar_obj
-		mov DI, offset wallType2
-		cmp DL, 02
-		je pintar_obj
-		mov DI, offset wallType3
-		cmp DL, 03
-		je pintar_obj
-		mov DI, offset wallType4
-		cmp DL, 04
-		je pintar_obj
-		mov DI, offset wallType5
-		cmp DL, 0e
-		je pintar_obj
-		mov DI, offset wallType6
-		cmp DL, 0f
-		je pintar_obj
-		jmp loop_cols
-pintar_obj:	push AX
-		push CX
-		call PrintSprite
-		pop CX
+		cmp DL, 0Fh
+		jg isNotWall
+
+		push AX
+			mov DI, offset wallSprite	;; Nuestro sprites de muros va a seguir la misma logica que el del pacman
+										;; Hacemos offset en el sprite de muros para que empieze en el primer tipo de wall que es un vacío
+										;; Luego dependiendo de lo que venga en el mapa, se hace offset + 64*tipo para acceder al tipo de muro
+			mov AX, DX					;; En DL, está almacenado el valor del tipo de muro que es
+			mov BX, 40h					;; Cargamos a BX con 40h/64d
+			mul BX						;; Multiplicamos tipo*40
+			add DI, AX					;; Nos posicionamos en el sprite deseado
 		pop AX
-loop_cols:	inc AX
-		xchg CX, BX
-		pop CX
-		loop objetos_cols
-;;  )
-		xchg CX, BX
-		inc CX
-		xchg CX, SI
-		pop CX
-		loop objetos_filas
-;;)
-retornar_pintar_mapa:
+
+		jmp printObject
+
+		isNotWall:
+			mov DI, offset AceDot
+
+	printObject:
+		
+		call PrintSprite
+		
+		inc AX
+
+		cmp AX, 28h					;; Comparamos si llegamos a la ultima fila
+		jne printCol				;; Si no llegamos, seguimos iterando
+
+		inc CX						
+		cmp CX, 19h					;; Comparamos si llegamos a la última fila
+		jne printRow	
 		ret
 PrintMapObject ENDP
 
@@ -144,6 +126,21 @@ InsertMapObject PROC USES AX CX
     mov [DI], DH                        ;; Insertamos el objeto que se encuentra en DH
     ret
 InsertMapObject ENDP
+
+;---------------------------------------------------------
+; GetMapObject
+;
+; Descripción:
+; Obtiene el valor que se encuentra dentro del tablero de juego
+;
+; Recibe:
+; AX -> X + 1 del aceman
+; CX -> Y + 1 del aceman
+;
+; Retorna:
+; DL -> Valor del objeto (wall, acedot, powerdot)
+;---------------------------------------------------------
+
 
 GetMapObject PROC USES AX CX
     mov DI, offset tableGame

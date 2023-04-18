@@ -117,7 +117,7 @@ PrintAceman PROC
 			push AX							;; Guardamos los registros
 			push CX
 
-			mov DI, offset emptySprite		;; Pintamos un sprite vacío en donde estaba el aceman
+			mov DI, offset wallSprite		;; Pintamos un sprite vacío en donde estaba el aceman
 			call PrintSprite
 
 			pop CX
@@ -138,8 +138,8 @@ PrintAceman ENDP
 ;
 ; Retorna: -
 ;---------------------------------------------------------
-PrintSprite PROC
-    pintar_sprite:
+PrintSprite PROC USES AX CX
+    start:
 		mov BX, 0000
 		mov DL, 08
 		mul DL
@@ -174,10 +174,12 @@ PrintSprite PROC
 PrintSprite ENDP
 
 DelayProc PROC
-delay:
+	delay:
 		mov BP, 03000
-ciclob:		mov SI, 00010
-cicloa:		dec SI
+	ciclob:		
+		mov SI, 00010
+	cicloa:		
+		dec SI
 		cmp SI, 00
 		jne cicloa
 		dec BP
