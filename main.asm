@@ -42,22 +42,19 @@ counterToGetIndexGotten DW 0
 ;---------------------------------------------------------
 timeStr DB '00:00:000$'
 
-initialHour DW 0
-minutesNumber DW 0
-secondsNumber Dw 0
-milisecondsNumber DW 0
+initialTime DW 13EBh                    ;; Como valor inicial guardamos 59s 99cs
 
 currentTime DW 00
 
 ;---------------------------------------------------------
 ; Variables para el juego
 ;---------------------------------------------------------
-tableGame DB 03E8h dup(0)         ;; La pantalla es de 25 * 40
+tableGame DB 03E8h dup(0)               ;; La pantalla es de 25 * 40
 totalPoints DW 0h
 aceDotPoints DW 01h
 totalDots DW 06h
 
-isGhostBlue DW 0FFh                ;; 00 = no se puede comer | ff = se puede comer y pintar azul
+isGhostBlue DW 0FFh                     ;; 00 = no se puede comer | ff = se puede comer y pintar azul
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas

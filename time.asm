@@ -22,16 +22,6 @@ mDisplayTime macro timeNumber
     pop BX  
 endm
 
-SetCurrentTime PROC USES AX CX DX
-	call GetCurrentTime
-    mSetCursorTime
-    
-	; mov minutesNumber, CL
-	; mov secondsNumber, DH
-	; mov milisecondsNumber, DL
-	ret
-SetCurrentTime ENDP
-
 ;---------------------------------------------------------
 ; GetCurrentTime
 ;
@@ -49,19 +39,11 @@ GetCurrentTime PROC
 	mov AH, 2ch
     int 21h
     mov AX, 00h
-
-
 	ret
 GetCurrentTime ENDP
 
 CalculateTime PROC USES AX BX CX DX
     mSetCursorTime
-    call GetCurrentTime
-
-    sub CX, initialHour
-    sub DX, minutesNumber
-    sub BX, secondsNumber
-    sub AX, milisecondsNumber
 
     mDisplayTime DX
 

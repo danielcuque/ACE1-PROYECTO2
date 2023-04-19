@@ -2,7 +2,6 @@ mStartGame macro
 
     call CreateMap
     call PrintMapObject    				;; Pintamos el mapa
-	; call SetCurrentTime					;; Establecemos el tiempo al empezar el juego
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
 	mPrintAllGhots						;; Mostramos todos los fantasmas
 
