@@ -16,11 +16,11 @@ mDisplayTime macro timeNumber
         mov BX, timeNumber
         mov numberGotten, BX
         mResetrecoveredStr
-        mPrintNumberConverted
-        ; call NumToStr
-        ; mov BX, offset recoveredStr
-        ; add BX, 05h
-        ; mPrintPartialDirection BX
+        ; mPrintNumberConverted
+        call NumToStr
+        mov BX, offset recoveredStr
+        add BX, 05h
+        mPrintPartialDirection BX
     pop BX  
 endm
 
@@ -113,9 +113,9 @@ CalculateTime PROC USES AX BX CX DX
 
     mov minuteTime, AX              ;; Guardamos los minutos
     
-    ; mDisplayTime minuteTime        ;; Mostramos los minutos
+    mDisplayTime minuteTime        ;; Mostramos los minutos
 
-    ; mPrintMsg colonChar
+    mPrintMsg colonChar
 
     xor AX, AX
     xor BX, BX
@@ -129,21 +129,15 @@ CalculateTime PROC USES AX BX CX DX
     
     mov CX, timePassed      ;; Movemos la diferencia anterior a CX
     sub CX, AX              ;; Tiempo pasado - minutos * 6000 = nueva diferencia
-    mov timePassed, 00h
-    mov timePassed, CX
-
-    xor AX, AX
-    xor BX, BX
-    xor CX, CX
-    xor DX, DX
     
-    mov BX, timePassed      ;; Movemos la nueva diferencia a BX
+
     mov AX, 64h             ;; AX = 100 decimal
-    div BX                  ;; timePassed  = nueva diferencia / 100 = segundos
+    xchg AX, CX
+    div CX                  ;; timePassed  = nueva diferencia / 100 = segundos
     mov secondTime, AX
 
-    ; mDisplayTime secondTime
-    ; mPrintMsg colonChar
+    mDisplayTime secondTime
+    mPrintMsg colonChar
 
     xor AX, AX
     xor BX, BX
@@ -159,7 +153,7 @@ CalculateTime PROC USES AX BX CX DX
 
     mov hundredTime, CX     ;; Guardamos las centéstimas
     
-    ; mDisplayTime hundredTime
+    mDisplayTime hundredTime
 
     ret
 CalculateTime ENDP
