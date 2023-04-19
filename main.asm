@@ -29,7 +29,7 @@ menuMsg DB '1. Iniciar sesi', 0A2h, 'n $'
 ;---------------------------------------------------------
 fileLineBuffer DB 102h dup('$') 
 handleObject DW 0       
-
+fileName DB 'niv1.aml'
 ;---------------------------------------------------------
 ; Variable para convertir numeros
 ;---------------------------------------------------------
@@ -42,17 +42,21 @@ counterToGetIndexGotten DW 0
 ;---------------------------------------------------------
 timeStr DB '00:00:000$'
 
-initialTime DW 13EBh                    ;; Como valor inicial guardamos 59s 99cs
+initialTime     DW 65h                    ;; Como valor inicial guardamos 59s 99cs
+currentTime     DW 00h
 
-currentTime DW 00
+timePassed      DW 00
+minuteTime      DB 00h
+secondTime      DB 00h
+hundredTime     DB 00h
 
 ;---------------------------------------------------------
 ; Variables para el juego
 ;---------------------------------------------------------
-tableGame DB 03E8h dup(0)               ;; La pantalla es de 25 * 40
-totalPoints DW 0h
-aceDotPoints DW 01h
-totalDots DW 06h
+tableGame       DB 03E8h dup(0)               ;; La pantalla es de 25 * 40
+totalPoints     DW 0h
+aceDotPoints    DW 01h
+totalDots       DW 06h
 
 isGhostBlue DW 0FFh                     ;; 00 = no se puede comer | ff = se puede comer y pintar azul
 
@@ -78,7 +82,7 @@ BKW                     DB 01h, '"b"'
 mSpriteVars
 
 ;; Para Aceman
-currentAcemanSprite         DB      00
+currentAcemanSprite         DB     00
 currentAcemanDirection      DB     rightKey
 currentAcemanPosition_x     DB     02
 currentAcemanPosition_y     DB     00
@@ -100,6 +104,7 @@ cyanGhost_y                 DW      0Bh
 cyanGhost_x                 DW      15h
 
 
+
 mStartProgram macro
     LOCAL start, exit
     start:
@@ -114,7 +119,7 @@ endm
 
 INCLUDE utils.asm           ;; Funciones auxiliares que pueden ser usadas en cualquier parte del programa
 INCLUDE menu.asm            ;; Menu principal
-INCLUDE time.asm     ;; Lógica para el crónometro
+INCLUDE time.asm            ;; Lógica para el crónometro
 INCLUDE game.asm            ;; Lógica del juego
 INCLUDE files.asm           ;; Lógica para leer archivos
 

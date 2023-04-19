@@ -6,7 +6,7 @@ mStartGame macro
 	mPrintAllGhots						;; Mostramos todos los fantasmas
 
 	continueGame:
-		; call CalculateTime						;; Mostramos el tiempo en cada iteracion
+		call CalculateTime						;; Mostramos el tiempo en cada iteracion
 		call PrintAceman				;; Mostramos el pacman en cada iteracion
 		call ChangeAcemanDirection		;; Solicitamos mover al aceman
 		call MoveAceman					;; Calculamos la nueva posición
