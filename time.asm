@@ -45,75 +45,120 @@ GetCurrentTime PROC USES AX BX CX DX
     ; DH -> Segundos
     ; DL -> Milisegundos
     ; min * 60s * 100cs + seg * 100cs + cs = tiempo en cs
+    ; mDisplayTime DH
+    mov initialHundred, 00h
+    mov initialSeconds, 00h
+    mov initialMinutes, 00h
+    mov currentTime,    00h      ;; Limpiamos currentTime
+
+    mov initialMinutes, CL
+    mov initialSeconds, DH
+    mov initialHundred, DL
+
+    xor AX, AX                  ;; Limpiamos AX
+    xor BX, BX                  ;; Limpiamos BX para que sirva como registro para hacer las operaciones
+    xor CX, CX
+    xor DX, DX
+
+    mov BL, initialMinutes                  ;; Movemos los minutos a BL
+
+    mov AX, 1770h               ;; 60 * 100 decimal
+    mul BX                      ;; AX =  min * 60 * 100
+    mov currentTime, AX         ;; currentTime = AX (pasamos los minutos a centésimas)
 
     xor AX, AX
     xor BX, BX
-    mov BL, CL
-    mov currentTime, 0000h
-    mov AX, 1770h               ;; 60 * 100 decimal
-    mul BX                      ;; AX =  min * 60 * 100
-    mov currentTime, AX         ;; currentTime = AX
+    mov BL, initialSeconds
 
-    mDisplayTime currentTime
-
-    xor AX, AX
     mov AX, 64h             ;; AX = 100 decimal
-    mul DH                  ;; AX = seg * 100
+    mul BL                  ;; AX = seg * 100 (pasamos los segundos a centésimas)
 
-    add currentTime, AX     ;; currentTime += AX 
-    mov DH, 00
-    add currentTime, DX
+    add currentTime, AX     ;; currentTime += AX (sumamos minutos en centésimas con segundos en centésimas)
+    xor BX, BX
+    mov BL, initialHundred
+    add currentTime, BX
+
+    ; mDisplayTime currentTime
 
 	ret
 GetCurrentTime ENDP
 
-CalculateTime PROC USES AX BX CX DX
-    mSetCursorTime
+mSetCurrentTime macro
+    push AX
     call GetCurrentTime
+    mov AX, currentTime
+    mov initialTime, AX
+    pop AX
+endm
 
-    ; mDisplayTime currentTime
+CalculateTime PROC USES AX BX CX DX
+    mSetCursorTime                  ;; Establecemos el cursor al final de la línea 0
+    call GetCurrentTime             ;; Obtenemos el tiempo actual en milésimas
 
-    ; xor AX, AX
-    ; xor BX, BX
-    ; xor DX, DX
+    xor AX, AX                      ;; Limpiamos los registros
+    xor BX, BX
+    xor CX, CX
+    xor DX, DX
+
+    mov minuteTime, 00h
+    mov secondTime, 00h
+    mov hundredTime, 00h
     
-    ; mov AX, currentTime     
-    ; sub AX, initialTime     ;; Restamos tiempoActual - tiempoInicial = Diferencia
-    ; mov timePassed, AX      ;; Guardamos el tiempo transcurrido
-    ; mov BX, 1770h           ;; 6000 decimal        
-    ; div BX                  ;; Diferencia / 6000 = minutos
+    mov AX, currentTime             ;; En AX guardamos el tiempo actual
+    sub AX, initialTime             ;; Restamos tiempoActual - tiempoInicial = Diferencia
+    mov timePassed, AX              ;; Guardamos el tiempo transcurrido entre la hora de inicio y la actual
 
-    ; mov minuteTime, AL      ;; Guardamos los minutos
+    mov BX, 1770h                   ;; 6000 decimal        
+    div BX                          ;; Diferencia / 6000 = minutos
 
-    ; xor AX, AX
-    ; xor BX, BX
-    ; xor CX, CX
-
-    ; mov AX, 1770h           ;; 
-    ; mov BL, minuteTime 
-    ; mul BX                  ;; Minutos * 6000 
+    mov minuteTime, AX              ;; Guardamos los minutos
     
-    ; mov CX, timePassed
-    ; sub CX, AX              ;; Tiempo pasado - minutos * 6000 = nueva diferencia
-    ; mov timePassed, CX
+    ; mDisplayTime minuteTime        ;; Mostramos los minutos
 
-    ; xor AX, AX
-    ; mov AX, 64h             ;; AX = 100 decimal
-    ; div CX                  ;; timePassed  = nueva diferencia / 100 = segundos
-    ; mov secondTime, AL
+    ; mPrintMsg colonChar
 
-    ; mDisplayTime minuteTime
+    xor AX, AX
+    xor BX, BX
+    xor CX, CX
+    xor DX, DX
 
-    ; mov AH, 02h
-    ; mov DL, ':'
-    ; int 21h
+    mov AX, 1770h           ;; Cargamos a AX con 6000 d
+    mov BX, minuteTime      ;; Movemos los minutos a BX
+    mul BX                  ;; Minutos * 6000 
+    ;; AX = minutos * 6000
+    
+    mov CX, timePassed      ;; Movemos la diferencia anterior a CX
+    sub CX, AX              ;; Tiempo pasado - minutos * 6000 = nueva diferencia
+    mov timePassed, 00h
+    mov timePassed, CX
+
+    xor AX, AX
+    xor BX, BX
+    xor CX, CX
+    xor DX, DX
+    
+    mov BX, timePassed      ;; Movemos la nueva diferencia a BX
+    mov AX, 64h             ;; AX = 100 decimal
+    div BX                  ;; timePassed  = nueva diferencia / 100 = segundos
+    mov secondTime, AX
 
     ; mDisplayTime secondTime
+    ; mPrintMsg colonChar
 
-    ; mov AH, 02h
-    ; mov DL, ':'
-    ; int 21h
+    xor AX, AX
+    xor BX, BX
+    xor CX, CX
+    xor DX, DX
 
+    mov BX, secondTime      ;; Movemos los segundos a BX
+    mov AX, 64h             ;; Cargamos a AX con 100 decimal
+    mul BX                  ;; AX = segundos * 100
+
+    mov CX, timePassed      ;; Cargamos la diferencia pasada en CX
+    sub CX, AX              ;; Restamos la diferencia pasada con AX
+
+    mov hundredTime, CX     ;; Guardamos las centéstimas
+    
     ; mDisplayTime hundredTime
 
     ret

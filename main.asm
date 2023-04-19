@@ -18,6 +18,7 @@ testStr db 'testeando $'
 ; o que no van a ser de utilidad en otra parte del codigo
 ; ------------------------------------------------------------
 infoMsg DB 'Universidad de San Carlos de Guatemala', 0Dh, 0Ah,'Facultad de Ingenieria', 0Dh, 0Ah,'Escuela de Ciencias y Sistemas', 0Dh, 0Ah,'Arquitectura de computadores y ensambladores 1', 0Dh, 0Ah,'Seccion B', 0Dh, 0Ah,'Daniel Estuardo Cuque Ruiz' , 0Dh, 0Ah,'202112145', 0Dh, 0Ah, '$'
+colonChar DB ':$'
 
 ; ---------------------------------------------------------
 ; Variables para el menu principal
@@ -42,13 +43,17 @@ counterToGetIndexGotten DW 0
 ;---------------------------------------------------------
 timeStr DB '00:00:000$'
 
-initialTime     DW 65h                    ;; Como valor inicial guardamos 59s 99cs
+initialTime     DW 00                    ;; Como valor inicial guardamos 59s 99cs
 currentTime     DW 00h
 
+initialMinutes  DB 00h
+initialSeconds  DB 00h
+initialHundred  DB 00h
+
 timePassed      DW 00
-minuteTime      DB 00h
-secondTime      DB 00h
-hundredTime     DB 00h
+minuteTime      DW 00h
+secondTime      DW 00h
+hundredTime     DW 00h
 
 ;---------------------------------------------------------
 ; Variables para el juego

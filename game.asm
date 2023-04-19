@@ -1,10 +1,10 @@
 mStartGame macro 
 
+	mSetCurrentTime						;; Guardamos el tiempo inicial
     call CreateMap
     call PrintMapObject    				;; Pintamos el mapa
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
 	mPrintAllGhots						;; Mostramos todos los fantasmas
-
 	continueGame:
 		call CalculateTime						;; Mostramos el tiempo en cada iteracion
 		call PrintAceman				;; Mostramos el pacman en cada iteracion
