@@ -42,6 +42,7 @@ counterToGetIndexGotten DW 0
 ;---------------------------------------------------------
 timeStr DB '00:00:000$'
 
+initialHour DW 0
 minutesNumber DW 0
 secondsNumber Dw 0
 milisecondsNumber DW 0

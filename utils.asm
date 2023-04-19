@@ -29,6 +29,20 @@ mPrintMsg macro str
     pop AX
 endm
 
+mPrintPartialDirection macro str
+    push AX
+    push DX
+
+    mov DX, str
+    mov AH, 09h
+    int 21h
+
+    pop AX
+    pop DX
+endm
+
+
+
 mActiveVideoMode macro
     push AX
     mov AL, 13h
@@ -313,6 +327,7 @@ StrToNum PROC
 StrToNum ENDP
 
 mPrintNumberConverted macro
+	mResetrecoveredStr
     call NumToStr
     mPrintMsg recoveredStr
 endm
@@ -340,4 +355,23 @@ mPrintTotalPoints macro
 	pop AX
 endm
 
+mResetrecoveredStr macro
+    LOCAL start
+    push CX
+    push BX
+    push AX
 
+    xor CX, CX
+    mov CL, sizeof recoveredStr
+    mov BX, offset recoveredStr
+    mov AL, 24h
+
+    start:
+        mov [BX], AL
+        inc BX
+    loop start
+
+    pop AX
+    pop BX
+    pop CX
+endm

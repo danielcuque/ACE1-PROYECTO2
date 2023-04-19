@@ -1,13 +1,13 @@
 mStartGame macro 
-	call SetCurrentTime					;; Establecemos el tiempo al empezar el juego
 
     call CreateMap
     call PrintMapObject    				;; Pintamos el mapa
+	; call SetCurrentTime					;; Establecemos el tiempo al empezar el juego
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
 	mPrintAllGhots						;; Mostramos todos los fantasmas
 
 	continueGame:
-		mPrintTime						;; Mostramos el tiempo en cada iteracion
+		; call CalculateTime						;; Mostramos el tiempo en cada iteracion
 		call PrintAceman				;; Mostramos el pacman en cada iteracion
 		call ChangeAcemanDirection		;; Solicitamos mover al aceman
 		call MoveAceman					;; Calculamos la nueva posición
