@@ -113,7 +113,6 @@ mGetCoordinate macro
     mGetNumberValue YKW
     pop CX
 
-    
     xchg CX, AX             ;; CX = Pos X, AX = Pos Y (intercambiamos)
     
 endm
@@ -158,9 +157,16 @@ ReadFile PROC USES AX BX CX DX
 
     mReadLine                           ;; Leemos "acemaninit":{
     mGetCoordinate                      ;; Obtenemos la coordenada de acemaninit
-    mov aceman_x, AX
+    mov aceman_x, AX                    
     mov aceman_y, CX
 
+    mReadLine                           ;; Leemos },
+    mReadLine                           ;; Leemos "walls":[
+    mReadLine                           ;; Leemos {
+
+    getWalls:                          
+    getPowerDots:
+    getPortals:
      
 
     jmp closeFile
