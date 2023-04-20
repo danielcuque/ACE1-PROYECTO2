@@ -7,7 +7,7 @@ mStartGame macro
 
 	mSetCurrentTime						;; Guardamos el tiempo inicial
 	
-	call CreateMap
+	; call CreateMap
     call PrintMapObject    				;; Pintamos el mapa
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
 	

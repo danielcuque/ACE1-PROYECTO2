@@ -146,6 +146,9 @@ IsNumber PROC
         cmp AL, 0Ah         ;; O si encuentra un salto de línea, significa que terminó
         je success
 
+        cmp AL, '"'         ;; Para obtener el tipo de número
+        je success
+
         cmp AL, 24h         ;; O si encuentra un salto de línea, significa que terminó
         je success
  

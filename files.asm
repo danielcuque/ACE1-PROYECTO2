@@ -80,10 +80,12 @@ mGetNumberValue macro keyword
     mov DI, offset keyword
     mov CL, [DI]
     mov SI, offset fileLineBuffer
-    advance:                        ;; Avanzamos el tamaño de la palabra
+    ; mPrintPartialDirection SI
+    ; mWaitEnter
+    advance:                            ;; Avanzamos el tamaño de la palabra
         inc SI                      
         loop advance
-    inc SI                          ;; Nos saltamos el ':'
+    inc SI                              ;; Nos saltamos el ':'
     call IsNumber                       ;; Comprobamos que sea un número
     cmp DL, 01
     jne errorWhenReadLine
@@ -109,12 +111,11 @@ mGetCoordinate macro
     mov CX, AX              ;; BX = Pos X AX = Pos X
     
     push CX
-    mReadLine
-    mGetNumberValue YKW
+        mReadLine
+        mGetNumberValue YKW
     pop CX
 
-    xchg CX, AX             ;; CX = Pos X, AX = Pos Y (intercambiamos)
-    
+    xchg CX, AX             ;; CX = Pos X, AX = Pos Y (intercambiamos)  
 endm
 
 ;---------------------------------------------------------
@@ -164,7 +165,46 @@ ReadFile PROC USES AX BX CX DX
     mReadLine                           ;; Leemos "walls":[
     mReadLine                           ;; Leemos {
 
-    getWalls:                          
+    getWalls:
+        mReadLine
+        mov SI, offset fileLineBuffer
+        mov AL, [SI]
+
+        cmp AL, '}'
+        je endWalls
+
+        ;; Leemos el tipo de muro -> "numTipo": [
+        cmp AL, '"'
+        jne errorWhenReadLine
+        inc SI                              ;; Obtenemos el número
+        call IsNumber                       
+        cmp DL, 01
+        jne errorWhenReadLine
+
+        xor DX, DX
+        mov DX, numberGotten
+        mov currentWallType, DL             ;; Guardamos el valor del tipo de muro en currentWallType
+
+    setWall:
+        mReadLine                       ;; Nos saltamos {
+
+        mGetCoordinate
+
+        xor DX, DX
+        mov DL, currentWallType
+        call InsertMapObject
+
+        mReadLine                       ;; Nos saltamos }
+
+        mov SI, offset fileLineBuffer
+        mov AL, [SI]
+        
+        cmp AL, ']'
+        jne setWall
+    jmp getWalls
+
+    endWalls:
+        mWaitEnter                          
     getPowerDots:
     getPortals:
      
@@ -176,6 +216,7 @@ ReadFile PROC USES AX BX CX DX
         jmp endRead
     errorWhenReadLine:
         mPrintMsg errorReadLine
+        mPrintMsg fileLineBuffer
         mWaitEnter
         jmp endRead
     errorToClose:

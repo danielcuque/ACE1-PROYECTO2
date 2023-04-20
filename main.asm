@@ -21,7 +21,7 @@ infoMsg             DB 'Universidad de San Carlos de Guatemala', 0Dh, 0Ah,'Facul
 colonChar           DB ':$'
 newLineChar         DB 0Ah, '$'
 errorOpenFile       DB 'Error al abrir el archivo$'
-errorReadLine       DB 'Error al leer la linea$'
+errorReadLine       DB 'Error al leer la linea en $'
 errorCloseFile      DB 'Error al cerrar el archivo$'
 errorSizeOfNumber   DB 'Numero demasiado grande$'
 
@@ -93,6 +93,9 @@ BKW                     DB 01h, '"b"'
 ; Variables para los sprites de los personajes
 ;---------------------------------------------------------
 mSpriteVars
+
+;; Para muros
+currentWallType             DB     00
 
 ;; Para Aceman
 currentAcemanSprite         DB     00
