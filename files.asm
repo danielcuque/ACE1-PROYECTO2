@@ -186,25 +186,24 @@ ReadFile PROC USES AX BX CX DX
         mov currentWallType, DL             ;; Guardamos el valor del tipo de muro en currentWallType
 
     setWall:
-        mReadLine                       ;; Nos saltamos {
+        mReadLine                           ;; Nos saltamos {
+        mov SI, offset fileLineBuffer
+        mov AL, [SI]
+
+        cmp AL, ']'
+        je getWalls
 
         mGetCoordinate
 
         xor DX, DX
-        mov DL, currentWallType
+        mov DH, currentWallType
         call InsertMapObject
 
-        mReadLine                       ;; Nos saltamos }
+        mReadLine                           ;; Nos saltamos }
+        jmp setWall
+    
 
-        mov SI, offset fileLineBuffer
-        mov AL, [SI]
-        
-        cmp AL, ']'
-        jne setWall
-    jmp getWalls
-
-    endWalls:
-        mWaitEnter                          
+    endWalls:                          
     getPowerDots:
     getPortals:
      
