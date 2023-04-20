@@ -78,7 +78,7 @@ isGhostBlue DW 0FFh                             ;; 00 = no se puede comer | FF =
 ;---------------------------------------------------------
 NIVELKW                 DB 07h, '"nivel"'
 VALORDOTKW              DB 0Ah, '"valordot"'
-ACEMANINITLW            DB 0Ch, '"acemaninit"'
+ACEMANINITLW            DB 0Eh, '"acemaninit":{'
 XKW                     DB 03h, '"x"'
 YKW                     DB 03h, '"y"'
 WALLSKW                 DB 07h, '"walls"'

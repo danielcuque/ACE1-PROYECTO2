@@ -641,7 +641,7 @@ SumPowerDotPoints PROC USES AX BX
 
 	mov BX, 05h
 	mul BX
-	add totalPoints, BX
+	add totalPoints, AX
 
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
 	sub totalDots, 01h

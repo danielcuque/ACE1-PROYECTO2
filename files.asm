@@ -128,6 +128,8 @@ ReadFile PROC USES AX BX CX DX
     mGetNumberValue VALORDOTKW
     mov aceDotPoints, AX
 
+    mReadLine                           ;; Leemos "acemaninit":{
+     
 
     jmp closeFile
     errorToOpen:
