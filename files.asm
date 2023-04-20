@@ -120,9 +120,13 @@ ReadFile PROC USES AX BX CX DX
     cmp AL, '{'
     jne errorWhenReadLine
 
-    mReadLine
+    mReadLine                           ;; Leemos "nivel": valor,
     mGetNumberValue NIVELKW
     mov numberLevel, AL
+
+    mReadLine                           ;; Leemos "valordot": valor
+    mGetNumberValue VALORDOTKW
+    mov aceDotPoints, AX
 
 
     jmp closeFile
