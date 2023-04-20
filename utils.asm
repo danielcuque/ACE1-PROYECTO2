@@ -13,6 +13,40 @@ mWaitEnter macro
     pop AX
 endm
 
+;---------------------------------------------------------
+; mResetVarWithDollarSign
+;
+; Descripción:
+; Reinicia una variable con signo dolar ($) tomando su tamaño
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
+mResetVarWithDollarSign macro str
+    LOCAL start
+    push CX
+    push BX
+    push AX
+
+    xor CX, CX
+    mov CL, sizeof str
+    mov BX, offset str
+    mov AL, 24h
+
+    start:
+        mov [BX], AL
+        inc BX
+    loop start
+
+    pop AX
+    pop BX
+    pop CX
+endm
+
 ; ------------------------------------------------------------
 ; Recibe como parámetro un string y lo imprime en pantalla
 ; ------------------------------------------------------------
@@ -40,8 +74,6 @@ mPrintPartialDirection macro str
     pop AX
     pop DX
 endm
-
-
 
 mActiveVideoMode macro
     push AX
@@ -243,11 +275,6 @@ ResetPointer PROC
 	ret
 ResetPointer ENDP
 
-
-IsNumber PROC
-	
-IsNumber ENDP
-
 ;---------------------------------------------------------
 ; NumToStr
 ;
@@ -263,6 +290,7 @@ IsNumber ENDP
 
 NumToStr PROC USES AX BX CX DX SI DI
 
+	mResetVarWithDollarSign recoveredStr    ;; Reiniciamos la variable para mostrar un numero str
 	mov BX, 0Ah                             ;; Cargamos a BX con 10
     xor CX, CX                              ;; Limpiamos a cx
     mov AX, numberGotten                    ;; Le cargamos a AX el valor del numero que queremos convertir
@@ -327,7 +355,6 @@ StrToNum PROC
 StrToNum ENDP
 
 mPrintNumberConverted macro
-	mResetrecoveredStr
     call NumToStr
     mPrintMsg recoveredStr
 endm
@@ -355,23 +382,37 @@ mPrintTotalPoints macro
 	pop AX
 endm
 
-mResetrecoveredStr macro
-    LOCAL start
-    push CX
-    push BX
-    push AX
+;---------------------------------------------------------
+; CompareStr
+;
+; Descripción:
+; Compara dos cadenas para ver si son iguales
+;
+; Recibe:
+; SI -> offset de la cadena A, la cadena apunta al tamaño de la misma
+; DI -> offset de la cadena B que se quiere comparar con A
+; 
+;
+; Retorna:
+; DL -> 0, no son iguales
+; DL ->  1, son iguales
+;---------------------------------------------------------
 
-    xor CX, CX
-    mov CL, sizeof recoveredStr
-    mov BX, offset recoveredStr
-    mov AL, 24h
+CompareStr PROC USES AX BX SI DI
+    mov DX, 00h       
+    mov CL, [DI]
+    inc DI
+    compareLoop:
+        mov AL, [DI]
+        mov BL, [SI]
+        cmp AL, BL
+        jne endCompare
+        inc DI
+        inc SI
+        loop compareLoop
+    
+    mov DL, 01
 
-    start:
-        mov [BX], AL
-        inc BX
-    loop start
-
-    pop AX
-    pop BX
-    pop CX
-endm
+    endCompare:
+	ret
+CompareStr ENDP

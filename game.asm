@@ -6,8 +6,9 @@ mStartGame macro
     pop DX
 
 	mSetCurrentTime						;; Guardamos el tiempo inicial
+	
+	call CreateMap
     call PrintMapObject    				;; Pintamos el mapa
-
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
 	
 	mPrintAllGhots						;; Mostramos todos los fantasmas

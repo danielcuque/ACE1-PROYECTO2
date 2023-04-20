@@ -10,17 +10,14 @@ endm
 
 mDisplayTime macro timeNumber
     push BX
-        mov BX, 0
-        mov numberGotten, BX
-        ; mov BL, timeNumber
-        mov BX, timeNumber
-        mov numberGotten, BX
-        mResetrecoveredStr
-        ; mPrintNumberConverted
-        call NumToStr
-        mov BX, offset recoveredStr
-        add BX, 05h
-        mPrintPartialDirection BX
+        mov BX, 0                       ;; Limpiamos BX
+        mov numberGotten, BX            ;; Limpiamos numberGotten
+        mov BX, timeNumber              ;; Obtenemos el numero del tiempo que se quiere mostrar
+        mov numberGotten, BX            ;; Le pasamos ese valor a numberGotten
+        call NumToStr                   ;; Lo convertimos a str        
+        mov BX, offset recoveredStr     ;; Con el numero convertido a Str
+        add BX, 05h                     ;; Solo mostramos los ultimas 2 dígitos
+        mPrintPartialDirection BX       ;; Mostramos esa información parcial
     pop BX  
 endm
 
