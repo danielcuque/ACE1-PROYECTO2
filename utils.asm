@@ -106,6 +106,93 @@ EmptyScreen PROC
 EmptyScreen ENDP
 
 ;---------------------------------------------------------
+; mIsNumber
+;
+; Descripción:
+; Comprueba si la cadena es un numero
+;
+; Recibe:
+; SI -> Posicion donde se quiere verificar si es número
+;
+; Retorna:
+; DL -> 0, si no es número
+; DL -> 1, si sí es número
+; numberGotten -> Si sí es numero, se carga de str a num, guardando el valor en dicha variable
+;---------------------------------------------------------
+
+IsNumber PROC
+	xor CX, CX              ;; Este llevara el control de cuantas posiciones aumentar en SI en caso de que sí sea necesario
+    xor BX, BX
+    xor AX, AX
+
+    mov BX, SI              ;; Copiamos la direccion de memoria de SI para no modificar SI si no es necesario
+    
+    start:
+
+        mov AL, [BX]
+    
+        cmp AL, 20h         ;; Si llegamos al espacio y todo está correcto, entonces generamos el numero
+        je success
+
+        cmp AL, 00h          ;; Comparamos que si es caracter nulo, llegamos al final
+        je success
+
+		cmp AL, 2Ch			;; El numero puede llevar a su fin si se detecta una coma
+		je success
+
+        cmp AL, 0Dh         ;; O comparamos que no sea un valor de retorno
+        je success
+
+        cmp AL, 0Ah         ;; O si encuentra un salto de línea, significa que terminó
+        je success
+
+        cmp AL, 24h         ;; O si encuentra un salto de línea, significa que terminó
+        je success
+ 
+        cmp AL, 30h         ;; Comparamos que el ASCII no sea menor al ASCII DE 1
+        jb isNot
+
+        cmp AL, 39h         ;; Comparamos que el ASCII no sea mayor al ASCII de 9
+        ja isNot
+
+        inc BX
+        inc CX              ;; Incrementamos CX para poder hacer un loop y guardar el número recuperado en formato string
+        
+        jmp start
+ 
+    isNot:
+        mov DL, 00h         ;; Si no es número, entonces seteamos a DL como 0 y lo retornarmos
+        jmp endProc
+
+    success:
+        xor AX, AX                          ;; Limpiamos a AX
+        mov BX, offset recoveredStr         ;; Movemos la direccion de memoria del número a recuperar para insertarle datos
+
+        cmp CX, 07h                         ;; Si el número es mayor a 5, significa que no es válido
+        jl generateNumber                   ;; Si es menor a 5, entonces recuperamos el número
+
+        mPrintMsg errorSizeOfNumber         ;; si no es válido, lo devolvemos a isNot    
+        jmp isNot
+        
+        generateNumber:
+            mResetVarWithDollarSign recoveredStr
+
+            createNumber:
+
+                mov AL, [SI]                    ;; Movemos el valor que se encuentra en SI a AX, por ejemplo, si en Si está 1, entonces lo movemos
+                mov [BX], AL                    ;; Le insertamos ese valor a la variable de recoveredStr
+                inc BX                          ;; Incrementamos DI
+                inc SI                          ;; Incrementamos SI, para avanzar en el buffer
+                loop createNumber               ;; Ciclamos
+                
+                call StrToNum                    ;; Convertimos el String a número
+                mov DL, 01
+    endProc:
+		ret
+IsNumber ENDP
+
+
+;---------------------------------------------------------
 ; PrintSprite
 ;
 ; Descripción:
@@ -344,13 +431,29 @@ NumToStr ENDP
 ; Convierte el numero almacenado en recoveredStr en un numero
 ;
 ; Recibe:
-; recoveredStr
+; SI ->  posición donde se encuentra el str a evaluar
 ;
 ; Retorna:
-; numberGotten
+; numberGotten ->  numero extraido del str
 ;---------------------------------------------------------
-StrToNum PROC
-	
+StrToNum PROC USES AX BX CX DX
+	xor SI, SI ; Limpio SI
+    xor AX, AX ; Limpio AX
+    xor DX, DX ; Limpio DX
+    mov BX, 0Ah ; Cargo a BX con 10 decimal
+    
+    nextNum:
+        mul BX 
+        mov DL, recoveredStr[SI]
+        sub DL, 30h
+        add AX, DX
+        inc SI
+        mov DL, recoveredStr[SI]
+        cmp DL, 24h
+        je endProc
+        jmp nextNum
+    endProc:
+        mov numberGotten, AX
 	ret
 StrToNum ENDP
 

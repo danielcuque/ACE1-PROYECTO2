@@ -12,6 +12,7 @@
 ;---------------------------------------------------------
 
 mReadLine macro
+    LOCAL start, endOfFile, endOfLine, endMacro
     mResetVarWithDollarSign fileLineBuffer
     lea DI, fileLineBuffer
     
@@ -60,6 +61,35 @@ mReadLine macro
     endMacro:
 endm
 
+
+;---------------------------------------------------------
+; mGetNumberValue
+;
+; Descripción:
+; Obtiene el valor numérico de la llave propiedad:valor
+;
+; Recibe:
+; keyword -> string que representa la clave a comparar
+;
+; Retorna:
+; AX -> Valor numérico
+;---------------------------------------------------------
+
+mGetNumberValue macro keyword
+    LOCAL advance
+    mov DI, offset keyword
+    mov CL, [DI]
+    mov SI, offset fileLineBuffer
+    advance:                        ;; Avanzamos el tamaño de la palabra
+        inc SI                      
+        loop advance
+    inc SI                          ;; Nos saltamos el ':'
+    call IsNumber                       ;; Comprobamos que sea un número
+    cmp DL, 01
+    jne errorWhenReadLine
+    mov AX, numberGotten
+endm
+
 ;---------------------------------------------------------
 ; ReadFile
 ;
@@ -75,22 +105,27 @@ endm
 
 ReadFile PROC USES AX BX CX DX
     xor CX, CX
+
     mov AL, 00                          ;; Modo de lectura
     mov AH, 3dh                         ;; Función para abrir el archivo
     int 21h                             ;; Provocamos la interrupción
     jc errorToOpen
 
     mov handleObject, AX
-    readLine:
-        mReadLine
-        mPrintMsg fileLineBuffer
-        ; mPrintMsg newLineChar
-        cmp DL, 02h
-        je closeFile
-        ; mWaitEnter
-        jmp readLine
-    jmp closeFile
 
+    mReadLine
+
+    mov SI, offset fileLineBuffer       ;; La primera línea debería de contener la llave que abre ({)
+    mov AL, [SI]                        ;; Comparamos el caracter
+    cmp AL, '{'
+    jne errorWhenReadLine
+
+    mReadLine
+    mGetNumberValue NIVELKW
+    mov numberLevel, AL
+
+
+    jmp closeFile
     errorToOpen:
         mPrintMsg errorOpenFile
         mWaitEnter
@@ -109,7 +144,7 @@ ReadFile PROC USES AX BX CX DX
         int 21h                         ;; Cerramos el archivo
         jc errorToClose                 ;; Mandamos el error si el carry flag se activa
     endRead:
-    mPrintMsg testStr
-    mWaitEnter
+    ; mPrintMsg testStr
+    ; mWaitEnter
     ret
 ReadFile ENDP
