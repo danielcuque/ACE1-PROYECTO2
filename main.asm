@@ -19,6 +19,7 @@ testStr db 'testeando $'
 ; ------------------------------------------------------------
 infoMsg DB 'Universidad de San Carlos de Guatemala', 0Dh, 0Ah,'Facultad de Ingenieria', 0Dh, 0Ah,'Escuela de Ciencias y Sistemas', 0Dh, 0Ah,'Arquitectura de computadores y ensambladores 1', 0Dh, 0Ah,'Seccion B', 0Dh, 0Ah,'Daniel Estuardo Cuque Ruiz' , 0Dh, 0Ah,'202112145', 0Dh, 0Ah, '$'
 colonChar DB ':$'
+newLineChar DB 0Ah, '$'
 errorOpenFile DB 'Error al abrir el archivo$'
 errorReadLine DB 'Error al leer la linea$'
 errorCloseFile DB 'Error al cerrar el archivo$'

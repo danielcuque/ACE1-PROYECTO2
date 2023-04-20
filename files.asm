@@ -8,7 +8,7 @@
 ; handleObject -> Información del archivo
 ;
 ; Retorna:
-; fileLineBuffer -> Str de la primera línea
+; fileLineBuffer -> Str de la línea
 ;---------------------------------------------------------
 
 mReadLine macro
@@ -28,16 +28,16 @@ mReadLine macro
         cmp AX, 0
         je endOfFile
 
-        mov AL, [DI]                ;;
+        mov AL, [DI]                ;; Cargamos el caracter actual a AL para poder compararlo
 
-        cmp AL, 0Dh                 ;; Si llegamos al retorno de carro, significa que llegamos al final de línea
-        je endOfLine                ;; Si encuentra un retorno de carro, signifca que terminó la línea
-
-        cmp AL, 00h                 ;; También podemos indicar que si encontró un caracter nulo, se terminó la fila
-        je endOfLine
+        cmp AL, 20h                 ;; Los espacios nos los saltamos
+        je start
 
         cmp AL, 0Ah                 ;; O si encuentra un salto de línea, significa que terminó
         je endOfLine
+
+        cmp AL, 0Dh                 ;; Nos saltamos los retornos de carro
+        je start
 
         mov [DI], AL                ;; Copiamos el valor a DI para guardarlo en el buffer
         inc DI                      ;; Incrementamos la posicion de DI donde se va a guardar
@@ -73,7 +73,7 @@ endm
 ; Tablero de juego lleno
 ;---------------------------------------------------------
 
-ReadFile PROC USES AX BX CX
+ReadFile PROC USES AX BX CX DX
     xor CX, CX
     mov AL, 00                          ;; Modo de lectura
     mov AH, 3dh                         ;; Función para abrir el archivo
@@ -84,6 +84,7 @@ ReadFile PROC USES AX BX CX
     readLine:
         mReadLine
         mPrintMsg fileLineBuffer
+        ; mPrintMsg newLineChar
         cmp DL, 02h
         je closeFile
         ; mWaitEnter
