@@ -1,10 +1,17 @@
 mStartGame macro 
 
+	push DX
+        mov DX, offset fileName1		;; Leemos el nivel 1 del juego
+        call ReadFile
+    pop DX
+
 	mSetCurrentTime						;; Guardamos el tiempo inicial
-    call CreateMap
     call PrintMapObject    				;; Pintamos el mapa
+
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
+	
 	mPrintAllGhots						;; Mostramos todos los fantasmas
+
 	continueGame:
 		call CalculateTime						;; Mostramos el tiempo en cada iteracion
 		call PrintAceman				;; Mostramos el pacman en cada iteracion
@@ -12,7 +19,7 @@ mStartGame macro
 		call MoveAceman					;; Calculamos la nueva posición
 		cmp totalDots, 0000h			;; Si el total de dots es 0, se termina el juego
 		je endGame						;; Saltamos al final
-		jmp continueGame
+		; jmp continueGame
 	endGame:
 endm
 

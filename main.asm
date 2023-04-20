@@ -19,6 +19,8 @@ testStr db 'testeando $'
 ; ------------------------------------------------------------
 infoMsg DB 'Universidad de San Carlos de Guatemala', 0Dh, 0Ah,'Facultad de Ingenieria', 0Dh, 0Ah,'Escuela de Ciencias y Sistemas', 0Dh, 0Ah,'Arquitectura de computadores y ensambladores 1', 0Dh, 0Ah,'Seccion B', 0Dh, 0Ah,'Daniel Estuardo Cuque Ruiz' , 0Dh, 0Ah,'202112145', 0Dh, 0Ah, '$'
 colonChar DB ':$'
+errorOpenFile DB 'Error al abrir el archivo$'
+errorCloseFile DB 'Error al cerrar el archivo$'
 
 ; ---------------------------------------------------------
 ; Variables para el menu principal
@@ -30,7 +32,9 @@ menuMsg DB '1. Iniciar sesi', 0A2h, 'n $'
 ;---------------------------------------------------------
 fileLineBuffer DB 102h dup('$') 
 handleObject DW 0       
-fileName DB 'niv1.aml'
+fileName1 DB 'niv1.aml', 0                  
+fileName2 DB 'niv2.aml', 0                      ;; Es necesario colocar 0 al final
+fileName3 DB 'niv3.aml', 0
 ;---------------------------------------------------------
 ; Variable para convertir numeros
 ;---------------------------------------------------------
@@ -43,7 +47,7 @@ counterToGetIndexGotten DW 0
 ;---------------------------------------------------------
 timeStr DB '00:00:000$'
 
-initialTime     DW 00                    ;; Como valor inicial guardamos 59s 99cs
+initialTime     DW 00                           ;; Como valor inicial guardamos 59s 99cs
 currentTime     DW 00h
 
 initialMinutes  DB 00h
@@ -58,12 +62,12 @@ hundredTime     DW 00h
 ;---------------------------------------------------------
 ; Variables para el juego
 ;---------------------------------------------------------
-tableGame       DB 03E8h dup(0)               ;; La pantalla es de 25 * 40
+tableGame       DB 03E8h dup(0)                 ;; La pantalla es de 25 * 40
 totalPoints     DW 0h
 aceDotPoints    DW 01h
 totalDots       DW 06h
 
-isGhostBlue DW 0FFh                     ;; 00 = no se puede comer | ff = se puede comer y pintar azul
+isGhostBlue DW 0FFh                             ;; 00 = no se puede comer | ff = se puede comer y pintar azul
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
@@ -108,18 +112,6 @@ magentaGhost_x              DW      15h
 cyanGhost_y                 DW      0Bh
 cyanGhost_x                 DW      15h
 
-
-
-mStartProgram macro
-    LOCAL start, exit
-    start:
-        mActiveVideoMode
-        mStartGame
-    exit:
-        mActiveTextMode
-        mExit
-endm
-
 .CODE
 
 INCLUDE utils.asm           ;; Funciones auxiliares que pueden ser usadas en cualquier parte del programa
@@ -127,6 +119,17 @@ INCLUDE menu.asm            ;; Menu principal
 INCLUDE time.asm            ;; Lógica para el crónometro
 INCLUDE game.asm            ;; Lógica del juego
 INCLUDE files.asm           ;; Lógica para leer archivos
+
+mStartProgram macro
+    LOCAL start, exit
+    start:
+        mActiveVideoMode
+        
+        mStartGame
+    exit:
+        mActiveTextMode
+        mExit
+endm
 
 start:
     main PROC
