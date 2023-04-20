@@ -20,7 +20,7 @@ mStartGame macro
 		call MoveAceman					;; Calculamos la nueva posición
 		cmp totalDots, 0000h			;; Si el total de dots es 0, se termina el juego
 		je endGame						;; Saltamos al final
-		; jmp continueGame
+		jmp continueGame
 	endGame:
 endm
 
