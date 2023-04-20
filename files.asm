@@ -196,6 +196,7 @@ ReadFile PROC USES AX BX CX DX
         mGetCoordinate
 
         xor DX, DX
+        dec AX
         mov DH, currentWallType
         call InsertMapObject
 

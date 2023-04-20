@@ -71,7 +71,7 @@ aceDotPoints    DW 01h
 totalDots       DW 01h
 numberLevel     DB 00h                          ;; Guardamos el nivel actual del juego
 
-isGhostBlue DW 0FFh                             ;; 00 = no se puede comer | FF = se puede comer y pintar azul
+isGhostBlue DW 00h                             ;; 00 = no se puede comer | FF = se puede comer y pintar azul
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
