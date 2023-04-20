@@ -204,10 +204,49 @@ ReadFile PROC USES AX BX CX DX
         jmp setWall
     
 
-    endWalls:                          
+    endWalls:
+
+    mReadLine                               ;; Nos saltamos ],
+    mReadLine                               ;; Leemos "power-dots": [                       
+    
     getPowerDots:
+        mReadLine
+
+        mov SI, offset fileLineBuffer
+        mov AL, [SI]
+
+        cmp AL, ']'
+        je endPowerDots
+
+        mGetCoordinate
+
+        xor DX, DX
+        dec AX
+        mov DH, 14h
+        call InsertMapObject
+        add totalDots, 01H
+
+        mReadLine
+        jmp getPowerDots
+    
+    endPowerDots:
+        mReadLine                             ;; Leemos "portales":[
+    
     getPortals:
-     
+        mReadLine
+
+        mov SI, offset fileLineBuffer
+        mov AL, [SI]
+
+        cmp AL, ']'
+        je endPortals
+
+        mPrintMsg fileLineBuffer
+        mWaitEnter
+
+        jmp getPortals
+        
+    endPortals: 
 
     jmp closeFile
     errorToOpen:
