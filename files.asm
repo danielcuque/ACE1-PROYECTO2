@@ -91,6 +91,34 @@ mGetNumberValue macro keyword
 endm
 
 ;---------------------------------------------------------
+; mGetCoordinate
+;
+; Descripción:
+; Obtiene la coordenada X y Y de clave:valor
+;
+; Recibe:
+; -
+;
+; Retorna:
+; AX ->  Pos X
+; CX ->  Pos Y
+;---------------------------------------------------------
+mGetCoordinate macro
+    mReadLine
+    mGetNumberValue XKW
+    mov CX, AX              ;; BX = Pos X AX = Pos X
+    
+    push CX
+    mReadLine
+    mGetNumberValue YKW
+    pop CX
+
+    
+    xchg CX, AX             ;; CX = Pos X, AX = Pos Y (intercambiamos)
+    
+endm
+
+;---------------------------------------------------------
 ; ReadFile
 ;
 ; Descripción:
@@ -129,6 +157,10 @@ ReadFile PROC USES AX BX CX DX
     mov aceDotPoints, AX
 
     mReadLine                           ;; Leemos "acemaninit":{
+    mGetCoordinate                      ;; Obtenemos la coordenada de acemaninit
+    mov aceman_x, AX
+    mov aceman_y, CX
+
      
 
     jmp closeFile

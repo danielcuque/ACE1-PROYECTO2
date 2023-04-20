@@ -497,7 +497,7 @@ endm
 ; 
 ;
 ; Retorna:
-; DL -> 0, no son iguales
+; DL ->  0, no son iguales
 ; DL ->  1, son iguales
 ;---------------------------------------------------------
 

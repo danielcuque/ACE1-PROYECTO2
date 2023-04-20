@@ -68,7 +68,7 @@ hundredTime     DW 00h
 tableGame       DB 03E8h dup(0)                 ;; La pantalla es de 25 * 40
 totalPoints     DW 0h
 aceDotPoints    DW 01h
-totalDots       DW 06h
+totalDots       DW 01h
 numberLevel     DB 00h                          ;; Guardamos el nivel actual del juego
 
 isGhostBlue DW 0FFh                             ;; 00 = no se puede comer | FF = se puede comer y pintar azul
@@ -97,10 +97,9 @@ mSpriteVars
 ;; Para Aceman
 currentAcemanSprite         DB     00
 currentAcemanDirection      DB     rightKey
-currentAcemanPosition_x     DB     02
-currentAcemanPosition_y     DB     00
-aceman_x                    DW     0001
-aceman_y                    DW     0002
+
+aceman_x                    DW     001h
+aceman_y                    DW     002h
 dir_sprite_aceman           DB     rightKey
 
 ;; Para fantasmas
