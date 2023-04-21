@@ -57,7 +57,7 @@ GetCurrentTime PROC USES AX BX CX DX
     xor CX, CX
     xor DX, DX
 
-    mov BL, initialMinutes                  ;; Movemos los minutos a BL
+    mov BL, initialMinutes      ;; Movemos los minutos a BL
 
     mov AX, 1770h               ;; 60 * 100 decimal
     mul BX                      ;; AX =  min * 60 * 100

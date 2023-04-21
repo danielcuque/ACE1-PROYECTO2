@@ -1,7 +1,0 @@
-
-
-
-; AdminMenu PROC
-
-
-; ENDP

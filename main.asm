@@ -48,10 +48,8 @@ counterToGetIndexGotten DW 0
 ;---------------------------------------------------------
 ; Variables para el cronómetro
 ;---------------------------------------------------------
-timeStr DB '00:00:000$'
-
-initialTime     DW 00                           ;; Como valor inicial guardamos 59s 99cs
-currentTime     DW 00h
+initialTime     DW 00                           ;; Se guarda la los minutos:segundos:cs de cuando se inicia el juego en cs (centésimas de segundo)
+currentTime     DW 00h                          ;; Se va actualizando el tiempo
 
 initialMinutes  DB 00h
 initialSeconds  DB 00h
@@ -87,7 +85,6 @@ PORTALESKW              DB 0Ah, '"portales"'
 NUMEROKW                DB 08h, '"numero"'
 AKW                     DB 01h, '"a"'
 BKW                     DB 01h, '"b"'
-
 
 ;---------------------------------------------------------
 ; Variables para los sprites de los personajes
