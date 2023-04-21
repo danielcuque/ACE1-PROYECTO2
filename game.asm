@@ -25,11 +25,11 @@ PrintHealthAceman PROC USES AX BX CX DX DI
 PrintHealthAceman ENDP
 
 mStartGame macro 
+	
+    mov DX, offset fileName1			;; Leemos el nivel 1 del juego
+    call ReadFile
 
-	; push DX
-        mov DX, offset fileName1		;; Leemos el nivel 1 del juego
-        call ReadFile
-    ; pop DX
+	call PrintInitialInformation		;; Mostramos la información acerca de los dots, fantasmas, etc
 
 	mSetCurrentTime						;; Guardamos el tiempo inicial
 	
@@ -38,11 +38,10 @@ mStartGame macro
 
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
 	
-	mPrintAllGhots						;; Mostramos todos los fantasmas
-
 	continueGame:
 		call CalculateTime				;; Mostramos el tiempo en cada iteracion
 		call PrintAceman				;; Mostramos el pacman en cada iteracion
+		mPrintAllGhots						;; Mostramos todos los fantasmas
 		call ChangeAcemanDirection		;; Solicitamos mover al aceman
 		call MoveAceman					;; Calculamos la nueva posición
 
@@ -56,6 +55,19 @@ mStartGame macro
 	endGameSuccess:
 	
 endm
+
+;---------------------------------------------------------
+; PrintMapObject
+;
+; Descripción:
+; Pinta el mapa en el que se va a jugar el nivel
+;
+; Recibe:
+; _
+;
+; Retorna:
+; _
+;---------------------------------------------------------
 
 PrintMapObject PROC
 		mov CX, 0h							;; Dejamos el numero de columna en 0
@@ -564,11 +576,28 @@ SumPowerDotPoints PROC USES AX BX
 	mov BX, 05h
 	mul BX
 	add totalPoints, AX
-
+	not isGhostBlue
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
 	sub totalDots, 01h
 	ret
 SumPowerDotPoints ENDP
+
+;---------------------------------------------------------
+; PrintInitialInformation
+;
+; Descripción:
+; Imprime la información principal del juego
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+PrintInitialInformation PROC
+	
+	ret
+PrintInitialInformation ENDP
 
 MoveGhost PROC
 	
