@@ -70,7 +70,8 @@ totalPoints     DW 0h                           ;; El marcador total para cuando
 aceDotPoints    DW 01h                          ;; Valor del aceDot
 totalDots       DW 00h                          ;; Cantidad de ace/power dots en el mapa
 numberLevel     DB 00h                          ;; Guardamos el nivel actual del juego
-isGhostBlue DW 00h                              ;; 00 = no se puede comer | FF = se puede comer y pintar azul
+healthAceman    DB 03h
+isGhostBlue     DW 00h                              ;; 00 = no se puede comer | FF = se puede comer y pintar azul
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas

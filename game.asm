@@ -1,3 +1,29 @@
+;---------------------------------------------------------
+; PrintHealthAceman
+;
+; Descripción:
+; Muestra la cantidad de vida que tiene el aceman
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+PrintHealthAceman PROC USES AX BX CX DX DI
+	mov DL, healthAceman			;; Imprimimos n veces, donde n es al cantidad de vidas que le quedan al aceman
+	mov AX, 25h		
+	mov CX, 18h
+	mov DI, offset HeartSprite
+	
+	paintHearts:
+		call PrintSprite
+		inc AX
+		dec DL
+		jnz paintHearts
+	ret
+PrintHealthAceman ENDP
+
 mStartGame macro 
 
 	push DX
@@ -7,21 +33,28 @@ mStartGame macro
 
 	mSetCurrentTime						;; Guardamos el tiempo inicial
 	
-	; call CreateMap
     call PrintMapObject    				;; Pintamos el mapa
+	call PrintHealthAceman				;; Mostramos la vida del aceman
+
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
 	
 	mPrintAllGhots						;; Mostramos todos los fantasmas
 
 	continueGame:
-		call CalculateTime						;; Mostramos el tiempo en cada iteracion
+		call CalculateTime				;; Mostramos el tiempo en cada iteracion
 		call PrintAceman				;; Mostramos el pacman en cada iteracion
 		call ChangeAcemanDirection		;; Solicitamos mover al aceman
 		call MoveAceman					;; Calculamos la nueva posición
-		cmp totalDots, 0000h			;; Si el total de dots es 0, se termina el juego
-		je endGame						;; Saltamos al final
+
+		cmp totalDots, 0h				;; Si el total de dots es 0, se termina el juego
+		je endGameSuccess				;; Saltamos al final si se acabaron los dots
+
+		cmp healthAceman, 0h			;; Si se le acabaron las vidas a Aceman, termina el juego
+		je endGameSuccess
+
 		jmp continueGame
-	endGame:
+	endGameSuccess:
+	
 endm
 
 PrintMapObject PROC
@@ -195,8 +228,6 @@ MoveAceman PROC
 	makeBelowMove:
 		mov aceman_y, CX				;; Cargamos la nueva posición en Y
 		ret
-
-
 	checkAbove:
 		cmp DH, aboveKey
 		jne checkRight
@@ -394,7 +425,7 @@ ChangeAcemanDirection ENDP
 
 SumAceDotPoints PROC USES BX
 	mov BX, 00					;; Limpiamos BX
-	mov BX, totalPoints		;; El valor del puntaje se cambia a BX
+	mov BX, totalPoints			;; El valor del puntaje se cambia a BX
 	add BX, aceDotPoints		;; Le sumo a BX el valor del puntaje de los acedots
 	xchg BX, totalPoints		;; Devuelvo el valor a la variable de puntaje total
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
@@ -428,25 +459,6 @@ SumPowerDotPoints PROC USES AX BX
 	sub totalDots, 01h
 	ret
 SumPowerDotPoints ENDP
-
-;---------------------------------------------------------
-; Aumentar puntaje
-;
-; Descripción:
-; Aumenta el puntaje dentro del juego
-;
-; Recibe:
-; AX -> Pos X
-; CX -> Pos Y
-;
-; Retorna:
-; -
-;---------------------------------------------------------
-mAddTotalPoints macro
-
-endm
-
-
 
 MoveGhost PROC
 	

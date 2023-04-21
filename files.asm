@@ -241,9 +241,6 @@ ReadFile PROC USES AX BX CX DX
         cmp AL, ']'
         je endPortals
 
-        mPrintMsg fileLineBuffer
-        mWaitEnter
-
         jmp getPortals
         
     endPortals: 

@@ -287,12 +287,12 @@ endm
 ;
 ; Retorna: -
 ;---------------------------------------------------------
-PrintSprite PROC USES AX CX
+PrintSprite PROC USES AX CX DX DI
     
 	mov BX, 0h					;; Limpiamos al registro BX
 	mov DL, 08h					;; Cargamos a DL 8
 	mul DL						;; Multiplicamos Posx * 8 para hacer row major con la matriz de pixeles
-	add BX, AX					;; 
+	add BX, AX					;; Sumamos el resultado de la multiplación
 	xchg AX, CX					;; Intercambiamos el valor de las posiciones
 	mul DL						;; Multiplicamos nuevamente * 8 las filas
 	xchg AX, CX
