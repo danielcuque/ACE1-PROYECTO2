@@ -208,6 +208,9 @@ MoveAceman PROC
 
 		cmp DL, 14h
 		je addPowerDotPointsBelow
+
+		; cmp DL, 15h
+		; jge movePortal
 		
 		cmp DL, maxWall
 		ja makeBelowMove				;; También necesitamos comparar si llegó al límite de las paredes
@@ -340,6 +343,7 @@ MoveAceman PROC
 
 	makeLeftMove:
 		mov aceman_x, AX
+	movePortal:
 	endProc:
 		ret
 MoveAceman ENDP

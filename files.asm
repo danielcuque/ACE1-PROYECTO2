@@ -248,7 +248,7 @@ ReadFile PROC USES AX BX CX DX
         mGetCoordinate                         ;; Obtenemos las coordenadas del par A
 
         xor DX, DX
-        mov DH, 15h
+        mov DH, lastPortalInserted
         dec AX
         call InsertMapObject
 
@@ -257,9 +257,11 @@ ReadFile PROC USES AX BX CX DX
 
         mGetCoordinate                         ;; Obtenemos la coordenada
         xor DX, DX
-        mov DH, 15h
+        mov DH, lastPortalInserted
         dec AX
         call InsertMapObject                   ;; Insertamos el objeto
+
+        add lastPortalInserted, 01h
 
         mReadLine                              ;; Leemos  }
         mReadLine
