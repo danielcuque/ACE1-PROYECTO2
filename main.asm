@@ -18,6 +18,7 @@ testStr db 'testeando $'
 ; o que no van a ser de utilidad en otra parte del codigo
 ; ------------------------------------------------------------
 infoMsg             DB 'Universidad de San Carlos de Guatemala', 0Dh, 0Ah,'Facultad de Ingenieria', 0Dh, 0Ah,'Escuela de Ciencias y Sistemas', 0Dh, 0Ah,'Arquitectura de computadores y ensambladores 1', 0Dh, 0Ah,'Seccion B', 0Dh, 0Ah,'Daniel Estuardo Cuque Ruiz' , 0Dh, 0Ah,'202112145', 0Dh, 0Ah, '$'
+developerName       DB 'Daniel Cuque | 202112145$'
 colonChar           DB ':$'
 newLineChar         DB 0Ah, '$'
 errorOpenFile       DB 'Error al abrir el archivo$'
@@ -72,7 +73,8 @@ totalDots           DW 00h                          ;; Cantidad de ace/power dot
 numberLevel         DB 00h                          ;; Guardamos el nivel actual del juego
 healthAceman        DB 03h
 isGhostBlue         DW 00h                          ;; 00 = no se puede comer | FF = se puede comer y pintar azul
-lastPortalInserted  DB 15h                       ;; 20 decimal
+lastPortalInserted  DB 15h                          ;; 20 decimal
+currentPlayerName   DB 'Daniel$'                    ;; Nombre del jugador
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
@@ -88,6 +90,7 @@ PORTALESKW              DB 0Ah, '"portales"'
 NUMEROKW                DB 08h, '"numero"'
 AKW                     DB 01h, '"a"'
 BKW                     DB 01h, '"b"'
+JUGADORKW               DB 'JUGADOR: $'
 
 ;---------------------------------------------------------
 ; Variables para los sprites de los personajes

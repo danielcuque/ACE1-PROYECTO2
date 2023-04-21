@@ -594,8 +594,118 @@ SumPowerDotPoints ENDP
 ; Retorna:
 ; -
 ;---------------------------------------------------------
-PrintInitialInformation PROC
+PrintInitialInformation PROC USES AX BX CX DX DI
+	mov AX, 1h					;; Fila 1
+	mov CX, 1h					;; Columna 1
+	mov DI, offset AceDot
+	call PrintSprite
 	
+	mov AH, 02				;;
+	mov DH, 1h				;;	fila
+	mov DL, 3h				;;	columna
+	mov BH, 00				;;
+	int 10
+
+	mov BX, aceDotPoints
+	mov numberGotten, BX
+	mPrintNumberConverted
+
+	mov AX, 1h					;; Fila 1
+	mov CX, 2h					;; Columna 1
+	mov DI, offset PowerDot
+	call PrintSprite
+
+	mov AH, 02				;;
+	mov DH, 2h				;;	fila
+	mov DL, 3h				;;	columna
+	mov BH, 00				;;
+	int 10
+
+	mov AX, 05h
+	mov BX, aceDotPoints
+	mul BX
+	mov numberGotten, AX
+	mPrintNumberConverted
+
+	mov AX, 1h					;; Fila 1
+	mov CX, 3h					;; Columna 1
+	mov DI, offset CoinSprite
+	call PrintSprite
+
+	mov AH, 02				;;
+	mov DH, 3h				;;	fila
+	mov DL, 3h				;;	columna
+	mov BH, 00				;;
+	int 10
+
+	mov AX, totalPoints
+	mov numberGotten, AX
+	mPrintNumberConverted
+
+	mov AX, 1h					;; Fila 1
+	mov CX, 4h					;; Columna 1
+	mov DI, offset GhostCyan
+	call PrintSprite
+
+	mov AH, 02				;;
+	mov DH, 4h				;;	fila
+	mov DL, 3h				;;	columna
+	mov BH, 00				;;
+	int 10
+
+	mov AX, totalPoints
+	mov numberGotten, AX
+	mPrintNumberConverted
+
+	mov AX, 1h					;; Fila 1
+	mov CX, 5h					;; Columna 1
+	mov DI, offset HeartSprite
+	call PrintSprite
+
+	mov AH, 02				;;
+	mov DH, 5h				;;	fila
+	mov DL, 3h				;;	columna
+	mov BH, 00				;;
+	int 10
+
+	xor AX, AX
+	mov AL, healthAceman
+	mov numberGotten, AX
+	mPrintNumberConverted
+
+	mov AX, 1h					;; Fila 1
+	mov CX, 6h					;; Columna 1
+	mov DI, offset LevelSprite
+	call PrintSprite
+
+	mov AH, 02				;;
+	mov DH, 6h				;;	fila
+	mov DL, 3h				;;	columna
+	mov BH, 00				;;
+	int 10
+
+	xor AX, AX
+	mov AL, numberLevel
+	mov numberGotten, AX
+	mPrintNumberConverted
+
+	mov AH, 02				;;
+	mov DH, 09h				;;	fila
+	mov DL, 1h				;;	columna
+	mov BH, 00				;;
+	int 10
+	
+	mPrintMsg JUGADORKW
+	mPrintMsg currentPlayerName
+
+	mov AH, 02				;;
+	mov DH, 0Ah				;;	fila
+	mov DL, 1h				;;	columna
+	mov BH, 00				;;
+	int 10
+
+	mPrintMsg developerName
+	mWaitEnter
 	ret
 PrintInitialInformation ENDP
 
