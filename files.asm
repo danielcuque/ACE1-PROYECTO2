@@ -196,7 +196,7 @@ ReadFile PROC USES AX BX CX DX
         mGetCoordinate
 
         xor DX, DX
-        dec AX
+        dec AX                              ;; Decrementamos AX para que se coloque una posicion antes
         mov DH, currentWallType
         call InsertMapObject
 

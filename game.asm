@@ -112,6 +112,97 @@ PrintMapObject PROC
 PrintMapObject ENDP
 
 ;---------------------------------------------------------
+; SearchPortalPosition
+;
+; Descripción:
+; Busca la pareja del portal para poder cambiar la posición
+;
+; Recibe:
+; CX -> Posición Y actual del portal
+; AX -> Posición X actual del portal
+; DL -> ID del portal
+;
+; Retorna:
+; CX -> Pos Y de la pareja
+; AX -> Pos X de la pareja
+;---------------------------------------------------------
+
+SearchPortalPosition PROC USES DI
+	mov DI, offset tableGame				;; Obtenemos la direccion de memoria del tablero para poder recorrerlo
+	mov DH, DL								;; Movemos temporalmente el valor de DL con el ID a DH
+	mov auxiliarX, AX						;; Guardamos temporalmente el valor de AX Y CX para poder evaluar
+	mov auxiliarY, CX
+
+	xor AX, AX
+	xor CX, CX
+
+	printRow:
+		mov AX, 0h
+
+	printCol:
+		call GetMapObject
+		cmp DL, DH
+		je verifyPositionX
+		jmp continueLoop
+
+		verifyPositionX:
+			cmp CX, auxiliarY
+			je verifyPositionY
+			jmp continueLoop
+		
+		verifyPositionY:
+			cmp AX, auxiliarX
+			je continueLoop
+			jmp changeDirection
+
+		continueLoop:
+			inc AX
+			cmp AX, 28h					;; Comparamos si llegamos a la ultima fila
+			jne printCol				;; Si no llegamos, seguimos iterando
+
+			inc CX						
+			cmp CX, 19h					;; Comparamos si llegamos a la última fila
+			jne printRow
+
+	changeDirection:
+		cmp AX, 00
+		je rigthMove
+
+		cmp AX, 27h
+		je leftMove
+
+		cmp CX, 01h
+		je belowMove
+
+		cmp CX, 18h
+		je aboveMove
+
+	aboveMove:
+		; inc CX
+		mov currentAcemanDirection, aboveKey
+		mov dir_sprite_aceman, aboveKey
+		jmp setNewCoordinate
+
+	belowMove:
+		; dec CX
+		mov currentAcemanDirection, belowKey
+		mov dir_sprite_aceman, belowKey
+		jmp setNewCoordinate
+	leftMove:
+		dec AX	
+		mov currentAcemanDirection, leftKey
+		mov dir_sprite_aceman, leftKey
+		jmp setNewCoordinate
+	rigthMove:
+		inc AX
+		mov currentAcemanDirection, rightKey
+		mov dir_sprite_aceman, rightKey
+		jmp setNewCoordinate
+	setNewCoordinate:	
+	ret
+SearchPortalPosition ENDP
+
+;---------------------------------------------------------
 ; InsertMapObject
 ;
 ; Descripción:
@@ -209,8 +300,8 @@ MoveAceman PROC
 		cmp DL, 14h
 		je addPowerDotPointsBelow
 
-		; cmp DL, 15h
-		; jge movePortal
+		cmp DL, 15h
+		jge movePortal
 		
 		cmp DL, maxWall
 		ja makeBelowMove				;; También necesitamos comparar si llegó al límite de las paredes
@@ -248,6 +339,8 @@ MoveAceman PROC
 		cmp DL, 14h
 		je addPowerDotPointsAbove
 
+		cmp DL, 15h
+		jge movePortal
 		
 		cmp DL, maxWall
 		ja makeAboveMove
@@ -287,6 +380,9 @@ MoveAceman PROC
 		cmp DL, 14h
 		je addPowerDotPointsRight
 
+		cmp DL, 15h
+		jge movePortal
+
 		cmp DL, maxWall
 		ja makeRightMove
 		dec AX
@@ -324,6 +420,9 @@ MoveAceman PROC
 		cmp DL, 14h
 		je addPowerDotPointsLeft
 
+		cmp DL, 15h
+		jge movePortal
+
 		cmp DL, maxWall
 		ja makeLeftMove
 		inc AX
@@ -343,7 +442,11 @@ MoveAceman PROC
 
 	makeLeftMove:
 		mov aceman_x, AX
+		jmp endProc
 	movePortal:
+		call SearchPortalPosition
+		mov aceman_x, AX
+		mov aceman_y, CX
 	endProc:
 		ret
 MoveAceman ENDP

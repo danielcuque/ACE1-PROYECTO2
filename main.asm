@@ -24,6 +24,8 @@ errorOpenFile       DB 'Error al abrir el archivo$'
 errorReadLine       DB 'Error al leer la linea en $'
 errorCloseFile      DB 'Error al cerrar el archivo$'
 errorSizeOfNumber   DB 'Numero demasiado grande$'
+auxiliarX           DW 00h
+auxiliarY           DW 00h
 
 ; ---------------------------------------------------------
 ; Variables para el menu principal
