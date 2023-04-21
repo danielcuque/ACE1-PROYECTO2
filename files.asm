@@ -269,8 +269,7 @@ ReadFile PROC USES AX BX CX DX
         jmp getPortals
         
     endPortals: 
-
-    jmp closeFile
+        jmp closeFile
     errorToOpen:
         mPrintMsg errorOpenFile
         mWaitEnter
@@ -290,7 +289,5 @@ ReadFile PROC USES AX BX CX DX
         int 21h                         ;; Cerramos el archivo
         jc errorToClose                 ;; Mandamos el error si el carry flag se activa
     endRead:
-    ; mPrintMsg testStr
-    ; mWaitEnter
     ret
 ReadFile ENDP

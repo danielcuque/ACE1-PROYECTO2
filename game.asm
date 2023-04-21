@@ -133,37 +133,49 @@ SearchPortalPosition PROC USES DI
 	mov auxiliarX, AX						;; Guardamos temporalmente el valor de AX Y CX para poder evaluar
 	mov auxiliarY, CX
 
-	xor AX, AX
+	xor AX, AX								;; Limpiamos los registros
 	xor CX, CX
 
 	printRow:
-		mov AX, 0h
+		mov AX, 0h							;; Empezamos desde la línea 0
 
 	printCol:
-		call GetMapObject
-		cmp DL, DH
-		je verifyPositionX
-		jmp continueLoop
+		call GetMapObject					;; Obtenemos el objeto dentro del mapa en la posición actual
+		cmp DL, DH							;; Comparamos el ID del objeto, y buscamos que sea el mismo ID
+		je verifyPositionY					;; Si es igual, entonces verificamos las posiciones para que no sea el mismo portal
+		jmp continueLoop					;; Si no es, entonces continuamos el loop
 
-		verifyPositionX:
-			cmp CX, auxiliarY
-			je verifyPositionY
-			jmp continueLoop
-		
+		;; Para los portales horizontales, el eje Y puede ser igual
+		;; Para los verticales, el eje X puede ser igual
+
 		verifyPositionY:
-			cmp AX, auxiliarX
-			je continueLoop
-			jmp changeDirection
+			cmp CX, auxiliarY				;; Guardamos la posición anterior y miramos si son las mismas
+			je verifyPositionX				;; Si la posición en Y es la misma, entonces verificamos que el eje X no sea igual
+			jmp secondVerifyX				;; Si no son iguales, puede ser que sea un portal vertical		 
+		
+		verifyPositionX:
+			cmp AX, auxiliarX				;; Si el eje X es igual, y el Y también, quiere decir que es el mismo portal y lo saltamos
+			je continueLoop					
+			jmp changeDirection				;; De lo contrario, entonces cambiamos la dirección
+		
+		secondVerifyX:	
+			cmp AX, auxiliarX				;; Si el eje X no es igual, entonces lo saltamos
+			jne continueLoop				
+		
+		secondVerifyY:
+			cmp CX, auxiliarY				;; Si el eje Y es igual, entonces lo saltamos
+			je continueLoop	
+			jmp changeDirection				;; De lo contrario lo saltamos
 
 		continueLoop:
 			inc AX
-			cmp AX, 28h					;; Comparamos si llegamos a la ultima fila
-			jne printCol				;; Si no llegamos, seguimos iterando
+			cmp AX, 28h						;; Comparamos si llegamos a la ultima fila
+			jne printCol					;; Si no llegamos, seguimos iterando
 
 			inc CX						
-			cmp CX, 19h					;; Comparamos si llegamos a la última fila
+			cmp CX, 19h						;; Comparamos si llegamos a la última fila
 			jne printRow
-
+		jmp setNewCoordinate
 	changeDirection:
 		cmp AX, 00
 		je rigthMove
@@ -174,17 +186,17 @@ SearchPortalPosition PROC USES DI
 		cmp CX, 01h
 		je belowMove
 
-		cmp CX, 18h
+		cmp CX, 19h
 		je aboveMove
 
 	aboveMove:
-		; inc CX
+		dec CX
 		mov currentAcemanDirection, aboveKey
 		mov dir_sprite_aceman, aboveKey
 		jmp setNewCoordinate
 
 	belowMove:
-		; dec CX
+		inc CX
 		mov currentAcemanDirection, belowKey
 		mov dir_sprite_aceman, belowKey
 		jmp setNewCoordinate
