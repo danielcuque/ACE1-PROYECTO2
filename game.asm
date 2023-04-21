@@ -26,10 +26,10 @@ PrintHealthAceman ENDP
 
 mStartGame macro 
 
-	push DX
+	; push DX
         mov DX, offset fileName1		;; Leemos el nivel 1 del juego
         call ReadFile
-    pop DX
+    ; pop DX
 
 	mSetCurrentTime						;; Guardamos el tiempo inicial
 	
@@ -191,24 +191,15 @@ SearchPortalPosition PROC USES DI
 
 	aboveMove:
 		dec CX
-		mov currentAcemanDirection, aboveKey
-		mov dir_sprite_aceman, aboveKey
 		jmp setNewCoordinate
-
 	belowMove:
 		inc CX
-		mov currentAcemanDirection, belowKey
-		mov dir_sprite_aceman, belowKey
 		jmp setNewCoordinate
 	leftMove:
 		dec AX	
-		mov currentAcemanDirection, leftKey
-		mov dir_sprite_aceman, leftKey
 		jmp setNewCoordinate
 	rigthMove:
 		inc AX
-		mov currentAcemanDirection, rightKey
-		mov dir_sprite_aceman, rightKey
 		jmp setNewCoordinate
 	setNewCoordinate:	
 	ret
