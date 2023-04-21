@@ -30,6 +30,7 @@ mStartGame macro
     call ReadFile
 
 	call PrintInitialInformation		;; Mostramos la información acerca de los dots, fantasmas, etc
+	mWaitEnter
 
 	mSetCurrentTime						;; Guardamos el tiempo inicial
 	
@@ -538,10 +539,16 @@ ChangeAcemanDirection PROC USES AX CX
 		jmp endProc
 	
 	pauseGame:
+		mov AH, 00
+		int 16h
+
 		call EmptyScreen
 		call PrintInitialInformation
+		mWaitEnter
 		call PrintMapObject
 		mPrintTotalPoints
+		call PrintHealthAceman
+		jmp endProc
 	emptyBuffer:
 		mov AH, 00
 		int 16
@@ -723,7 +730,6 @@ PrintInitialInformation PROC USES AX BX CX DX DI
 	int 10
 
 	mPrintMsg developerName
-	mWaitEnter
 	ret
 PrintInitialInformation ENDP
 
