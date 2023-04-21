@@ -69,6 +69,7 @@ hundredTime     DW 00h
 tableGame           DB 03E8h dup(0)                 ;; La pantalla es de 25 * 40
 totalPoints         DW 0h                           ;; El marcador total para cuando coma ace/power dots
 aceDotPoints        DW 01h                          ;; Valor del aceDot
+ghostPoints         DW 64h                          ;; El valor inicial de los fantasmas
 totalDots           DW 00h                          ;; Cantidad de ace/power dots en el mapa
 numberLevel         DB 00h                          ;; Guardamos el nivel actual del juego
 healthAceman        DB 03h

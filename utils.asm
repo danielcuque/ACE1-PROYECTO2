@@ -99,9 +99,34 @@ mExit macro
     int 21h
 endm
 
-EmptyScreen PROC
-    mPrintMsg infoMsg
-    mWaitEnter
+;---------------------------------------------------------
+; EmptyScreen
+;
+; Descripción:
+; Vacía la pantalla
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
+EmptyScreen PROC USES AX CX DI
+    mov CX, 0h							;; Dejamos el numero de columna en 0
+	printRow:
+		mov AX, 0h							;; Cada vez que se pinte una fila, la pos X regresa a 0
+	printCol:
+        mov DI, offset wallSprite
+		call PrintSprite
+
+		inc AX
+		cmp AX, 28h					;; Comparamos si llegamos a la ultima fila
+		jne printCol				;; Si no llegamos, seguimos iterando
+
+		inc CX						
+		cmp CX, 19h					;; Comparamos si llegamos a la última fila
+		jne printRow	
     ret
 EmptyScreen ENDP
 

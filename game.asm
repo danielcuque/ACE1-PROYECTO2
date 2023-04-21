@@ -41,7 +41,7 @@ mStartGame macro
 	continueGame:
 		call CalculateTime				;; Mostramos el tiempo en cada iteracion
 		call PrintAceman				;; Mostramos el pacman en cada iteracion
-		mPrintAllGhots						;; Mostramos todos los fantasmas
+		mPrintAllGhots				    ;; Mostramos todos los fantasmas
 		call ChangeAcemanDirection		;; Solicitamos mover al aceman
 		call MoveAceman					;; Calculamos la nueva posición
 
@@ -69,7 +69,7 @@ endm
 ; _
 ;---------------------------------------------------------
 
-PrintMapObject PROC
+PrintMapObject PROC USES AX BX CX DX DI
 		mov CX, 0h							;; Dejamos el numero de columna en 0
 		mov DI, offset tableGame
 	printRow:
@@ -477,6 +477,7 @@ MoveAceman ENDP
 ;
 ; Retorna:
 ; Cambio de direcciones
+; Juego pausado si es necesario
 ;---------------------------------------------------------
 ChangeAcemanDirection PROC USES AX CX
 	mov AH, 01									;; Generamos la interrupción para obtener entradas del teclado
@@ -484,17 +485,29 @@ ChangeAcemanDirection PROC USES AX CX
 
 	jz endProc									;; Si la bandera de carry es zero entonces retornamos
 
+	; mov AL, 00
+	; xchg AL, AH
+	; mov numberGotten, 00
+	; mov numberGotten, AX
+	; mPrintNumberConverted
+	; mWaitEnter
+	; xchg AL, AH
+
 	cmp AH, 48h									;; 48h es para la tecla de arriba
 	je aboveMove
 
-	cmp AH, 50h
+	cmp AH, 50h									;; Tecla abajo
 	je belowMove
 
-	cmp AH, 4Bh
+	cmp AH, 4Bh									;; Tecla izquierda
 	je leftMove
 
-	cmp AH, 4Dh
+	cmp AH, 4Dh									;; Tecla derecha
 	je rigthMove
+
+	cmp AH, 01h									;; Tecla ESC
+	je pauseGame
+
 	jmp emptyBuffer
 
 
@@ -523,7 +536,12 @@ ChangeAcemanDirection PROC USES AX CX
 		mov currentAcemanDirection, rightKey
 		mov dir_sprite_aceman, rightKey
 		jmp endProc
-
+	
+	pauseGame:
+		call EmptyScreen
+		call PrintInitialInformation
+		call PrintMapObject
+		mPrintTotalPoints
 	emptyBuffer:
 		mov AH, 00
 		int 16
@@ -653,7 +671,7 @@ PrintInitialInformation PROC USES AX BX CX DX DI
 	mov BH, 00				;;
 	int 10
 
-	mov AX, totalPoints
+	mov AX, ghostPoints
 	mov numberGotten, AX
 	mPrintNumberConverted
 
