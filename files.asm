@@ -233,13 +233,36 @@ ReadFile PROC USES AX BX CX DX
         mReadLine                             ;; Leemos "portales":[
     
     getPortals:
-        mReadLine
+        mReadLine                             ;; Leemos {
 
         mov SI, offset fileLineBuffer
         mov AL, [SI]
 
         cmp AL, ']'
         je endPortals
+
+        mReadLine                              ;; Leemos 'numero': valor
+
+        mReadLine                              ;; Leemos "a":{
+        
+        mGetCoordinate                         ;; Obtenemos las coordenadas del par A
+
+        xor DX, DX
+        mov DH, 15h
+        dec AX
+        call InsertMapObject
+
+        mReadLine                              ;; Leemos },
+        mReadLine                              ;; Leemos "b":{
+
+        mGetCoordinate                         ;; Obtenemos la coordenada
+        xor DX, DX
+        mov DH, 15h
+        dec AX
+        call InsertMapObject                   ;; Insertamos el objeto
+
+        mReadLine                              ;; Leemos  }
+        mReadLine
 
         jmp getPortals
         
