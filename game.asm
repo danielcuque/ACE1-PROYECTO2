@@ -52,6 +52,9 @@ mStartGame macro
 		cmp healthAceman, 0h			;; Si se le acabaron las vidas a Aceman, termina el juego
 		je endGameSuccess
 
+		cmp isBackMenu, 00
+		jne menuProgram
+
 		jmp continueGame
 	endGameSuccess:
 	
@@ -544,7 +547,11 @@ ChangeAcemanDirection PROC USES AX CX
 
 		call EmptyScreen
 		call PrintInitialInformation
-		mWaitEnter
+		call PauseMenu
+		
+		cmp isBackMenu, 00
+		jne endProc
+
 		call PrintMapObject
 		mPrintTotalPoints
 		call PrintHealthAceman

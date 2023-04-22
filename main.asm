@@ -76,6 +76,7 @@ healthAceman        DB 03h
 isGhostBlue         DW 00h                          ;; 00 = no se puede comer | FF = se puede comer y pintar azul
 lastPortalInserted  DB 15h                          ;; 20 decimal
 currentPlayerName   DB 'Daniel$'                    ;; Nombre del jugador
+isBackMenu            DB 00                           ;; 00 = continuar | FF = volver al menú principal
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
@@ -132,9 +133,8 @@ INCLUDE files.asm           ;; Lógica para leer archivos
 
 mStartProgram macro
     LOCAL start, exit
-    start:
+    startProgram:
         mActiveVideoMode
-        
         mStartGame
     exit:
         mActiveTextMode
@@ -145,6 +145,12 @@ start:
     main PROC
         mov AX, @data
         mov DS, AX
+    menuProgram:
+        mResetVars
+        mActiveTextMode
+        mPrintMsg infoMsg
+        mWaitEnter
+
         mStartProgram
     main ENDP
 END start

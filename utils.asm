@@ -547,3 +547,52 @@ CompareStr PROC USES AX BX SI DI
     endCompare:
 	ret
 CompareStr ENDP
+
+;---------------------------------------------------------
+; PauseMenu
+;
+; Descripción:
+; Se muestra en el menu de pausa del juego
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+PauseMenu PROC USES AX
+    waitAnswer:
+        mov AH, 08h
+        int 21
+
+        cmp AL, 0Dh
+        je endProc
+
+        cmp AL, 65h
+        je setBackMenu
+
+        jmp waitAnswer
+
+    setBackMenu:
+        mov isBackMenu, 01h        ;; 00 o FF 
+    
+    endProc:
+    ret
+PauseMenu ENDP
+
+;---------------------------------------------------------
+; mResetVars
+;
+; Descripción:
+; Reinica todas las variables del juego
+;
+; Recibe:
+; -
+;
+; Retorna:
+; Variables reiniciadas
+;---------------------------------------------------------
+mResetVars macro
+    mov isBackMenu, 00
+    mov totalDots, 00
+endm
