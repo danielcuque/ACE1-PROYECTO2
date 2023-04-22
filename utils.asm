@@ -596,3 +596,68 @@ mResetVars macro
     mov isBackMenu, 00
     mov totalDots, 00
 endm
+
+
+;---------------------------------------------------------
+; GenerateRandomNum
+;
+; Descripción:
+; Genera un número aleatorio entre 0 y 3
+;
+; Recibe:
+; -
+;
+; Retorna:
+; AL con el numero aleatorio
+;---------------------------------------------------------
+GenerateRandomNum PROC USES BX DX
+    mov AH, 1Ah
+    int 1Ah
+    mov randomNumber, DX
+    
+    ; Extraer los bits menos significativos del valor obtenido
+    and randomNumber, 0000FFFFh
+    
+    ; Dividir el valor obtenido por 16384 (2^14)
+    mov AX, randomNumber
+    mov BX, 16384t
+    div BX
+    ret
+GenerateRandomNum ENDP
+
+;---------------------------------------------------------
+; FillWithDots
+;
+; Descripción:
+; LLena el tablero con dots
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+FillWithDots PROC USES AX BX CX DX
+    mov CX, 01h                ;; Se salta la primera línea
+
+    fillRow:
+        mov AX, 0h
+    fillCol:
+        call GetMapObject
+        cmp DL, 00h
+        jne continueLoop
+        
+        mov DH, 13h
+        add totalDots, 01h
+        call InsertMapObject
+    
+    continueLoop:
+        inc AX
+        cmp AX, 28h                 ;; 40 decimal
+        jne fillCol
+
+        inc CX
+        cmp CX, 18h                 ;; 24 decimal
+        jne fillRow
+    ret
+FillWithDots ENDP

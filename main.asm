@@ -27,6 +27,7 @@ errorCloseFile      DB 'Error al cerrar el archivo$'
 errorSizeOfNumber   DB 'Numero demasiado grande$'
 auxiliarX           DW 00h
 auxiliarY           DW 00h
+randomNumber        DW 001h                    ;; Sirve de seed para los numeros aleatorios
 
 ; ---------------------------------------------------------
 ; Variables para el menu principal

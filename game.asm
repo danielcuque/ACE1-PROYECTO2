@@ -25,6 +25,11 @@ PrintHealthAceman PROC USES AX BX CX DX DI
 PrintHealthAceman ENDP
 
 mStartGame macro 
+	; call GenerateRandomNum
+	; mov AH, 00
+	; mov numberGotten, AX
+	; mPrintNumberConverted
+	; mWaitEnter
 	
     mov DX, offset fileName1			;; Leemos el nivel 1 del juego
     call ReadFile
@@ -33,6 +38,8 @@ mStartGame macro
 	mWaitEnter
 
 	mSetCurrentTime						;; Guardamos el tiempo inicial
+
+	call FillWithDots					;; Rellena los espacios vacios en el mapa con dots normales
 	
     call PrintMapObject    				;; Pintamos el mapa
 	call PrintHealthAceman				;; Mostramos la vida del aceman
