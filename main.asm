@@ -112,17 +112,17 @@ aceman_y                    DW     002h
 dir_sprite_aceman           DB     rightKey
 
 ;; Para fantasmas
-redGhost_y                  DW      09h      
-redGhost_x                  DW      13h
+redGhost_y                  DW      09h             ;; 9 decimal 
+redGhost_x                  DW      13h             ;; 19 decimal
 
-orangeGhost_y               DW      0Bh
-orangeGhost_x               DW      13h
+orangeGhost_y               DW      0Bh             ;; 11 decimal
+orangeGhost_x               DW      13h             ;; 19 decimal
 
-magentaGhost_y              DW      09h
-magentaGhost_x              DW      15h
+magentaGhost_y              DW      09h             ;; 9 decimal
+magentaGhost_x              DW      15h             ;; 21 decimal
 
-cyanGhost_y                 DW      0Bh
-cyanGhost_x                 DW      15h
+cyanGhost_y                 DW      0Bh             ;; 11 decimal
+cyanGhost_x                 DW      15h             ;; 21 decmal
 
 .CODE
 

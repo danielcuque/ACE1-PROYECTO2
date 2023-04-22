@@ -274,6 +274,7 @@ mPrintGhots macro x_pos, y_pos, ghost
 	LOCAL print, printGhostBlue
 	push AX
 	push CX
+
 	mov AX, x_pos
 	mov CX, y_pos
 
@@ -659,5 +660,24 @@ FillWithDots PROC USES AX BX CX DX
         inc CX
         cmp CX, 18h                 ;; 24 decimal
         jne fillRow
+
+    ;; Reservamos el espacio de los fantasmas
+    mov CX, 09h
+    mov DH, 00
+    ghostRow:
+        mov AX, 13h
+    
+    ghostCol:
+        sub totalDots, 01h
+        call InsertMapObject
+        inc AX
+        cmp AX, 16h
+        jne ghostCol
+
+        inc CX
+        cmp CX, 0Ch
+        jne ghostRow 
+
+    
     ret
 FillWithDots ENDP
