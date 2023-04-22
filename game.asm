@@ -609,7 +609,7 @@ SumPowerDotPoints PROC USES AX BX
 	mov BX, 05h
 	mul BX
 	add totalPoints, AX
-	not isGhostBlue
+	mov isGhostBlue, 0ffh
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
 	sub totalDots, 01h
 	ret
