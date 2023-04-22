@@ -82,7 +82,7 @@ PrintMapObject PROC USES AX BX CX DX DI
 
 	printCol:
 		call GetMapObject
-		cmp DL, 0Fh
+		cmp DL, 0Fh							;; 15 decimal
 		jg isNotWall
 
 		push AX
@@ -100,15 +100,15 @@ PrintMapObject PROC USES AX BX CX DX DI
 
 		isNotWall:
 			mov DI, offset AceDot			;; Luego validamos el resto de objetos que pueden existir en el juego
-			cmp DL, 13h
+			cmp DL, 13h						;; 19 decimal
 			je printObject
 
 			mov DI, offset PowerDot
-			cmp DL, 14h
+			cmp DL, 14h						;; 20 decimal
 			je printObject
 
 			mov DI, offset PortalSprite
-			cmp DL, 15h
+			cmp DL, 15h						;; 21 decimal
 			jge printObject
 
 			jmp skipObject

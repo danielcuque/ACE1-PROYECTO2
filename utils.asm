@@ -611,27 +611,105 @@ endm
 ; -
 ;---------------------------------------------------------
 FillWithDots PROC USES AX BX CX DX
-    mov CX, 01h                ;; Se salta la primera línea
+    mov CX, 02 ; row
+	mov AX, 01 ; col
+	getRowValue:
+	    call GetMapObject
 
-    fillRow:
-        mov AX, 0h
-    fillCol:
+	    cmp DL, 00
+        jne searchNextValue
+
+	    push CX
+
+        searchWallBelow:
+            inc CX
+            call GetMapObject
+
+            cmp DL, 00
+            jne searchWallAbove
+
+            cmp CX, 17h
+            je searchNextValueBelow
+
+            jmp searchWallBelow
+
+	    searchWallAbove:
+	    pop CX
+
+	    push CX 
+	    loopSearchWallAbove:
+            dec CX
+            call GetMapObject
+
+            cmp DL, 00
+            jne searchWallRight
+
+            cmp CX, 01 
+	        je searchNextValueAbove
+	
+	        jmp loopSearchWallAbove
+
+	    searchWallRight:
+	        pop CX 
+	        push AX
+
+	    loopSearchWallRigth:
+
+	    inc AX
         call GetMapObject
-        cmp DL, 00h
-        jne continueLoop
-        
-        mov DH, 13h
-        add totalDots, 01h
-        call InsertMapObject
-    
-    continueLoop:
-        inc AX
-        cmp AX, 28h                 ;; 40 decimal
-        jne fillCol
 
+        cmp DL, 00
+        jne searchWallLeft
+
+        cmp AX, 27h
+	    je searchNextValueRight
+
+	    jmp loopSearchWallRigth
+
+	    searchWallLeft:
+	        pop AX
+	        push AX
+
+	    loopSearchWallLeft:
+	        dec AX
+	        call GetMapObject
+
+            cmp DL, 00
+            jne returnValue
+
+            cmp AX, 00 
+            je searchNextValueLeft
+            jmp loopSearchWallLeft
+
+	returnValue:
+	    pop AX
+	    jmp insertNewDot
+
+	searchNextValueBelow:
+	    pop CX
+	    jmp searchNextValue
+	searchNextValueAbove:
+	    pop CX
+	    jmp searchNextValue
+	searchNextValueRight:
+	    pop AX
+	    jmp searchNextValue
+	searchNextValueLeft:
+	    pop AX
+	    jmp searchNextValue
+
+	insertNewDot:
+	    mov DH, 13h
+	    call InsertMapObject
+	    add totalDots, 01
+	searchNextValue:
+	    inc AX
+	    cmp AX, 27h
+	    jne getRowValue
         inc CX
-        cmp CX, 18h                 ;; 24 decimal
-        jne fillRow
+        cmp CX, 17
+        mov AX, 01
+        jne getRowValue
 
     ;; Reservamos el espacio de los fantasmas
     mov CX, 09h
