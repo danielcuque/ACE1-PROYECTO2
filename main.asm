@@ -27,8 +27,14 @@ errorCloseFile      DB 'Error al cerrar el archivo$'
 errorSizeOfNumber   DB 'Numero demasiado grande$'
 auxiliarX           DW 00h
 auxiliarY           DW 00h
-randomNumber        DW 001h                    ;; Sirve de seed para los numeros aleatorios
 
+; ---------------------------------------------------------
+; Variables para números aleatorioss
+;---------------------------------------------------------
+randomNumber DB 00h
+randomSeed DW 00h
+Randoms1 DB 0Ah, 9Fh, 0F0h, 1Bh, 69h, 3Dh, 0e8h, 52h, 0c6h, 41h, 0b7h, 74h, 23h, 0ach, 8eh, 0d5h
+Randoms2 DB 9CH, 0EEH, 0B5H, 0CAH, 0AFH, 0F0H, 0DBH, 69H, 3DH, 58H, 22H, 06H, 41H, 17H, 74H, 83H
 ; ---------------------------------------------------------
 ; Variables para el menu principal
 ;---------------------------------------------------------

@@ -598,34 +598,6 @@ mResetVars macro
     mov totalDots, 00
 endm
 
-
-;---------------------------------------------------------
-; GenerateRandomNum
-;
-; Descripción:
-; Genera un número aleatorio entre 0 y 3
-;
-; Recibe:
-; -
-;
-; Retorna:
-; AL con el numero aleatorio
-;---------------------------------------------------------
-GenerateRandomNum PROC USES BX DX
-    mov AH, 1Ah
-    int 1Ah
-    mov randomNumber, DX
-    
-    ; Extraer los bits menos significativos del valor obtenido
-    and randomNumber, 0000FFFFh
-    
-    ; Dividir el valor obtenido por 16384 (2^14)
-    mov AX, randomNumber
-    mov BX, 16384t
-    div BX
-    ret
-GenerateRandomNum ENDP
-
 ;---------------------------------------------------------
 ; FillWithDots
 ;
@@ -681,3 +653,95 @@ FillWithDots PROC USES AX BX CX DX
     
     ret
 FillWithDots ENDP
+
+;---------------------------------------------------------
+; GenerateRandomNum
+;
+; Descripción:
+; Genera un número aleatorio entre 0 y 3
+;
+; Recibe:
+; -
+;
+; Retorna:
+; 
+;---------------------------------------------------------
+GenerateRandomNum PROC USES DS
+    mov BH, 0                       ;; Donde empieza el rango
+    mov BL, 04h                     ;; El tamaño del rango, en este caso, desde 0, 1, 2, 3
+
+    call DoRangedRandom
+    mov byte ptr [randomNumber], AL
+    ret
+GenerateRandomNum ENDP
+
+
+DoRandomByte1 PROC
+    mov AL, CL
+    DoRandomByte1b:
+        ror AL, 1
+        ror AL, 1
+        xor AL, CL
+        ror AL, 1
+        ror AL, 1
+        xor AL, CH
+        ror AL, 1
+        xor AL, 9Dh
+        xor AL, CL
+    ret
+DoRandomByte1 ENDP
+
+DoRandomByte2 PROC
+    mov BX, offset Randoms1
+    mov AH, 00
+    mov AL, CH
+    xor AL, 0Bh         ;; 11 decimal
+    and AL, 0Fh         ;; 15 decimal
+
+    mov SI, AX
+    mov DH, [BX+SI]
+
+    call DoRandomByte1
+    and AL, 0Fh
+
+    mov BX, offset Randoms2
+    mov SI, AX
+    mov AL, [BX+SI]
+    
+    xor AL, DH
+    ret
+DoRandomByte2 ENDP
+
+DoRandom PROC USES BX CX DX
+    mov CX, word PTR [ds:randomSeed]
+    inc CX
+    mov word PTR [ds:randomSeed], CX
+    call DoRandomWord
+    mov AL, DL
+    xor AL, DH
+    ret
+DoRandom ENDP
+
+DoRandomWord PROC
+    call DoRandomByte1
+    mov DH, AL
+    push DX
+    push CX
+    push BX
+        call DoRandomByte2
+    pop BX
+    pop CX
+    pop DX
+    mov DL, AL
+    inc CX
+    ret
+DoRandomWord ENDP
+
+DoRangedRandom:
+    call DoRandom
+
+    cmp AL, BH
+    jc DoRangedRandom
+    cmp AL, BL
+    jnc DoRangedRandom
+    ret
