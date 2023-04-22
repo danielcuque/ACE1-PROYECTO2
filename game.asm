@@ -24,13 +24,7 @@ PrintHealthAceman PROC USES AX BX CX DX DI
 	ret
 PrintHealthAceman ENDP
 
-mStartGame macro 
-	; call GenerateRandomNum
-	; mov AH, 00
-	; mov numberGotten, AX
-	; mPrintNumberConverted
-	; mWaitEnter
-	
+mStartGame macro 	
     mov DX, offset fileName1			;; Leemos el nivel 1 del juego
     call ReadFile
 

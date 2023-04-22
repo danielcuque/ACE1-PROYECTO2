@@ -675,6 +675,18 @@ GenerateRandomNum PROC USES DS
     ret
 GenerateRandomNum ENDP
 
+;---------------------------------------------------------
+; DoRandomByte1
+;
+; Descripción:
+; Desplaza aleatoriamente los bytes
+;
+; Recibe:
+; -
+;
+; Retorna:
+; AL con un byte random
+;---------------------------------------------------------
 
 DoRandomByte1 PROC
     mov AL, CL
@@ -686,17 +698,30 @@ DoRandomByte1 PROC
         ror AL, 1
         xor AL, CH
         ror AL, 1
-        xor AL, 9Dh
+        xor AL, 9Dh             ;; 157 decimal
         xor AL, CL
     ret
 DoRandomByte1 ENDP
 
+;---------------------------------------------------------
+; DoRandomByte2
+;
+; Descripción:
+; Genera un byte aleatorio 
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
 DoRandomByte2 PROC
-    mov BX, offset Randoms1
+    mov BX, offset Randoms1     ;; Se dirige a la tabla de números randoms
     mov AH, 00
     mov AL, CH
-    xor AL, 0Bh         ;; 11 decimal
-    and AL, 0Fh         ;; 15 decimal
+    xor AL, 0Bh                 ;; 11 decimal
+    and AL, 0Fh                 ;; 15 decimal
 
     mov SI, AX
     mov DH, [BX+SI]
@@ -712,6 +737,19 @@ DoRandomByte2 PROC
     ret
 DoRandomByte2 ENDP
 
+;---------------------------------------------------------
+; DoRandom
+;
+; Descripción:
+; Guarda el seed para el número random
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
 DoRandom PROC USES BX CX DX
     mov CX, word PTR [ds:randomSeed]
     inc CX
@@ -721,6 +759,19 @@ DoRandom PROC USES BX CX DX
     xor AL, DH
     ret
 DoRandom ENDP
+
+;---------------------------------------------------------
+; DoRandomWord
+;
+; Descripción:
+; Genera a partir de procedures como DoRandomByte1/2
+;
+; Recibe:
+; -
+;
+; Retorna:
+; CX -> JC
+;---------------------------------------------------------
 
 DoRandomWord PROC
     call DoRandomByte1
@@ -736,6 +787,19 @@ DoRandomWord PROC
     inc CX
     ret
 DoRandomWord ENDP
+
+;---------------------------------------------------------
+; DoRangedRandom
+;
+; Descripción:
+; Genera el numero aleatorio
+;
+; Recibe:
+; -
+;
+; Retorna:
+; AL ->  Numero aleatorio de 8 bits
+;---------------------------------------------------------
 
 DoRangedRandom:
     call DoRandom
