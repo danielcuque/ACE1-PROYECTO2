@@ -61,8 +61,11 @@ mStartGame macro
 		call ChangeAcemanDirection		;; Solicitamos mover al aceman
 		call MoveAceman					;; Calculamos la nueva posición
 		
-		mPrintAllGhots				    ;; Mostramos todos los fantasmas
+		; mPrintAllGhots				    ;; Mostramos todos los fantasmas
 		call MoveGhostCyan
+		call MoveGhostRed
+		call MoveGhostOrange
+		call MoveGhostMagenta
 
 		cmp totalDots, 0h				;; Si el total de dots es 0, se termina el juego
 		je endGameSuccess				;; Saltamos al final si se acabaron los dots
@@ -808,6 +811,9 @@ MoveGhostCyan PROC USES AX BX CX DX
 
 		isBelow:
 			mov cyanGhost_y, CX
+			dec CX
+			call PrintOneObject
+			mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
 			ret
 	
 	makeAboveMove:
@@ -828,6 +834,9 @@ MoveGhostCyan PROC USES AX BX CX DX
 
 		isAbove:
 			mov cyanGhost_y, CX
+			inc CX
+			call PrintOneObject
+			mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
 			ret 
 
 	makeRightMove:
@@ -849,6 +858,9 @@ MoveGhostCyan PROC USES AX BX CX DX
 
 		isRight:
 			mov cyanGhost_x, AX
+			dec AX
+			call PrintOneObject
+			mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
 			ret
 
 	makeLeftMove:
@@ -870,10 +882,353 @@ MoveGhostCyan PROC USES AX BX CX DX
 
 		isLeft:
 			mov cyanGhost_x, AX
+			inc AX
+			call PrintOneObject
+			mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
 			ret
 	endProc:
 	ret
 MoveGhostCyan ENDP
+
+
+MoveGhostRed PROC USES AX BX CX DX
+
+	mov AX, RedGhost_x
+	mov CX, RedGhost_y
+
+	call GenerateRandomNum
+	
+	cmp randomNumber, 00
+	je makeLeftMove
+
+	cmp randomNumber, 01
+	je makeAboveMove
+
+	cmp randomNumber, 02
+	je makeRightMove
+
+	makeBelowMove:
+		inc CX
+
+		call GetMapObject
+
+		cmp DL, 01h				;; Si es objeto vacío, avanzamos
+		jb isBelow
+
+		cmp DL, 0Fh				;; Validamos que no se pase un muro
+		ja isBelow
+
+		cmp DL, maxWall
+		ja isBelow
+		dec CX
+		ret
+
+		isBelow:
+			mov RedGhost_y, CX
+			dec CX
+			call PrintOneObject
+			mPrintGhots RedGhost_x, RedGhost_y, GhostRed
+			ret
+	
+	makeAboveMove:
+		dec CX
+		
+		call GetMapObject
+
+		cmp DL, 01
+		jb isAbove
+
+		cmp DL, 13h
+		jge isAbove
+
+		cmp DL, maxWall
+		ja isAbove
+		inc CX
+		ret
+
+		isAbove:
+			mov RedGhost_y, CX
+			inc CX
+			call PrintOneObject
+			mPrintGhots RedGhost_x, RedGhost_y, GhostRed
+			ret 
+
+	makeRightMove:
+		inc AX
+
+		call GetMapObject
+
+		cmp DL, 01
+		jb isRight
+
+		cmp DL, 13h
+		jge isRight
+
+		cmp DL, maxWall
+		ja isRight
+
+		dec AX
+		ret
+
+		isRight:
+			mov RedGhost_x, AX
+			dec AX
+			call PrintOneObject
+			mPrintGhots RedGhost_x, RedGhost_y, GhostRed
+			ret
+
+	makeLeftMove:
+		dec AX
+		
+		call GetMapObject
+
+		cmp DL, 01
+		jb isLeft
+
+		cmp DL, 13h
+		jge isLeft
+
+		cmp DL, maxWall
+		ja isLeft
+
+		inc AX
+		ret
+
+		isLeft:
+			mov RedGhost_x, AX
+			inc AX
+			call PrintOneObject
+			mPrintGhots RedGhost_x, RedGhost_y, GhostRed
+			ret
+	endProc:
+	ret
+MoveGhostRed ENDP
+
+MoveGhostOrange PROC USES AX BX CX DX
+
+	mov AX, OrangeGhost_x
+	mov CX, OrangeGhost_y
+
+	call GenerateRandomNum
+	
+	cmp randomNumber, 00
+	je makeLeftMove
+
+	cmp randomNumber, 01
+	je makeAboveMove
+
+	cmp randomNumber, 02
+	je makeRightMove
+
+	makeBelowMove:
+		inc CX
+
+		call GetMapObject
+
+		cmp DL, 01h				;; Si es objeto vacío, avanzamos
+		jb isBelow
+
+		cmp DL, 0Fh				;; Validamos que no se pase un muro
+		ja isBelow
+
+		cmp DL, maxWall
+		ja isBelow
+		dec CX
+		ret
+
+		isBelow:
+			mov OrangeGhost_y, CX
+			dec CX
+			call PrintOneObject
+			mPrintGhots OrangeGhost_x, OrangeGhost_y, GhostOrange
+			ret
+	
+	makeAboveMove:
+		dec CX
+		
+		call GetMapObject
+
+		cmp DL, 01
+		jb isAbove
+
+		cmp DL, 13h
+		jge isAbove
+
+		cmp DL, maxWall
+		ja isAbove
+		inc CX
+		ret
+
+		isAbove:
+			mov OrangeGhost_y, CX
+			inc CX
+			call PrintOneObject
+			mPrintGhots OrangeGhost_x, OrangeGhost_y, GhostOrange
+			ret 
+
+	makeRightMove:
+		inc AX
+
+		call GetMapObject
+
+		cmp DL, 01
+		jb isRight
+
+		cmp DL, 13h
+		jge isRight
+
+		cmp DL, maxWall
+		ja isRight
+
+		dec AX
+		ret
+
+		isRight:
+			mov OrangeGhost_x, AX
+			dec AX
+			call PrintOneObject
+			mPrintGhots OrangeGhost_x, OrangeGhost_y, GhostOrange
+			ret
+
+	makeLeftMove:
+		dec AX
+		
+		call GetMapObject
+
+		cmp DL, 01
+		jb isLeft
+
+		cmp DL, 13h
+		jge isLeft
+
+		cmp DL, maxWall
+		ja isLeft
+
+		inc AX
+		ret
+
+		isLeft:
+			mov OrangeGhost_x, AX
+			inc AX
+			call PrintOneObject
+			mPrintGhots OrangeGhost_x, OrangeGhost_y, GhostOrange
+			ret
+	endProc:
+	ret
+MoveGhostOrange ENDP
+
+MoveGhostMagenta PROC USES AX BX CX DX
+
+	mov AX, MagentaGhost_x
+	mov CX, MagentaGhost_y
+
+	call GenerateRandomNum
+	
+	cmp randomNumber, 00
+	je makeLeftMove
+
+	cmp randomNumber, 01
+	je makeAboveMove
+
+	cmp randomNumber, 02
+	je makeRightMove
+
+	makeBelowMove:
+		inc CX
+
+		call GetMapObject
+
+		cmp DL, 01h				;; Si es objeto vacío, avanzamos
+		jb isBelow
+
+		cmp DL, 0Fh				;; Validamos que no se pase un muro
+		ja isBelow
+
+		cmp DL, maxWall
+		ja isBelow
+		dec CX
+		ret
+
+		isBelow:
+			mov MagentaGhost_y, CX
+			dec CX
+			call PrintOneObject
+			mPrintGhots MagentaGhost_x, MagentaGhost_y, GhostMagenta
+			ret
+	
+	makeAboveMove:
+		dec CX
+		
+		call GetMapObject
+
+		cmp DL, 01
+		jb isAbove
+
+		cmp DL, 13h
+		jge isAbove
+
+		cmp DL, maxWall
+		ja isAbove
+		inc CX
+		ret
+
+		isAbove:
+			mov MagentaGhost_y, CX
+			inc CX
+			call PrintOneObject
+			mPrintGhots MagentaGhost_x, MagentaGhost_y, GhostMagenta
+			ret 
+
+	makeRightMove:
+		inc AX
+
+		call GetMapObject
+
+		cmp DL, 01
+		jb isRight
+
+		cmp DL, 13h
+		jge isRight
+
+		cmp DL, maxWall
+		ja isRight
+
+		dec AX
+		ret
+
+		isRight:
+			mov MagentaGhost_x, AX
+			dec AX
+			call PrintOneObject
+			mPrintGhots MagentaGhost_x, MagentaGhost_y, GhostMagenta
+			ret
+
+	makeLeftMove:
+		dec AX
+		
+		call GetMapObject
+
+		cmp DL, 01
+		jb isLeft
+
+		cmp DL, 13h
+		jge isLeft
+
+		cmp DL, maxWall
+		ja isLeft
+
+		inc AX
+		ret
+
+		isLeft:
+			mov MagentaGhost_x, AX
+			inc AX
+			call PrintOneObject
+			mPrintGhots MagentaGhost_x, MagentaGhost_y, GhostMagenta
+			ret
+	endProc:
+	ret
+MoveGhostMagenta ENDP
 
 
 ;---------------------------------------------------------
