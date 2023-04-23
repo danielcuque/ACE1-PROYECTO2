@@ -317,6 +317,9 @@ MoveAceman PROC
 		inc CX							;; Incrementamos la posición siguiente para poder obtener el objeto que le sigue al aceman
 
 		call GetMapObject				;; Obtenemos ese objeto a través de la pos AX, CX
+		mov DH, 00
+		mov numberGotten, DX
+		mPrintNumberConverted
 
 		cmp DL, 01						;; Si no es un muro, entonces avanzamos
 		jb makeBelowMove
@@ -340,15 +343,13 @@ MoveAceman PROC
 
 	addPowerDotPointsBelow:
 		call SumPowerDotPoints
-
 	deleteDotBelow:
-		push DX
-			mov DL, 00
-			call InsertMapObject
-		pop DX
+		mov DL, 00
+		call InsertMapObject
 	makeBelowMove:
 		mov aceman_y, CX				;; Cargamos la nueva posición en Y
 		ret
+
 	checkAbove:
 		cmp DH, aboveKey
 		jne checkRight
@@ -356,6 +357,10 @@ MoveAceman PROC
 		dec CX							;; Para ir hacia arriba, necesitamos decrementar la pos Y
 
 		call GetMapObject
+
+		mov DH, 00
+		mov numberGotten, DX
+		mPrintNumberConverted
 
 		cmp DL, 01
 		jb makeAboveMove
@@ -381,14 +386,13 @@ MoveAceman PROC
 		call SumPowerDotPoints
 
 	deleteDotAbove:
-		push DX
-			mov DL, 00
-			call InsertMapObject
-		pop DX
+		mov DL, 00
+		call InsertMapObject
 
 	makeAboveMove:
 		mov aceman_y, CX
 		ret
+
 	checkRight:
 
 		cmp DH, rightKey
@@ -397,6 +401,10 @@ MoveAceman PROC
 		inc AX
 
 		call GetMapObject
+
+		mov DH, 00
+		mov numberGotten, DX
+		mPrintNumberConverted
 
 		cmp DL, 01
 		jb makeRightMove
@@ -417,14 +425,13 @@ MoveAceman PROC
 	addAceDotPointsRight:
 		call SumAceDotPoints
 		jmp deleteDotRight
+
 	addPowerDotPointsRight:
 		call SumPowerDotPoints
 		
 	deleteDotRight:
-		push DX
-			mov DL, 00
-			call InsertMapObject
-		pop DX
+		mov DL, 00
+		call InsertMapObject
 
 	makeRightMove:
 		mov aceman_x, AX
@@ -437,6 +444,10 @@ MoveAceman PROC
 		dec AX
 
 		call GetMapObject
+
+		mov DH, 00
+		mov numberGotten, DX
+		mPrintNumberConverted
 
 		cmp DL, 01
 		jb makeLeftMove
@@ -462,10 +473,8 @@ MoveAceman PROC
 		call SumPowerDotPoints
 
 	deleteDotLeft:
-		push DX
-			mov DL, 00
-			call InsertMapObject
-		pop DX
+		mov DL, 00
+		call InsertMapObject
 
 	makeLeftMove:
 		mov aceman_x, AX
@@ -599,7 +608,11 @@ SumAceDotPoints ENDP
 ; Retorna:
 ; -
 ;---------------------------------------------------------
-SumPowerDotPoints PROC USES AX BX
+SumPowerDotPoints PROC
+	push AX
+	push BX
+	push CX
+
 	mov AX, 00h
 	mov BX, 00h
 
@@ -608,22 +621,17 @@ SumPowerDotPoints PROC USES AX BX
 	mov BX, 05h
 	mul BX
 	add totalPoints, AX
-	mov isGhostBlue, 0ffh
+	mov isGhostBlue, 01
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
 	sub totalDots, 01h
 
 	;; Colocamos el contador
 	mov temporizerTime, 0Ch		;; Colocamos 12s nuevamente
-	
-	mov AH, 2ch
-    int 21h
-    ; CH -> Hora
-    ; CL -> Minutos 
-    ; DH -> Segundos
-    ; DL -> Milisegundos
-	mov previousSecond, DH
 
-	mov temporizerTime, 0Ch
+	pop CX
+	pop BX
+	pop AX
+
 	ret
 SumPowerDotPoints ENDP
 

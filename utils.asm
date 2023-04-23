@@ -931,7 +931,7 @@ PrintTemporizer ENDP
 ;
 ; Retorna:
 ;---------------------------------------------------------
-CalculateTemporizer PROC USES AX DX
+CalculateTemporizer PROC USES AX CX DX
     mov AH, 2ch
     int 21h
     ; CH -> Hora
