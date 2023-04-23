@@ -24,14 +24,25 @@ PrintHealthAceman PROC USES AX BX CX DX DI
 	ret
 PrintHealthAceman ENDP
 
+;---------------------------------------------------------
+; mStartGame
+;
+; Descripción:
+; Lleva la secuencia del juego
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
 mStartGame macro 	
     mov DX, offset fileName1			;; Leemos el nivel 1 del juego
     call ReadFile
 
 	call PrintInitialInformation		;; Mostramos la información acerca de los dots, fantasmas, etc
 	mWaitEnter
-
-	mSetCurrentTime						;; Guardamos el tiempo inicial
 
 	call FillWithDots					;; Rellena los espacios vacios en el mapa con dots normales
 	
@@ -40,13 +51,17 @@ mStartGame macro
 	call PrintTemporizer
 
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
+
+	mSetCurrentTime						;; Guardamos el tiempo inicial
 	
 	continueGame:
 		call CalculateTime				;; Mostramos el tiempo en cada iteracion
+		
 		call PrintAceman				;; Mostramos el pacman en cada iteracion
-		mPrintAllGhots				    ;; Mostramos todos los fantasmas
 		call ChangeAcemanDirection		;; Solicitamos mover al aceman
 		call MoveAceman					;; Calculamos la nueva posición
+		
+		mPrintAllGhots				    ;; Mostramos todos los fantasmas
 
 		cmp totalDots, 0h				;; Si el total de dots es 0, se termina el juego
 		je endGameSuccess				;; Saltamos al final si se acabaron los dots

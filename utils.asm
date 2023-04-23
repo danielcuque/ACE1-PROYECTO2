@@ -288,6 +288,8 @@ mPrintGhots macro x_pos, y_pos, ghost
 		mov DI, offset GhostBlue
 	print:
 		call PrintSprite
+    
+    
 
 	pop CX
 	pop	AX
