@@ -48,12 +48,17 @@ handleObject DW 0
 fileName1 DB 'niv1.aml', 0                  
 fileName2 DB 'niv2.aml', 0                      ;; Es necesario colocar 0 al final
 fileName3 DB 'niv3.aml', 0
+
 ;---------------------------------------------------------
 ; Variable para convertir numeros
 ;---------------------------------------------------------
 numberGotten DW 0
 recoveredStr DB 9 DUP('$')
 counterToGetIndexGotten DW 0
+
+;---------------------------------------------------------
+; Variables para los reportes
+;---------------------------------------------------------
 
 ;---------------------------------------------------------
 ; Variables para el cronómetro
@@ -89,7 +94,7 @@ healthAceman        DB 03h
 isGhostBlue         DW 00h                          ;; 00 = no se puede comer | FF = se puede comer y pintar azul
 lastPortalInserted  DB 15h                          ;; 20 decimal
 currentPlayerName   DB 'Daniel$'                    ;; Nombre del jugador
-isBackMenu            DB 00                           ;; 00 = continuar | FF = volver al menú principal
+isBackMenu          DB 00                           ;; 00 = continuar | FF = volver al menú principal
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
@@ -135,6 +140,11 @@ magentaGhost_x              DW      15h             ;; 21 decimal
 
 cyanGhost_y                 DW      0Bh             ;; 11 decimal
 cyanGhost_x                 DW      15h             ;; 21 decmal
+
+;---------------------------------------------------------
+; Variables para la lista de usuarios
+;---------------------------------------------------------
+userList DB 00
 
 .CODE
 

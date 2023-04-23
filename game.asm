@@ -317,9 +317,6 @@ MoveAceman PROC
 		inc CX							;; Incrementamos la posición siguiente para poder obtener el objeto que le sigue al aceman
 
 		call GetMapObject				;; Obtenemos ese objeto a través de la pos AX, CX
-		mov DH, 00
-		mov numberGotten, DX
-		mPrintNumberConverted
 
 		cmp DL, 01						;; Si no es un muro, entonces avanzamos
 		jb makeBelowMove
@@ -357,10 +354,6 @@ MoveAceman PROC
 		dec CX							;; Para ir hacia arriba, necesitamos decrementar la pos Y
 
 		call GetMapObject
-
-		mov DH, 00
-		mov numberGotten, DX
-		mPrintNumberConverted
 
 		cmp DL, 01
 		jb makeAboveMove
@@ -402,10 +395,6 @@ MoveAceman PROC
 
 		call GetMapObject
 
-		mov DH, 00
-		mov numberGotten, DX
-		mPrintNumberConverted
-
 		cmp DL, 01
 		jb makeRightMove
 
@@ -444,10 +433,6 @@ MoveAceman PROC
 		dec AX
 
 		call GetMapObject
-
-		mov DH, 00
-		mov numberGotten, DX
-		mPrintNumberConverted
 
 		cmp DL, 01
 		jb makeLeftMove
