@@ -62,6 +62,7 @@ mStartGame macro
 		call MoveAceman					;; Calculamos la nueva posición
 		
 		mPrintAllGhots				    ;; Mostramos todos los fantasmas
+		call MoveGhostCyan
 
 		cmp totalDots, 0h				;; Si el total de dots es 0, se termina el juego
 		je endGameSuccess				;; Saltamos al final si se acabaron los dots
@@ -761,6 +762,171 @@ PrintInitialInformation PROC USES AX BX CX DX DI
 	ret
 PrintInitialInformation ENDP
 
-MoveGhost PROC
+;---------------------------------------------------------
+; MoveGhots
+;
+; Descripción:
+; Mueve el fantasma dentro del tablero
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+MoveGhostCyan PROC USES AX BX CX DX
+
+	mov AX, cyanGhost_x
+	mov CX, cyanGhost_y
+
+	call GenerateRandomNum
 	
-MoveGhost ENDP
+	cmp randomNumber, 00
+	je makeLeftMove
+
+	cmp randomNumber, 01
+	je makeAboveMove
+
+	cmp randomNumber, 02
+	je makeRightMove
+
+	makeBelowMove:
+		inc CX
+
+		call GetMapObject
+
+		cmp DL, 01h				;; Si es objeto vacío, avanzamos
+		jb isBelow
+
+		cmp DL, 0Fh				;; Validamos que no se pase un muro
+		ja isBelow
+
+		cmp DL, maxWall
+		ja isBelow
+		dec CX
+		ret
+
+		isBelow:
+			mov cyanGhost_y, CX
+			ret
+	
+	makeAboveMove:
+		dec CX
+		
+		call GetMapObject
+
+		cmp DL, 01
+		jb isAbove
+
+		cmp DL, 13h
+		jge isAbove
+
+		cmp DL, maxWall
+		ja isAbove
+		inc CX
+		ret
+
+		isAbove:
+			mov cyanGhost_y, CX
+			ret 
+
+	makeRightMove:
+		inc AX
+
+		call GetMapObject
+
+		cmp DL, 01
+		jb isRight
+
+		cmp DL, 13h
+		jge isRight
+
+		cmp DL, maxWall
+		ja isRight
+
+		dec AX
+		ret
+
+		isRight:
+			mov cyanGhost_x, AX
+			ret
+
+	makeLeftMove:
+		dec AX
+		
+		call GetMapObject
+
+		cmp DL, 01
+		jb isLeft
+
+		cmp DL, 13h
+		jge isLeft
+
+		cmp DL, maxWall
+		ja isLeft
+
+		inc AX
+		ret
+
+		isLeft:
+			mov cyanGhost_x, AX
+			ret
+	endProc:
+	ret
+MoveGhostCyan ENDP
+
+
+;---------------------------------------------------------
+; PrintOneObject
+;
+; Descripción:
+; Pinta un solo objeto en el mapa
+;
+; Recibe:
+; CX -> Pos Y
+; AX -> Pos X
+; DH -> ID del objeto
+;
+; Retorna:
+; Descripción de los registros de salida
+;---------------------------------------------------------
+
+PrintOneObject PROC
+	cmp DL, 0Fh							;; 15 decimal
+	jg isNotWall
+
+	push AX
+		xor AX, AX
+		mov DI, offset wallSprite		;; Nuestro sprites de muros va a seguir la misma logica que el del pacman
+										;; Hacemos offset en el sprite de muros para que empieze en el primer tipo de wall que es un vacío
+										;; Luego dependiendo de lo que venga en el mapa, se hace offset + 64*tipo para acceder al tipo de muro
+		mov AL, DL						;; En DL, está almacenado el valor del tipo de muro que es
+		mov BX, 40h						;; Cargamos a BX con 40h/64d
+		mul BX							;; Multiplicamos tipo * 40
+		add DI, AX						;; Nos posicionamos en el sprite deseado
+	pop AX
+
+	jmp printObject
+
+	isNotWall:
+		mov DI, offset AceDot			;; Luego validamos el resto de objetos que pueden existir en el juego
+		cmp DL, 13h						;; 19 decimal
+		je printObject
+
+		mov DI, offset PowerDot
+		cmp DL, 14h						;; 20 decimal
+		je printObject
+
+		mov DI, offset PortalSprite
+		cmp DL, 15h						;; 21 decimal
+		jge printObject
+
+		jmp skipObject
+
+	printObject:
+		
+		call PrintSprite
+	
+	skipObject:
+	ret
+PrintOneObject ENDP

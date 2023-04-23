@@ -270,7 +270,7 @@ PrintAceman PROC
 			ret
 PrintAceman ENDP
 
-mPrintGhots macro x_pos, y_pos, ghost
+mPrintGhots macro x_pos, y_pos, ghostSprite
 	LOCAL print, printGhostBlue
 	push AX
 	push CX
@@ -281,7 +281,7 @@ mPrintGhots macro x_pos, y_pos, ghost
 	cmp isGhostBlue, 00
 	jne printGhostBlue
 
-	mov DI, offset ghost
+	mov DI, offset ghostSprite
 	jmp print
 
 	printGhostBlue:
@@ -293,6 +293,7 @@ mPrintGhots macro x_pos, y_pos, ghost
 
 	pop CX
 	pop	AX
+
 endm
 
 mPrintAllGhots macro
@@ -746,12 +747,12 @@ FillWithDots ENDP
 ; Retorna:
 ; 
 ;---------------------------------------------------------
-GenerateRandomNum PROC USES DS
+GenerateRandomNum PROC USES AX BX CX DX DS
     mov BH, 0                       ;; Donde empieza el rango
     mov BL, 04h                     ;; El tamaño del rango, en este caso, desde 0, 1, 2, 3
 
     call DoRangedRandom
-    mov byte ptr [randomNumber], AL
+    mov byte ptr randomNumber, AL
     ret
 GenerateRandomNum ENDP
 
