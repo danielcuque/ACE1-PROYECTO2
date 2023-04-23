@@ -12,8 +12,8 @@
 ;---------------------------------------------------------
 PrintHealthAceman PROC USES AX BX CX DX DI
 	mov DL, healthAceman			;; Imprimimos n veces, donde n es al cantidad de vidas que le quedan al aceman
-	mov AX, 25h		
-	mov CX, 18h
+	mov AX, 25h						;; 37 decimal
+	mov CX, 18h						;; 24 decimal
 	mov DI, offset HeartSprite
 	
 	paintHearts:
@@ -37,6 +37,7 @@ mStartGame macro
 	
     call PrintMapObject    				;; Pintamos el mapa
 	call PrintHealthAceman				;; Mostramos la vida del aceman
+	call PrintTemporizer
 
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
 	
@@ -612,6 +613,7 @@ SumPowerDotPoints PROC USES AX BX
 	mov isGhostBlue, 0ffh
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
 	sub totalDots, 01h
+	mov temporizerTime, 0Ch
 	ret
 SumPowerDotPoints ENDP
 

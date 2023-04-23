@@ -71,6 +71,12 @@ secondTime      DW 00h
 hundredTime     DW 00h
 
 ;---------------------------------------------------------
+; Variables para el cronometro
+;---------------------------------------------------------
+previousSecond DB 00h                   ;; Guarda el segundo anterior
+temporizerTime DB 0Ch                   ;; Guardar 12 en decimal
+
+;---------------------------------------------------------
 ; Variables para el juego
 ;---------------------------------------------------------
 tableGame           DB 03E8h dup(0)                 ;; La pantalla es de 25 * 40

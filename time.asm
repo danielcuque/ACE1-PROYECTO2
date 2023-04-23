@@ -42,7 +42,7 @@ GetCurrentTime PROC USES AX BX CX DX
     ; DH -> Segundos
     ; DL -> Milisegundos
     ; min * 60s * 100cs + seg * 100cs + cs = tiempo en cs
-    ; mDisplayTime DH
+
     mov initialHundred, 00h
     mov initialSeconds, 00h
     mov initialMinutes, 00h
@@ -74,8 +74,6 @@ GetCurrentTime PROC USES AX BX CX DX
     xor BX, BX
     mov BL, initialHundred
     add currentTime, BX
-
-    ; mDisplayTime currentTime
 
 	ret
 GetCurrentTime ENDP

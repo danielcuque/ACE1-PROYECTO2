@@ -887,3 +887,36 @@ DoRangedRandom:
     cmp AL, BL
     jnc DoRangedRandom
     ret
+
+
+;---------------------------------------------------------
+; PrintTemporizer
+;
+; Descripción:
+; Muestra el temporizador de 12 segundos si es necesario
+;
+; Recibe:
+; Descripción de los registros de entrada
+;
+; Retorna:
+; Descripción de los registros de salida
+;---------------------------------------------------------
+PrintTemporizer PROC USES AX BX CX DX SI
+    mov AH, 02				;;
+	mov DH, 18h				;;	fila
+	mov DL, 00				;;	columna
+	mov BH, 00				;;
+	int 10
+
+    xor CX, CX
+    mov CL, temporizerTime
+    mov numberGotten, CX
+    call NumToStr
+    lea SI, recoveredStr
+    add SI, 05
+
+    mPrintPartialDirection SI
+    mWaitEnter
+	
+    ret
+PrintTemporizer ENDP
