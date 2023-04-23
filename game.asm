@@ -51,6 +51,7 @@ mStartGame macro
 	call PrintTemporizer
 
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
+	mPrintAllGhots
 
 	mSetCurrentTime						;; Guardamos el tiempo inicial
 	
@@ -61,11 +62,7 @@ mStartGame macro
 		call ChangeAcemanDirection		;; Solicitamos mover al aceman
 		call MoveAceman					;; Calculamos la nueva posición
 		
-		; mPrintAllGhots				    ;; Mostramos todos los fantasmas
-		call MoveGhostCyan
-		call MoveGhostRed
-		call MoveGhostOrange
-		call MoveGhostMagenta
+		mMoveGhosts						;; Movemos a los fantasmas
 
 		cmp totalDots, 0h				;; Si el total de dots es 0, se termina el juego
 		je endGameSuccess				;; Saltamos al final si se acabaron los dots
@@ -777,124 +774,15 @@ PrintInitialInformation ENDP
 ; Retorna:
 ; -
 ;---------------------------------------------------------
-MoveGhostCyan PROC USES AX BX CX DX
+mMoveGhost macro position_x, position_y, ghostSprite
+	LOCAL makeAboveMove, makeBelowMove, makeLeftMove, makeRightMove, isAbove, isBelow, isRight, isLeft, endProc
+	push AX 
+	push BX 
+	push CX
+	push DX
 
-	mov AX, cyanGhost_x
-	mov CX, cyanGhost_y
-
-	call GenerateRandomNum
-	
-	cmp randomNumber, 00
-	je makeLeftMove
-
-	cmp randomNumber, 01
-	je makeAboveMove
-
-	cmp randomNumber, 02
-	je makeRightMove
-
-	makeBelowMove:
-		inc CX
-
-		call GetMapObject
-
-		cmp DL, 01h				;; Si es objeto vacío, avanzamos
-		jb isBelow
-
-		cmp DL, 0Fh				;; Validamos que no se pase un muro
-		ja isBelow
-
-		cmp DL, maxWall
-		ja isBelow
-		dec CX
-		ret
-
-		isBelow:
-			mov cyanGhost_y, CX
-			dec CX
-			call PrintOneObject
-			mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
-			ret
-	
-	makeAboveMove:
-		dec CX
-		
-		call GetMapObject
-
-		cmp DL, 01
-		jb isAbove
-
-		cmp DL, 13h
-		jge isAbove
-
-		cmp DL, maxWall
-		ja isAbove
-		inc CX
-		ret
-
-		isAbove:
-			mov cyanGhost_y, CX
-			inc CX
-			call PrintOneObject
-			mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
-			ret 
-
-	makeRightMove:
-		inc AX
-
-		call GetMapObject
-
-		cmp DL, 01
-		jb isRight
-
-		cmp DL, 13h
-		jge isRight
-
-		cmp DL, maxWall
-		ja isRight
-
-		dec AX
-		ret
-
-		isRight:
-			mov cyanGhost_x, AX
-			dec AX
-			call PrintOneObject
-			mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
-			ret
-
-	makeLeftMove:
-		dec AX
-		
-		call GetMapObject
-
-		cmp DL, 01
-		jb isLeft
-
-		cmp DL, 13h
-		jge isLeft
-
-		cmp DL, maxWall
-		ja isLeft
-
-		inc AX
-		ret
-
-		isLeft:
-			mov cyanGhost_x, AX
-			inc AX
-			call PrintOneObject
-			mPrintGhots cyanGhost_x, cyanGhost_y, GhostCyan
-			ret
-	endProc:
-	ret
-MoveGhostCyan ENDP
-
-
-MoveGhostRed PROC USES AX BX CX DX
-
-	mov AX, RedGhost_x
-	mov CX, RedGhost_y
+	mov AX, position_x
+	mov CX, position_y
 
 	call GenerateRandomNum
 	
@@ -920,15 +808,19 @@ MoveGhostRed PROC USES AX BX CX DX
 
 		cmp DL, maxWall
 		ja isBelow
+
 		dec CX
-		ret
+		jmp endProc
 
 		isBelow:
-			mov RedGhost_y, CX
+			mov position_y, CX
 			dec CX
+
+			call GetMapObject
 			call PrintOneObject
-			mPrintGhots RedGhost_x, RedGhost_y, GhostRed
-			ret
+
+			mPrintGhots position_x, position_y, ghostSprite
+			jmp endProc
 	
 	makeAboveMove:
 		dec CX
@@ -944,14 +836,17 @@ MoveGhostRed PROC USES AX BX CX DX
 		cmp DL, maxWall
 		ja isAbove
 		inc CX
-		ret
+		jmp endProc
 
 		isAbove:
-			mov RedGhost_y, CX
+			mov position_y, CX
 			inc CX
+
+			call GetMapObject
 			call PrintOneObject
-			mPrintGhots RedGhost_x, RedGhost_y, GhostRed
-			ret 
+
+			mPrintGhots position_x, position_y, ghostSprite
+			jmp endProc 
 
 	makeRightMove:
 		inc AX
@@ -968,14 +863,17 @@ MoveGhostRed PROC USES AX BX CX DX
 		ja isRight
 
 		dec AX
-		ret
+		jmp endProc
 
 		isRight:
-			mov RedGhost_x, AX
+			mov position_x, AX
 			dec AX
+
+			call GetMapObject
 			call PrintOneObject
-			mPrintGhots RedGhost_x, RedGhost_y, GhostRed
-			ret
+
+			mPrintGhots position_x, position_y, ghostSprite
+			jmp endProc
 
 	makeLeftMove:
 		dec AX
@@ -992,244 +890,30 @@ MoveGhostRed PROC USES AX BX CX DX
 		ja isLeft
 
 		inc AX
-		ret
+		jmp endProc
 
 		isLeft:
-			mov RedGhost_x, AX
+			mov position_x, AX
 			inc AX
+
+			call GetMapObject
 			call PrintOneObject
-			mPrintGhots RedGhost_x, RedGhost_y, GhostRed
-			ret
+
+			mPrintGhots position_x, position_y, ghostSprite
+			jmp endProc
 	endProc:
-	ret
-MoveGhostRed ENDP
+		pop DX
+		pop CX
+		pop BX
+		pop AX
+endm
 
-MoveGhostOrange PROC USES AX BX CX DX
-
-	mov AX, OrangeGhost_x
-	mov CX, OrangeGhost_y
-
-	call GenerateRandomNum
-	
-	cmp randomNumber, 00
-	je makeLeftMove
-
-	cmp randomNumber, 01
-	je makeAboveMove
-
-	cmp randomNumber, 02
-	je makeRightMove
-
-	makeBelowMove:
-		inc CX
-
-		call GetMapObject
-
-		cmp DL, 01h				;; Si es objeto vacío, avanzamos
-		jb isBelow
-
-		cmp DL, 0Fh				;; Validamos que no se pase un muro
-		ja isBelow
-
-		cmp DL, maxWall
-		ja isBelow
-		dec CX
-		ret
-
-		isBelow:
-			mov OrangeGhost_y, CX
-			dec CX
-			call PrintOneObject
-			mPrintGhots OrangeGhost_x, OrangeGhost_y, GhostOrange
-			ret
-	
-	makeAboveMove:
-		dec CX
-		
-		call GetMapObject
-
-		cmp DL, 01
-		jb isAbove
-
-		cmp DL, 13h
-		jge isAbove
-
-		cmp DL, maxWall
-		ja isAbove
-		inc CX
-		ret
-
-		isAbove:
-			mov OrangeGhost_y, CX
-			inc CX
-			call PrintOneObject
-			mPrintGhots OrangeGhost_x, OrangeGhost_y, GhostOrange
-			ret 
-
-	makeRightMove:
-		inc AX
-
-		call GetMapObject
-
-		cmp DL, 01
-		jb isRight
-
-		cmp DL, 13h
-		jge isRight
-
-		cmp DL, maxWall
-		ja isRight
-
-		dec AX
-		ret
-
-		isRight:
-			mov OrangeGhost_x, AX
-			dec AX
-			call PrintOneObject
-			mPrintGhots OrangeGhost_x, OrangeGhost_y, GhostOrange
-			ret
-
-	makeLeftMove:
-		dec AX
-		
-		call GetMapObject
-
-		cmp DL, 01
-		jb isLeft
-
-		cmp DL, 13h
-		jge isLeft
-
-		cmp DL, maxWall
-		ja isLeft
-
-		inc AX
-		ret
-
-		isLeft:
-			mov OrangeGhost_x, AX
-			inc AX
-			call PrintOneObject
-			mPrintGhots OrangeGhost_x, OrangeGhost_y, GhostOrange
-			ret
-	endProc:
-	ret
-MoveGhostOrange ENDP
-
-MoveGhostMagenta PROC USES AX BX CX DX
-
-	mov AX, MagentaGhost_x
-	mov CX, MagentaGhost_y
-
-	call GenerateRandomNum
-	
-	cmp randomNumber, 00
-	je makeLeftMove
-
-	cmp randomNumber, 01
-	je makeAboveMove
-
-	cmp randomNumber, 02
-	je makeRightMove
-
-	makeBelowMove:
-		inc CX
-
-		call GetMapObject
-
-		cmp DL, 01h				;; Si es objeto vacío, avanzamos
-		jb isBelow
-
-		cmp DL, 0Fh				;; Validamos que no se pase un muro
-		ja isBelow
-
-		cmp DL, maxWall
-		ja isBelow
-		dec CX
-		ret
-
-		isBelow:
-			mov MagentaGhost_y, CX
-			dec CX
-			call PrintOneObject
-			mPrintGhots MagentaGhost_x, MagentaGhost_y, GhostMagenta
-			ret
-	
-	makeAboveMove:
-		dec CX
-		
-		call GetMapObject
-
-		cmp DL, 01
-		jb isAbove
-
-		cmp DL, 13h
-		jge isAbove
-
-		cmp DL, maxWall
-		ja isAbove
-		inc CX
-		ret
-
-		isAbove:
-			mov MagentaGhost_y, CX
-			inc CX
-			call PrintOneObject
-			mPrintGhots MagentaGhost_x, MagentaGhost_y, GhostMagenta
-			ret 
-
-	makeRightMove:
-		inc AX
-
-		call GetMapObject
-
-		cmp DL, 01
-		jb isRight
-
-		cmp DL, 13h
-		jge isRight
-
-		cmp DL, maxWall
-		ja isRight
-
-		dec AX
-		ret
-
-		isRight:
-			mov MagentaGhost_x, AX
-			dec AX
-			call PrintOneObject
-			mPrintGhots MagentaGhost_x, MagentaGhost_y, GhostMagenta
-			ret
-
-	makeLeftMove:
-		dec AX
-		
-		call GetMapObject
-
-		cmp DL, 01
-		jb isLeft
-
-		cmp DL, 13h
-		jge isLeft
-
-		cmp DL, maxWall
-		ja isLeft
-
-		inc AX
-		ret
-
-		isLeft:
-			mov MagentaGhost_x, AX
-			inc AX
-			call PrintOneObject
-			mPrintGhots MagentaGhost_x, MagentaGhost_y, GhostMagenta
-			ret
-	endProc:
-	ret
-MoveGhostMagenta ENDP
-
+mMoveGhosts macro
+	mMoveGhost redGhost_x, redGhost_y, GhostRed
+	mMoveGhost orangeGhost_x, orangeGhost_y, GhostOrange
+	mMoveGhost cyanGhost_x, cyanGhost_y, GhostCyan
+	mMoveGhost magentaGhost_x, magentaGhost_y, GhostMagenta
+endm
 
 ;---------------------------------------------------------
 ; PrintOneObject
@@ -1240,7 +924,7 @@ MoveGhostMagenta ENDP
 ; Recibe:
 ; CX -> Pos Y
 ; AX -> Pos X
-; DH -> ID del objeto
+; DL -> ID del objeto
 ;
 ; Retorna:
 ; Descripción de los registros de salida
