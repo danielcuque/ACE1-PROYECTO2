@@ -916,7 +916,39 @@ PrintTemporizer PROC USES AX BX CX DX SI
     add SI, 05
 
     mPrintPartialDirection SI
-    mWaitEnter
 	
     ret
 PrintTemporizer ENDP
+
+
+;---------------------------------------------------------
+; CalculateTemporizer
+;
+; Descripción:
+; Calcula el temporizador   
+;
+; Recibe:
+;
+; Retorna:
+;---------------------------------------------------------
+CalculateTemporizer PROC USES AX DX
+    mov AH, 2ch
+    int 21h
+    ; CH -> Hora
+    ; CL -> Minutos 
+    ; DH -> Segundos
+    ; DL -> Milisegundos
+    cmp DH, previousSecond
+    je   endProc
+    
+    decrementTime:
+        mov previousSecond, DH
+        sub temporizerTime, 01h
+        call PrintTemporizer
+
+        cmp temporizerTime, 00
+        jne endProc
+        mov isGhostBlue, 00
+    endProc:
+    ret
+CalculateTemporizer ENDP

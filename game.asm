@@ -51,6 +51,12 @@ mStartGame macro
 		cmp totalDots, 0h				;; Si el total de dots es 0, se termina el juego
 		je endGameSuccess				;; Saltamos al final si se acabaron los dots
 
+		cmp temporizerTime, 00
+		je continueSequence
+		call CalculateTemporizer
+
+		continueSequence:
+
 		cmp healthAceman, 0h			;; Si se le acabaron las vidas a Aceman, termina el juego
 		je endGameSuccess
 
@@ -491,14 +497,6 @@ ChangeAcemanDirection PROC USES AX CX
 
 	jz endProc									;; Si la bandera de carry es zero entonces retornamos
 
-	; mov AL, 00
-	; xchg AL, AH
-	; mov numberGotten, 00
-	; mov numberGotten, AX
-	; mPrintNumberConverted
-	; mWaitEnter
-	; xchg AL, AH
-
 	cmp AH, 48h									;; 48h es para la tecla de arriba
 	je aboveMove
 
@@ -613,6 +611,18 @@ SumPowerDotPoints PROC USES AX BX
 	mov isGhostBlue, 0ffh
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
 	sub totalDots, 01h
+
+	;; Colocamos el contador
+	mov temporizerTime, 0Ch		;; Colocamos 12s nuevamente
+	
+	mov AH, 2ch
+    int 21h
+    ; CH -> Hora
+    ; CL -> Minutos 
+    ; DH -> Segundos
+    ; DL -> Milisegundos
+	mov previousSecond, DH
+
 	mov temporizerTime, 0Ch
 	ret
 SumPowerDotPoints ENDP

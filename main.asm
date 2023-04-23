@@ -74,7 +74,7 @@ hundredTime     DW 00h
 ; Variables para el cronometro
 ;---------------------------------------------------------
 previousSecond DB 00h                   ;; Guarda el segundo anterior
-temporizerTime DB 0Ch                   ;; Guardar 12 en decimal
+temporizerTime DB 00h                   ;; Guardar 12 en decimal
 
 ;---------------------------------------------------------
 ; Variables para el juego
