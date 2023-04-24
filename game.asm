@@ -11,10 +11,21 @@
 ; -
 ;---------------------------------------------------------
 PrintHealthAceman PROC USES AX BX CX DX DI
-	mov DL, healthAceman			;; Imprimimos n veces, donde n es al cantidad de vidas que le quedan al aceman
-	mov AX, 25h						;; 37 decimal
-	mov CX, 18h						;; 24 decimal
+	;; Limpiamos el área donde se van a colocar los corazones
+	mov CX, 18h						;; 24 decimal, fila
+	mov AX, 25h						;; 37 decimal, columna
+	mov DL, 03h						;; Máximo van a ser 3 vidas
+	mov DI, offset wallSprite
+
+	clearSection:
+		call PrintSprite
+		inc AX
+		dec DL
+		jnz clearSection
+
+	sub AX, 03h
 	mov DI, offset HeartSprite
+	mov DL, healthAceman			;; Imprimimos n veces, donde n es al cantidad de vidas que le quedan al aceman
 	
 	paintHearts:
 		call PrintSprite
@@ -307,6 +318,77 @@ GetMapObject PROC USES AX CX
 GetMapObject ENDP
 
 ;---------------------------------------------------------
+; mVerifyGhostAcemanPosition
+;
+; Descripción:
+; Verifica si la posición del aceman, coincide con el fantasma que se le mande
+;
+; Recibe:
+; Descripción de los registros de entrada
+;
+; Retorna:
+; Descripción de los registros de salida
+;---------------------------------------------------------
+
+
+mVerifyGhostAcemanPosition macro ghostX, ghostY, initialGhostPositionX, initialGhostPositionY
+	LOCAL endVerification, changeAcemanHealth, changePoints
+
+	push AX
+	push BX
+	push CX
+	push DX
+
+	mov AX, aceman_x					;; Colocamos la posición X del aceman en AX
+	mov CX, aceman_y					;; Colocamos la posición Y del aceman en CX
+
+	cmp AX, ghostX						;; Comparamos si la posicion en X del fantasma y del aceman son iguales
+	jne endVerification
+
+	cmp CX, ghostY
+	jne endVerification
+
+	cmp isGhostBlue, 00					;; Comparamos si los fantasmas se pueden comer
+	jne changePoints					;; Si no es cero, significa que se suman los puntos
+
+	sub healthAceman, 01				;; Si si es cero, entonces significa que se le deben restar vidas al aceman
+	call PrintHealthAceman				;; Mostramos la vida del aceman
+
+	jmp endVerification
+
+	changePoints:
+		call SumGhostPoints					;; Si si eran comenstibles, se suman puntos, y se devuelve el fantasma a su casa
+		mov ghostX, initialGhostPositionX
+		mov ghostY, initialGhostPositionY
+
+	endVerification:
+	pop DX
+	pop CX
+	pop BX
+	pop AX
+endm
+
+SumGhostPoints PROC USES AX BX CX
+	mov BX, 00
+	mov BX, ghostPoints				;; Movemos a AX el valor del puntaje que dan los fantasmas
+
+	cmp BX, 64h						;; El valor base es 100, por lo que si tiene 100, entonces solo sumamos esa cantidad
+	jne multiplyPoints				;; De lo contrario, cambiamos el valor del puntaje
+	jmp addPoints
+
+	multiplyPoints:
+		mov AX, 02h					;; Multiplicamos el valor de los puntos
+		mul BX
+		mov ghostPoints, AX
+
+	addPoints:
+		mov CX, ghostPoints
+		add totalPoints, CX
+	
+	ret
+SumGhostPoints ENDP
+
+;---------------------------------------------------------
 ; MoveAceman
 ;
 ; Descripción:
@@ -361,7 +443,7 @@ MoveAceman PROC
 		call InsertMapObject
 	makeBelowMove:
 		mov aceman_y, CX				;; Cargamos la nueva posición en Y
-		ret
+		jmp verifyGhost
 
 	checkAbove:
 		cmp DH, aboveKey
@@ -400,7 +482,7 @@ MoveAceman PROC
 
 	makeAboveMove:
 		mov aceman_y, CX
-		ret
+		jmp verifyGhost
 
 	checkRight:
 
@@ -440,7 +522,7 @@ MoveAceman PROC
 
 	makeRightMove:
 		mov aceman_x, AX
-		ret
+		jmp verifyGhost
 
 	checkLeft:
 		cmp DH, leftKey
@@ -466,6 +548,7 @@ MoveAceman PROC
 		ja makeLeftMove
 		inc AX
 		ret
+
 	addAceDotPointsLeft:
 		call SumAceDotPoints
 		jmp deleteDotLeft
@@ -479,11 +562,20 @@ MoveAceman PROC
 
 	makeLeftMove:
 		mov aceman_x, AX
-		jmp endProc
+		jmp verifyGhost
+
 	movePortal:
 		call SearchPortalPosition
 		mov aceman_x, AX
 		mov aceman_y, CX
+
+	verifyGhost:					
+		;; Verificamos si la posición a la que nos movimos, hay un fantasma
+		mVerifyGhostAcemanPosition redGhost_x, redGhost_y, 13h, 09h
+		mVerifyGhostAcemanPosition orangeGhost_x, orangeGhost_y, 13, 0Bh
+		mVerifyGhostAcemanPosition cyanGhost_x, cyanGhost_y, 15h, 0Bh
+		mVerifyGhostAcemanPosition magentaGhost_x, magentaGhost_y, 15h, 09h
+		
 	endProc:
 		ret
 MoveAceman ENDP
@@ -623,6 +715,7 @@ SumPowerDotPoints PROC
 	mul BX
 	add totalPoints, AX
 	mov isGhostBlue, 01
+	mov ghostPoints, 64h		;; Reiniciamos el valor de los fantasmas en 100 decimal
 	mPrintTotalPoints			;; Imprimo el puntaje nuevamente
 	sub totalDots, 01h
 
@@ -774,8 +867,8 @@ PrintInitialInformation ENDP
 ; Retorna:
 ; -
 ;---------------------------------------------------------
-mMoveGhost macro position_x, position_y, ghostSprite
-	LOCAL makeAboveMove, makeBelowMove, makeLeftMove, makeRightMove, isAbove, isBelow, isRight, isLeft, endProc
+mMoveGhost macro position_x, position_y, ghostSprite, initialX, initialY
+	LOCAL makeAboveMove, makeBelowMove, makeLeftMove, makeRightMove, isAbove, isBelow, isRight, isLeft, verifyPowerDot, endProc, verifyPosition
 	push AX 
 	push BX 
 	push CX
@@ -900,7 +993,9 @@ mMoveGhost macro position_x, position_y, ghostSprite
 			call PrintOneObject
 
 			mPrintGhots position_x, position_y, ghostSprite
-			jmp endProc
+	verifyPosition:
+		mVerifyGhostAcemanPosition position_x, position_y, initialX, initialY
+
 	endProc:
 		pop DX
 		pop CX
@@ -909,10 +1004,10 @@ mMoveGhost macro position_x, position_y, ghostSprite
 endm
 
 mMoveGhosts macro
-	mMoveGhost redGhost_x, redGhost_y, GhostRed
-	mMoveGhost orangeGhost_x, orangeGhost_y, GhostOrange
-	mMoveGhost cyanGhost_x, cyanGhost_y, GhostCyan
-	mMoveGhost magentaGhost_x, magentaGhost_y, GhostMagenta
+	mMoveGhost redGhost_x, redGhost_y, GhostRed, 13h, 09h
+	mMoveGhost orangeGhost_x, orangeGhost_y, GhostOrange, 13h, 0Bh
+	mMoveGhost cyanGhost_x, cyanGhost_y, GhostCyan, 15h, 0Bh
+	mMoveGhost magentaGhost_x, magentaGhost_y, GhostMagenta, 15h, 09h
 endm
 
 ;---------------------------------------------------------
