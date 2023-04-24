@@ -59,6 +59,16 @@ counterToGetIndexGotten DW 0
 ;---------------------------------------------------------
 ; Variables para los reportes
 ;---------------------------------------------------------
+simpleSeparatorText       DB 15h dup('-')
+doubleSeparatorText       DB 15h dup('=')
+TIPOKW                    DB 'Tipo:'
+SENTIDOKW                 DB 'Sentido:'
+FECHAKW                   DB 'Fecha:'
+HORAKW                    DB 'Hora:'
+RANKKW                    DB 'Rank'
+PLAYERKW                  DB 'Player'
+NKW                       DB 'N'
+
 
 ;---------------------------------------------------------
 ; Variables para el cronómetro
