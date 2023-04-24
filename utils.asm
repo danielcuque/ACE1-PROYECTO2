@@ -728,7 +728,12 @@ FillWithDots PROC USES AX BX CX DX
         inc CX
         cmp CX, 0Ch
         jne ghostRow 
-
+    
+    mov CX, 08h
+    mov AX, 14h
+    mov DH, 00
+    call InsertMapObject
+    sub totalDots, 01h
     
     ret
 FillWithDots ENDP
