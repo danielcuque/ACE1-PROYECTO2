@@ -154,7 +154,16 @@ cyanGhost_x                 DW      15h             ;; 21 decmal
 ;---------------------------------------------------------
 ; Variables para la lista de usuarios
 ;---------------------------------------------------------
-userList DB 00
+; Estructura para usuarios
+; Nombre
+; Cui
+; Credenciales
+
+
+NewUserPointer DW 0                  ;; Apunta hacia donde tiene que insertar nuevamente el usuario
+UserList DW 0                       
+
+;; Recorrer
 
 .CODE
 
