@@ -48,8 +48,10 @@ PrintHealthAceman ENDP
 ; -
 ;---------------------------------------------------------
 
-mStartGame macro 	
-    mov DX, offset fileName1			;; Leemos el nivel 1 del juego
+mStartGame macro fileName
+	LOCAL continueGame, continueSequence, endGameSuccess
+    mResetVars
+    mov DX, offset fileName			;; Leemos el nivel 1 del juego
     call ReadFile
 
 	call PrintInitialInformation		;; Mostramos la información acerca de los dots, fantasmas, etc
@@ -384,6 +386,7 @@ SumGhostPoints PROC USES AX BX CX
 	addPoints:
 		mov CX, ghostPoints
 		add totalPoints, CX
+	mPrintTotalPoints
 	
 	ret
 SumGhostPoints ENDP

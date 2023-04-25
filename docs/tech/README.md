@@ -59,3 +59,38 @@ minuteTime      DW 00h
 secondTime      DW 00h
 hundredTime     DW 00h
 ```
+
+El programa está dividido en los siguientes archivos :
+- Files.asm: guarda los procedures y macros para leer y escribir archivos.
+- Game.asm: guarda los procedures y macros para el manejo del juego.
+- Main.asm: guarda el main del programa.
+- Sprites.asm: guarda los procedimientos y macros para el manejo de los sprites.
+- Timer.asm: guarda los procedimientos y macros para el manejo del cronometro.
+- Utils.asm: guarda los procedimientos y macros para el manejo de cadenas y numeros.
+
+## Files.asm
+
+### mReadline
+Este macro lee una linea de un archivo y la guarda en un buffer. Recibe como parametros el handle del archivo, el buffer donde se va a guardar la linea y el tamaño del buffer.
+
+### mGetNumberValue 
+Este macro avanza denro del fileLineBuffer hasta encontrar un numero, recibe un keyword con el tamaño de la misma, y un buffer donde se va a guardar el numero.
+
+### mGetCoordinate
+Este macro lee las coordenadas X y Y del archivo AML, y devuelve dichas coordenadas en los registro AX para X y CX para Y.
+
+### ReadFile
+Este procedure recibe en DX el nombre del archivo, y utiliza la interrupción 21h para poder abrir el archivo, la información del archivo se almancena en handleObject.
+
+Este se encarga de cargar el nivel al tablero prinicipal, recibe como parametro el nombre del archivo, y utiliza los macros y procedures definidos anteriormente para poder cargar el nivel.
+
+
+## Game.asm
+
+### mStartGame
+Este macro se encarga de inicializar el juego, recibe como parametro el nombre del archivo que se va a cargar, y utiliza el procedure ReadFile para cargar el nivel.
+
+### PrintHealthAceman
+Este procedure se encarga de imprimir la cantidad de vidas que le quedan al jugador, recibe como parametro la cantidad de vidas que le quedan al jugador.
+
+

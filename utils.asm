@@ -597,6 +597,7 @@ PauseMenu ENDP
 mResetVars macro
     mov isBackMenu, 00
     mov totalDots, 00
+    mov ghostPoints, 64h
 endm
 
 ;---------------------------------------------------------

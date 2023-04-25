@@ -80,8 +80,6 @@ mGetNumberValue macro keyword
     mov DI, offset keyword
     mov CL, [DI]
     mov SI, offset fileLineBuffer
-    ; mPrintPartialDirection SI
-    ; mWaitEnter
     advance:                            ;; Avanzamos el tamaño de la palabra
         inc SI                      
         loop advance

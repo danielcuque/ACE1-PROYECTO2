@@ -177,7 +177,9 @@ mStartProgram macro
     LOCAL start, exit
     startProgram:
         mActiveVideoMode
-        mStartGame
+        mStartGame fileName1
+        mStartGame fileName2
+        mStartGame fileName3
     exit:
         mActiveTextMode
         mExit
@@ -188,7 +190,6 @@ start:
         mov AX, @data
         mov DS, AX
     menuProgram:
-        mResetVars
         mActiveTextMode
         mPrintMsg infoMsg
         mWaitEnter
