@@ -941,10 +941,6 @@ PrintTemporizer ENDP
 CalculateTemporizer PROC USES AX CX DX
     mov AH, 2ch
     int 21h
-    ; CH -> Hora
-    ; CL -> Minutos 
-    ; DH -> Segundos
-    ; DL -> Milisegundos
     cmp DH, previousSecond
     je   endProc
     
