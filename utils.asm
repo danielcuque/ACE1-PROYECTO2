@@ -595,6 +595,7 @@ PauseMenu ENDP
 ; Variables reiniciadas
 ;---------------------------------------------------------
 mResetVars macro
+    call ResetMap
     mov isBackMenu, 00h
     mov totalDots, 00h
     mov totalPoints, 00h
@@ -957,3 +958,19 @@ CalculateTemporizer PROC USES AX CX DX
     endProc:
     ret
 CalculateTemporizer ENDP
+
+ResetMap PROC USES AX BX CX
+    xor CX, CX
+    xor BX, BX
+    xor AX, AX
+    
+    mov CX, sizeof tableGame
+    mov BX, offset tableGame
+    mov AL, 00h
+
+    start:
+        mov [BX], AL
+        inc BX
+    loop start
+    ret
+ResetMap ENDP

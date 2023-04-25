@@ -68,7 +68,7 @@ mStartGame macro fileName
 	mPrintAllGhots
 
 	mSetCurrentTime						;; Guardamos el tiempo inicial
-	
+
 	continueGame:
 		call CalculateTime				;; Mostramos el tiempo en cada iteracion
 		
