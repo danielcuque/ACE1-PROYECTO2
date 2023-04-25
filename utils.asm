@@ -595,9 +595,11 @@ PauseMenu ENDP
 ; Variables reiniciadas
 ;---------------------------------------------------------
 mResetVars macro
-    mov isBackMenu, 00
-    mov totalDots, 00
+    mov isBackMenu, 00h
+    mov totalDots, 00h
+    mov totalPoints, 00h
     mov ghostPoints, 64h
+    mov healthAceman, 03h
 endm
 
 ;---------------------------------------------------------

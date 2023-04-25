@@ -49,11 +49,12 @@ PrintHealthAceman ENDP
 ;---------------------------------------------------------
 
 mStartGame macro fileName
-	LOCAL continueGame, continueSequence, endGameSuccess
+	LOCAL continueGame, continueSequence, endGameSuccess, gameOver
     mResetVars
     mov DX, offset fileName			;; Leemos el nivel 1 del juego
     call ReadFile
 
+	call EmptyScreen
 	call PrintInitialInformation		;; Mostramos la información acerca de los dots, fantasmas, etc
 	mWaitEnter
 
@@ -87,14 +88,13 @@ mStartGame macro fileName
 		continueSequence:
 
 		cmp healthAceman, 0h			;; Si se le acabaron las vidas a Aceman, termina el juego
-		je endGameSuccess
+		je menuProgram
 
 		cmp isBackMenu, 00
 		jne menuProgram
 
 		jmp continueGame
 	endGameSuccess:
-	
 endm
 
 ;---------------------------------------------------------
