@@ -595,12 +595,24 @@ PauseMenu ENDP
 ; Variables reiniciadas
 ;---------------------------------------------------------
 mResetVars macro
-    call ResetMap
-    mov isBackMenu, 00h
-    mov totalDots, 00h
+    call ResetMap               ;; Limpiamos el mapa anterior
+    mov isBackMenu, 00h         ;; Limpiamos la variable de regresar al menu
+    mov totalDots, 00h          ;; Limpiamos la cantidad total de dots y puntaje
     mov totalPoints, 00h
     mov ghostPoints, 64h
     mov healthAceman, 03h
+
+    mov redGhost_y,      09h             ;; 9 decimal 
+    mov redGhost_x,      13h             ;; 19 decimal
+
+    mov orangeGhost_y,   0Bh             ;; 11 decimal
+    mov orangeGhost_x,   13h             ;; 19 decimal
+
+    mov magentaGhost_y,  09h             ;; 9 decimal
+    mov magentaGhost_x,  15h             ;; 21 decimal
+
+    mov cyanGhost_y,     0Bh             ;; 11 decimal
+    mov cyanGhost_x,     15h             ;; 21 decmal
 endm
 
 ;---------------------------------------------------------
@@ -963,7 +975,7 @@ ResetMap PROC USES AX BX CX
     xor CX, CX
     xor BX, BX
     xor AX, AX
-    
+
     mov CX, sizeof tableGame
     mov BX, offset tableGame
     mov AL, 00h
