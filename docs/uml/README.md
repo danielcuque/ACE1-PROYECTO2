@@ -1,0 +1,1 @@
+# Reperesentación de memoria
