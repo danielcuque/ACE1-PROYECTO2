@@ -69,6 +69,18 @@ RANKKW                    DB 'Rank'
 PLAYERKW                  DB 'Player'
 NKW                       DB 'N'
 
+;---------------------------------------------------------
+; Variables para los menus
+;---------------------------------------------------------
+INICIO                    DB 'Iniciar juego$'
+TOP10TIEMPOSPERSONALES    DB 'Top 10 tiempos personales$'
+TOP10PUNTEOPERSONAL       DB 'Top 10 punteo personal$'
+SALIR                     DB 'Salir$'
+TOP10TIEMPOSGLOBALES      DB 'Top 10 tiempos globales$'
+TOP10PUNTEOGLOBAL         DB 'Top 10 punteos globales$'
+APROBARUSUARIO            DB 'Aprobar usuario$'
+INACTIVARUSUARIO          DB 'Inactivar usuario$'
+
 
 ;---------------------------------------------------------
 ; Variables para el cronómetro
