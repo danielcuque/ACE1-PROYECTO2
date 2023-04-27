@@ -185,7 +185,7 @@ INCLUDE game.asm            ;; Lógica del juego
 INCLUDE files.asm           ;; Lógica para leer archivos
 
 mStartProgram macro
-    LOCAL start, exit
+    LOCAL start
     startProgram:
         mActiveVideoMode
         mStartGame fileName1
@@ -205,6 +205,7 @@ start:
         mPrintMsg infoMsg
         mWaitEnter
         mMainMenu
+    displayLoginMenu:
         mStartProgram
     main ENDP
 END start
