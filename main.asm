@@ -154,6 +154,8 @@ cyanGhost_x                 DW      15h             ;; 21 decmal
 ;---------------------------------------------------------
 ; Variables para la lista de usuarios
 ;---------------------------------------------------------
+
+currentBestScore DW     00h         ;; Mostramos el mejor puntaje del jugador actual
 ; Estructura para usuarios
 ; Nombre
 ; Cui

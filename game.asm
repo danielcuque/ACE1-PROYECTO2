@@ -66,6 +66,7 @@ mStartGame macro fileName
 
 	mPrintTotalPoints					;; Mostramos los puntos iniciales
 	mPrintAllGhots
+	call PrintBestScore
 
 	mSetCurrentTime						;; Guardamos el tiempo inicial
 
@@ -96,6 +97,20 @@ mStartGame macro fileName
 		jmp continueGame
 	endGameSuccess:
 endm
+
+PrintBestScore PROC USES AX BX CX DX
+	mov AH, 02				;;
+	mov DH, 18h				;;	fila
+	mov DL, 11h				;;	columna
+	mov BH, 00				;;
+	int 10
+
+    xor CX, CX
+    mov CX, currentBestScore
+    mov numberGotten, CX
+    mPrintNumberConverted
+	ret
+PrintBestScore ENDP
 
 ;---------------------------------------------------------
 ; PrintMapObject
