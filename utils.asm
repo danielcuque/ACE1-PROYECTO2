@@ -986,3 +986,27 @@ ResetMap PROC USES AX BX CX
     loop start
     ret
 ResetMap ENDP
+
+;---------------------------------------------------------
+; mPrintNumberByDigits
+;
+; Descripción:
+; Imprimir n cantidad de digitos
+;
+; Recibe:
+; Position -> El nivel de desplazamiento para mostrar el numero
+; numberToCovert -> numero a convertir
+; Retorna:
+; -
+;---------------------------------------------------------
+
+
+mPrintNumberByDigits macro position, numberToCovert
+    push BX
+        mov numberGotten, numberToCovert
+        call NumToStr
+        mov BX, offset recoveredStr
+        add BX, position
+        mPrintPartialDirection BX
+    pop BX 
+endm
