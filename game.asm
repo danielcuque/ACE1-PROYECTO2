@@ -76,8 +76,12 @@ mStartGame macro fileName
 		call PrintAceman				;; Mostramos el pacman en cada iteracion
 		call ChangeAcemanDirection		;; Solicitamos mover al aceman
 		call MoveAceman					;; Calculamos la nueva posición
-		
 		mMoveGhosts						;; Movemos a los fantasmas
+
+		mVerifyGhostAcemanPosition redGhost_x, redGhost_y, 13h, 09h
+		mVerifyGhostAcemanPosition orangeGhost_x, orangeGhost_y, 13, 0Bh
+		mVerifyGhostAcemanPosition cyanGhost_x, cyanGhost_y, 15h, 0Bh
+		mVerifyGhostAcemanPosition magentaGhost_x, magentaGhost_y, 15h, 09h
 
 		cmp totalDots, 0h				;; Si el total de dots es 0, se termina el juego
 		je endGameSuccess				;; Saltamos al final si se acabaron los dots
@@ -350,6 +354,8 @@ GetMapObject ENDP
 
 mVerifyGhostAcemanPosition macro ghostX, ghostY, initialGhostPositionX, initialGhostPositionY
 	LOCAL endVerification, changeAcemanHealth, changePoints
+	; mPrintMsg testStr
+	; mWaitEnter
 
 	push AX
 	push BX
@@ -367,6 +373,9 @@ mVerifyGhostAcemanPosition macro ghostX, ghostY, initialGhostPositionX, initialG
 
 	cmp isGhostBlue, 00					;; Comparamos si los fantasmas se pueden comer
 	jne changePoints					;; Si no es cero, significa que se suman los puntos
+
+	cmp healthAceman, 00
+	je endVerification
 
 	sub healthAceman, 01				;; Si si es cero, entonces significa que se le deben restar vidas al aceman
 	call PrintHealthAceman				;; Mostramos la vida del aceman
@@ -461,7 +470,7 @@ MoveAceman PROC
 		call InsertMapObject
 	makeBelowMove:
 		mov aceman_y, CX				;; Cargamos la nueva posición en Y
-		jmp verifyGhost
+		jmp endProc
 
 	checkAbove:
 		cmp DH, aboveKey
@@ -500,7 +509,7 @@ MoveAceman PROC
 
 	makeAboveMove:
 		mov aceman_y, CX
-		jmp verifyGhost
+		jmp endProc
 
 	checkRight:
 
@@ -540,7 +549,7 @@ MoveAceman PROC
 
 	makeRightMove:
 		mov aceman_x, AX
-		jmp verifyGhost
+		jmp endProc
 
 	checkLeft:
 		cmp DH, leftKey
@@ -580,19 +589,12 @@ MoveAceman PROC
 
 	makeLeftMove:
 		mov aceman_x, AX
-		jmp verifyGhost
+		jmp endProc
 
 	movePortal:
 		call SearchPortalPosition
 		mov aceman_x, AX
 		mov aceman_y, CX
-
-	verifyGhost:					
-		;; Verificamos si la posición a la que nos movimos, hay un fantasma
-		mVerifyGhostAcemanPosition redGhost_x, redGhost_y, 13h, 09h
-		mVerifyGhostAcemanPosition orangeGhost_x, orangeGhost_y, 13, 0Bh
-		mVerifyGhostAcemanPosition cyanGhost_x, cyanGhost_y, 15h, 0Bh
-		mVerifyGhostAcemanPosition magentaGhost_x, magentaGhost_y, 15h, 09h
 		
 	endProc:
 		ret
@@ -1011,9 +1013,6 @@ mMoveGhost macro position_x, position_y, ghostSprite, initialX, initialY
 			call PrintOneObject
 
 			mPrintGhots position_x, position_y, ghostSprite
-	verifyPosition:
-		mVerifyGhostAcemanPosition position_x, position_y, initialX, initialY
-
 	endProc:
 		pop DX
 		pop CX
