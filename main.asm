@@ -24,6 +24,7 @@ newLineChar         DB 0Ah, '$'
 errorOpenFile       DB 'Error al abrir el archivo$'
 errorReadLine       DB 'Error al leer la linea en $'
 errorCloseFile      DB 'Error al cerrar el archivo$'
+errorLoginUser      DB 'El usuario y contrase',0A4h,'a son incorrectas$'
 errorSizeOfNumber   DB 'Numero demasiado grande$'
 auxiliarX           DW 00h
 auxiliarY           DW 00h
@@ -66,7 +67,7 @@ PLAYERKW                  DB 'Player'
 NKW                       DB 'N'
 
 ;---------------------------------------------------------
-; Variables para los menus
+; Variables para los menus y login
 ;---------------------------------------------------------
 INICIARJUEGO                    DB '1. Iniciar juego', 0Dh, 0Ah,'$'
 TOP10TIEMPOSPERSONALES    DB '. Top 10 tiempos personales', 0Dh, 0Ah,'$'
@@ -166,9 +167,17 @@ cyanGhost_x                 DW      15h             ;; 21 decmal
 
 currentBestScore DW     00h         ;; Mostramos el mejor puntaje del jugador actual
 ; Estructura para usuarios
-; Nombre
-; Cui
-; Credenciales
+; "posición": "000F",
+; "bytesnombre": 1,
+; "valorbytesnombre": 6,
+; "bytespassword": 1,
+; "valorbytespassword": 7,
+; "bytesprimerjuego": 2,
+; "valorprimerjuego": "0037h",
+; "bytessiguienteusuario": 2,
+; "siguienteusuario": "0022h",
+; "nombre" : "aceman",
+; "password" : "test123",
 
 
 NewUserPointer DW 0                  ;; Apunta hacia donde tiene que insertar nuevamente el usuario
