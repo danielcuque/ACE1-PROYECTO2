@@ -68,14 +68,14 @@ NKW                       DB 'N'
 ;---------------------------------------------------------
 ; Variables para los menus
 ;---------------------------------------------------------
-INICIO                    DB '. Iniciar juego', 0Dh, 0Ah,'$'
+INICIARJUEGO                    DB '1. Iniciar juego', 0Dh, 0Ah,'$'
 TOP10TIEMPOSPERSONALES    DB '. Top 10 tiempos personales', 0Dh, 0Ah,'$'
 TOP10PUNTEOPERSONAL       DB '. Top 10 punteo personal', 0Dh, 0Ah,'$'
 SALIR                     DB '. Salir', 0Dh, 0Ah,'$'
 TOP10TIEMPOSGLOBALES      DB '. Top 10 tiempos globales', 0Dh, 0Ah,'$'
 TOP10PUNTEOGLOBAL         DB '. Top 10 punteos globales', 0Dh, 0Ah,'$'
-APROBARUSUARIO            DB '. Aprobar usuario', 0Dh, 0Ah,'$'
-INACTIVARUSUARIO          DB '. Inactivar usuario', 0Dh, 0Ah,'$'
+APROBARUSUARIO            DB '3. Aprobar usuario', 0Dh, 0Ah,'$'
+INACTIVARUSUARIO          DB '2. Inactivar usuario', 0Dh, 0Ah,'$'
 INICIARSESION             DB '1. Iniciar sesi',0A2h,'n',0Dh, 0Ah,'$'
 
 
@@ -185,7 +185,6 @@ INCLUDE game.asm            ;; Lógica del juego
 INCLUDE files.asm           ;; Lógica para leer archivos
 
 mStartProgram macro
-    LOCAL start
     startProgram:
         mActiveVideoMode
         mStartGame fileName1
@@ -206,6 +205,7 @@ start:
         mWaitEnter
         mMainMenu
     displayLoginMenu:
+        mMainAdminMenu
         mStartProgram
     main ENDP
 END start
