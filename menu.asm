@@ -1,7 +1,8 @@
 ;; Metodos para manejar los menús
 mMainMenu macro
     LOCAL start
-    start:
+    mov AX, 00
+    startMainMenu:
         mPrintMsg newLineChar
         mPrintMsg INICIARSESION         ;; Mostramos los mensajes
         mPrintNumberByDigits 6, 02h
@@ -20,7 +21,7 @@ mMainMenu macro
         cmp AL, 3Fh                    ;; Tecla F5
         je newUser
 
-        jmp start 
+        jmp startMainMenu
 endm
 
 ;Iniciar Juego

@@ -46,8 +46,7 @@ fileName1 DB 'niv1.aml', 0
 fileName2 DB 'niv2.aml', 0                      ;; Es necesario colocar 0 al final
 fileName3 DB 'niv3.aml', 0
 
-fileMemoryGraph DB 'MemGraph.MD', 0
-pathFile DB 'docs/uml/README.md'
+fileMemoryGraph DB 'docs/uml/README.MD', 0
 headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph', 0Dh, 0Ah
 footerMemoryGraph DB '@endjson', 0Dh, 0Ah,'````'
 

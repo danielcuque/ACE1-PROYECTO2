@@ -1,5 +1,0 @@
-````plantuml
-@startjson memoryGraph
-
-@endjson
-````
