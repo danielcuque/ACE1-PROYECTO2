@@ -56,7 +56,7 @@ footerMemoryGraph DB '}]}', 0Dh, 0Ah, '@endjson', 0Dh, 0Ah,'````'
 ; Variable para convertir numeros
 ;---------------------------------------------------------
 numberGotten DW 0
-recoveredStr DB 9 DUP('$')
+recoveredStr DB 8 DUP('$')
 counterToGetIndexGotten DW 0
 
 ;---------------------------------------------------------
@@ -77,7 +77,7 @@ RBRACE              DB '}'
 LSBRACE             DB '['
 RSBRACE             DB ']'
 COMMA               DB ','
-DOUBLEQUOTE         DB  '"'
+DOUBLEQUOTE         DB 22h
 NEWLINE             DB 0Ah
 
 MEMADDRESS          DB '"memoryAddress":'

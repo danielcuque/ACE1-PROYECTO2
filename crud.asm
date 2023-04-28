@@ -40,15 +40,13 @@ InsertNewUser PROC
         mov word ptr [DI], BX
 
         noPrevPointer:
-            mov prevPointer, SI
+            mov prevPointer, SI           ;; Si no hay algun usuario anterior, entonces
 
             add SI, 02h
-            mov word ptr [SI], 0
+            mov word ptr [SI], 00h
 
             add SI, 02h
-
-            add SI, 02h
-            mov word ptr [SI], 02h
+            mov word ptr [SI], 00h
 
             add SI, 2h
             mov [SI], DL
@@ -57,14 +55,13 @@ InsertNewUser PROC
             mov [SI], DH
 
             inc SI
-
             lea DI, nameBuffer
 
             xor CX, CX
             mov CL, [DI+1]
             mov [SI], CL
 
-            add SI, 01h
+            inc SI
 
             add DI, 02h
 

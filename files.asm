@@ -16,15 +16,32 @@ mWriteSimpleText macro bufferWithText
     int 21h                         ;; Realizar la interrupción
 
     ;; Colocamos un salto de linea 
+    ; mov AH, 40h                     ;; Función de escritura de archivo
+    ; mov BX, handleObject            ;; Handle del archivo
+    ; lea DX, NEWLINE                 ;; Texto a escribir
+    ; mov CX, sizeof NEWLINE          ;; Cantidad de bytes a escribir
+    ; int 21h                         ;; Realizar la interrupción
+endm
+
+mWriteNumber macro bufferWithText
+    
+    mWriteSimpleText DOUBLEQUOTE
     mov AH, 40h                     ;; Función de escritura de archivo
     mov BX, handleObject            ;; Handle del archivo
-    lea DX, NEWLINE          ;; Texto a escribir
-    mov CX, sizeof NEWLINE   ;; Cantidad de bytes a escribir
-    int 21h                         ;; Realizar la interrupción
+    lea DX, bufferWithText          ;; Texto a escribir
+    mov CX, sizeof bufferWithText   ;; Cantidad de bytes a escribir
+    dec CX
+    int 21h
+    mWriteSimpleText DOUBLEQUOTE 
+    mWriteSimpleText COMMA
 
-    
+    ;; Colocamos un salto de linea 
+    mov AH, 40h                     ;; Función de escritura de archivo
+    mov BX, handleObject            ;; Handle del archivo
+    lea DX, NEWLINE                 ;; Texto a escribir
+    mov CX, sizeof NEWLINE          ;; Cantidad de bytes a escribir
+    int 21h    
 
-    jc errorWrite
 endm
 
 mCloseFile macro
@@ -323,6 +340,15 @@ ReadFile PROC USES AX BX CX DX
     ret
 ReadFile ENDP
 
+WriteInFileNumber PROC
+    mov BX,  [DI]
+    mov numberGotten, BX                    ;; Lo convertimos a Numero
+    call NumToStr
+
+    mWriteNumber recoveredStr
+    ret
+WriteInFileNumber ENDP
+
 
 ;---------------------------------------------------------
 ; TraverseDataSegment
@@ -338,8 +364,41 @@ ReadFile ENDP
 ;---------------------------------------------------------
 
 TraverseDataSegment PROC
+    mov BX, [DI]
+    cmp BX, 00
+    je endTraverse
     
-    ret
+    mPrintMsg testStr
+    mWaitEnter
+    mWriteSimpleText MEMADDRESS
+    call WriteInFileNumber
+
+    mWriteSimpleText NEXTUSER
+
+    add DI, 02h
+    mov BX, [DI]
+    cmp BX, 00
+    je skipNextUserAddress
+    
+    call WriteInFileNumber
+
+    mWriteNumber recoveredStr
+
+    skipNextUserAddress:
+
+        add DI, 02h
+        mov BX, [DI]
+
+        cmp BX, 00
+        je skipFirstGame
+
+        call WriteInFileNumber
+
+    skipFirstGame:
+        add DI, 02h
+
+    endTraverse:
+    ret 
 TraverseDataSegment ENDP
 
 ;---------------------------------------------------------
@@ -360,6 +419,8 @@ GenerateMemoryGraph PROC
     mWriteSimpleText headerMemoryGraph          ;; Escribimos los encabezados para visualizar el manejo de memoria
 
     ;; TODO: Recorrer memoria
+    mov DI, offset dataSegment                  ;; Colocamos el puntero del inicio del usuario en DI
+    call TraverseDataSegment
 
     mWriteSimpleText footerMemoryGraph          ;; Colocamos el footer para cerrar el archivo uml
     mCloseFile                                  ;; Cerramos el archivo
