@@ -101,8 +101,10 @@ hundredTime     DW 00h
 ;---------------------------------------------------------
 ; Variables para el teclado
 ;---------------------------------------------------------
-nameBuffer                  DB   10 dup (0Ah, '$')           ;; Guarda el nombre
-passwordBuffer              DB   10 dup (0Ah, '$')           ;; Guarda la ontraseña
+nameBuffer                  DB   102h dup (0ffh, '$')           ;; Guarda el nombre
+passwordBuffer              DB   102h dup (0ffh, '$')          ;; Guarda la ontraseña
+nameMainAdmin               DB   '202112145'
+passwordMainAdmin           DB   '3024465830102'
 
 ;---------------------------------------------------------
 ; Variables para el cronometro
@@ -175,6 +177,7 @@ cyanGhost_x                 DW      15h             ;; 21 decmal
 ;---------------------------------------------------------
 
 currentBestScore DW     00h         ;; Mostramos el mejor puntaje del jugador actual
+
 ; Estructura para usuarios
 ; "memoryAddress": "000F",
 ; "nextUser": "0022h"
@@ -197,14 +200,15 @@ currentBestScore DW     00h         ;; Mostramos el mejor puntaje del jugador ac
 ; "nextGames": []
 
 
-NewUserPointer DW 0                  ;; Apunta hacia donde tiene que insertar nuevamente el usuario
-UserList DW 0                       
+nextPointer DW 0                  ;; Apunta hacia donde tiene que insertar nuevamente el usuario. De inicio es la dirección 4415
+dataSegment DW 0                       
 
 ;; Recorrer
 
 .CODE
-INCLUDE keyboard.asm
+INCLUDE keyboard.asm        ;; Funciones con el teclado
 INCLUDE utils.asm           ;; Funciones auxiliares que pueden ser usadas en cualquier parte del programa
+INCLUDE crud.asm
 INCLUDE menu.asm            ;; Menu principal
 INCLUDE time.asm            ;; Lógica para el crónometro
 INCLUDE game.asm            ;; Lógica del juego
@@ -225,6 +229,8 @@ start:
     main PROC
         mov AX, @data
         mov DS, AX
+        
+        call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
     menuProgram:
         mActiveTextMode
         mPrintMsg infoMsg
