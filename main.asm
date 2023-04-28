@@ -199,7 +199,7 @@ currentBestScore DW     00h         ;; Mostramos el mejor puntaje del jugador ac
 ; "level": "1"
 ; "nextGames": []
 
-
+prevPointer DW 0
 nextPointer DW 0                  ;; Apunta hacia donde tiene que insertar nuevamente el usuario. De inicio es la dirección 4415
 dataSegment DW 0                       
 
