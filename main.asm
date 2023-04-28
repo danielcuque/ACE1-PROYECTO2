@@ -42,13 +42,14 @@ Randoms2 DB 9CH, 0EEH, 0B5H, 0CAH, 0AFH, 0F0H, 0DBH, 69H, 3DH, 58H, 22H, 06H, 41
 ;---------------------------------------------------------
 fileLineBuffer DB 32 dup('$') 
 handleObject DW 0       
-fileName1 DB 'niv2.aml', 0                  
+fileName1 DB 'niv1.aml', 0                  
 fileName2 DB 'niv2.aml', 0                      ;; Es necesario colocar 0 al final
 fileName3 DB 'niv3.aml', 0
 
-fileMemoryGraph DB 'MemoryGraph.MD', 0
-headerMemoryGraph DB '````plantuml'
-footerMemoryGraph DB '@endjson````'
+fileMemoryGraph DB 'MemGraph.MD', 0
+pathFile DB 'docs/uml/README.md'
+headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph', 0Dh, 0Ah
+footerMemoryGraph DB '@endjson', 0Dh, 0Ah,'````'
 
 ;---------------------------------------------------------
 ; Variable para convertir numeros
@@ -236,7 +237,7 @@ start:
         mov AX, @data
         mov DS, AX
         
-        call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
+
         call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
     menuProgram:
         mActiveTextMode

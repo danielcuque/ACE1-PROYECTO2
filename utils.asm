@@ -1010,3 +1010,11 @@ mPrintNumberByDigits macro position, numberToCovert
         mPrintPartialDirection BX
     pop BX 
 endm
+
+PrintCarryFlag PROC USES BX
+    mov BX, 00
+    mov numberGotten, BX
+    mov byte ptr numberGotten, AL
+    mPrintNumberConverted
+    ret
+PrintCarryFlag ENDP

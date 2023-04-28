@@ -96,7 +96,7 @@ InsertNewUser PROC
         add SI, CX
 
         mov nextPointer, SI
-
+        call GenerateMemoryGraph
     ret
 InsertNewUser ENDP
 

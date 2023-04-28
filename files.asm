@@ -290,6 +290,33 @@ ReadFile PROC USES AX BX CX DX
     ret
 ReadFile ENDP
 
+mOpenFileToWrite macro filename
+    mov AH, 3Ch             ;; Función de apertura de archivo
+    mov AL, 02h             ;; Opciones de acceso, en este caso 2 = write
+    lea DX, filename        ;; Movemos el nombre del archivo
+
+    int 21h                 ;; Realizar la interrupción
+    jc errorWrite
+    mov handleObject, AX    ;; Guardamos el handle en la variable
+endm
+
+mWriteSimpleText macro bufferWithText
+    mov AH, 40h                     ;; Función de escritura de archivo
+    mov BX, handleObject            ;; Handle del archivo
+    lea DX, bufferWithText          ;; Texto a escribir
+    mov CX, sizeof bufferWithText   ;; Cantidad de bytes a escribir
+
+    int 21h                         ;; Realizar la interrupción
+
+    jc errorWrite
+endm
+
+mCloseFile macro
+    mov AH, 3Eh ; Función de cierre de archivo
+    mov BX, handleObject
+    int 21h     ; Realizar la interrupción
+    jc errorWrite
+endm
 
 ;---------------------------------------------------------
 ; GenerateMemoryGraph
@@ -305,6 +332,15 @@ ReadFile ENDP
 ;---------------------------------------------------------
 
 GenerateMemoryGraph PROC
-    
+    mOpenFileToWrite fileMemoryGraph
+    mWriteSimpleText headerMemoryGraph
+    mWriteSimpleText footerMemoryGraph
+    mCloseFile
+    jmp endProc
+    errorWrite:
+        call PrintCarryFlag
+        mWaitEnter
+
+    endProc:
     ret
 GenerateMemoryGraph ENDP
