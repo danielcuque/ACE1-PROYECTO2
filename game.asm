@@ -888,7 +888,7 @@ PrintInitialInformation ENDP
 ; -
 ;---------------------------------------------------------
 mMoveGhost macro position_x, position_y, ghostSprite, initialX, initialY
-	LOCAL makeAboveMove, makeBelowMove, makeLeftMove, makeRightMove, isAbove, isBelow, isRight, isLeft, verifyPowerDot, endProc, verifyPosition
+	LOCAL makeAboveMove, makeBelowMove, makeLeftMove, makeRightMove, isAbove, isBelow, isRight, isLeft, verifyPowerDot, endProc, verifyPosition, retBelow, retAbove, retLeft, retRight
 	push AX 
 	push BX 
 	push CX
@@ -916,14 +916,18 @@ mMoveGhost macro position_x, position_y, ghostSprite, initialX, initialY
 		cmp DL, 01h				;; Si es objeto vacío, avanzamos
 		jb isBelow
 
-		cmp DL, 0Fh				;; Validamos que no se pase un muro
-		ja isBelow
+		cmp DL, 13h
+		je isBelow
+
+		cmp DL, 14h
+		je isBelow
 
 		cmp DL, maxWall
 		ja isBelow
 
-		dec CX
-		jmp endProc
+		retBelow:
+			dec CX
+			jmp endProc
 
 		isBelow:
 			mov position_y, CX
@@ -944,12 +948,17 @@ mMoveGhost macro position_x, position_y, ghostSprite, initialX, initialY
 		jb isAbove
 
 		cmp DL, 13h
-		jge isAbove
+		je isAbove
+
+		cmp DL, 14h
+		je isAbove
 
 		cmp DL, maxWall
 		ja isAbove
-		inc CX
-		jmp endProc
+
+		retAbove:
+			inc CX	
+			jmp endProc
 
 		isAbove:
 			mov position_y, CX
@@ -970,11 +979,15 @@ mMoveGhost macro position_x, position_y, ghostSprite, initialX, initialY
 		jb isRight
 
 		cmp DL, 13h
-		jge isRight
+		je isRight
+
+		cmp DL, 14h
+		je isRight
 
 		cmp DL, maxWall
 		ja isRight
 
+		retRight:
 		dec AX
 		jmp endProc
 
@@ -997,13 +1010,17 @@ mMoveGhost macro position_x, position_y, ghostSprite, initialX, initialY
 		jb isLeft
 
 		cmp DL, 13h
-		jge isLeft
+		je isLeft
+
+		cmp DL, 14h
+		je isLeft
 
 		cmp DL, maxWall
 		ja isLeft
 
-		inc AX
-		jmp endProc
+		retLeft:
+			inc AX
+			jmp endProc
 
 		isLeft:
 			mov position_x, AX

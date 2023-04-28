@@ -1,5 +1,3 @@
-# Reperesentación de memoria
-
 ````plantuml 
 @startjson
 {
@@ -41,5 +39,4 @@
       "juegos":[
 ] }
 ] }
-@endjson
-```
+@endjson```

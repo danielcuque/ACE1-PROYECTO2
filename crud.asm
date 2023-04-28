@@ -31,11 +31,12 @@ InsertNewUser PROC
         mov SI, BX                        ;; Colocamos la dirección del puntero en SI
         mov [SI], BX                      ;; Guardamos la direccion del puntero en la direccion de memoria del puntero
 
-        mov DI, prevPointer
-        cmp DI, 00h
-        je noPrevPointer
+        mov DI, prevPointer               ;; Verificamos el puntero anterior
 
-        add DI, 02h
+        cmp DI, 00h
+        je noPrevPointer                  ;; Si el puntero es nulo, entonces movemos el puntero
+
+        add DI, 02h                       ;; De lo contrario, aumentamos en 2 el punterio anterior para obtener
         mov word ptr [DI], BX
 
         noPrevPointer:
@@ -67,37 +68,34 @@ InsertNewUser PROC
 
             add DI, 02h
 
-            saveUsername:
-                mov AL, [DI]
-                mov [SI], AL
-                inc DI
-                inc SI
-                loop saveUsername
-
-            add SI, CX
-            lea DI, passwordBuffer
-
-            xor CX, CX
-            mov CL, [DI+1]
-            mov [SI], CL
-
-            inc SI
-
-            add DI, 02h
-
-            savePassword:
-                mov AL, [DI]
-                mov [SI], AL
-                inc DI
-                inc SI
-                loop savePassword
-            inc SI
-            inc DI
+        saveUsername:
             mov AL, [DI]
             mov [SI], AL
-            mPrintMsg dataSegment
-            mWaitEnter
-            mov nextPointer, SI
+            inc DI
+            inc SI
+            loop saveUsername
+
+        add SI, CX
+        lea DI, passwordBuffer
+
+        xor CX, CX
+        mov CL, [DI+1]
+        mov [SI], CL
+
+        inc SI
+
+        add DI, 02h
+
+        savePassword:
+            mov AL, [DI]
+            mov [SI], AL
+            inc DI
+            inc SI
+            loop savePassword
+
+        add SI, CX
+
+        mov nextPointer, SI
 
     ret
 InsertNewUser ENDP
