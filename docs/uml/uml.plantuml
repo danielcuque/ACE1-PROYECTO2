@@ -23,7 +23,26 @@
           "valor": "43800t",
           "bytessiguientejuego": 2,
           "siguientejuego": "0000h"
-} ]
+},
+        {
+          "posición":"0037h",
+          "bytesmetrica": 1,
+          "metrica": "t",
+          "bytesvalor": 2,
+          "valor": "43800t",
+          "bytessiguientejuego": 2,
+          "siguientejuego": "0000h"
+},
+        {
+          "posición":"0037h",
+          "bytesmetrica": 1,
+          "metrica": "t",
+          "bytesvalor": 2,
+          "valor": "43800t",
+          "bytessiguientejuego": 2,
+          "siguientejuego": "0000h"
+}
+]
 }, {
       "posición": "0022h",
       "bytesnombre": 1,
@@ -37,6 +56,34 @@
       "nombre" : "player1",
       "password" : "otropass",
       "juegos":[
+        {
+          "posición":"0037h",
+          "bytesmetrica": 1,
+          "metrica": "t",
+          "bytesvalor": 2,
+          "valor": "43800t",
+          "bytessiguientejuego": 2,
+          "siguientejuego": [
+            {
+          "posición":"0037h",
+          "bytesmetrica": 1,
+          "metrica": "t",
+          "bytesvalor": 2,
+          "valor": "43800t",
+          "bytessiguientejuego": 2,
+          "siguientejuego": "0000h"
+}
+          ]
+},
+{
+          "posición":"0037h",
+          "bytesmetrica": 1,
+          "metrica": "t",
+          "bytesvalor": 2,
+          "valor": "43800t",
+          "bytessiguientejuego": 2,
+          "siguientejuego": "0000h"
+}
 ] }
 ] }
 @endjson

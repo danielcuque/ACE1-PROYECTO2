@@ -80,6 +80,7 @@ INACTIVARUSUARIO          DB '2. Inactivar usuario', 0Dh, 0Ah,'$'
 INICIARSESION             DB '1. Iniciar sesi',0A2h,'n',0Dh, 0Ah,'$'
 USERNAMEMSG               DB 'Ingresar nombre: $ '                  
 PASSWORDMSG               DB 'Ingresar contrase',0A4h,'a: $'
+NEWUSERMSG                DB 'F5 para solicitar nuevo usuario',0Dh, 0Ah,'$'
 
 
 ;---------------------------------------------------------
@@ -175,17 +176,25 @@ cyanGhost_x                 DW      15h             ;; 21 decmal
 
 currentBestScore DW     00h         ;; Mostramos el mejor puntaje del jugador actual
 ; Estructura para usuarios
-; "posición": "000F",
-; "bytesnombre": 1,
-; "valorbytesnombre": 6,
-; "bytespassword": 1,
-; "valorbytespassword": 7,
-; "bytesprimerjuego": 2,
-; "valorprimerjuego": "0037h",
-; "bytessiguienteusuario": 2,
-; "siguienteusuario": "0022h",
-; "nombre" : "aceman",
-; "password" : "test123",
+; "memoryAddress": "000F",
+; "nextUser": "0022h"
+; "firstGame": "0023h"
+; "credentials": "01"
+; "isUserActive": "01"
+; "nameSize": "06"
+; "nameStr": "Daniel"
+; "passwordSize": "0Dh"
+; "passwordStr": "3024465830102"
+; "games": []
+
+; Estructura para juegos
+; "memoryAddress": 0023h
+; "userAddress": "000F"
+; "nextGame": "0024h"
+; "time": "400"
+; "score": "1000"
+; "level": "1"
+; "nextGames": []
 
 
 NewUserPointer DW 0                  ;; Apunta hacia donde tiene que insertar nuevamente el usuario
@@ -225,5 +234,10 @@ start:
         ; mMainAdminMenu
         mLoginMenu
         mStartProgram
+
+    newUser:
+        ; mPrintMsg testStr
+        ; mWaitEnter
+        jmp exit
     main ENDP
 END start

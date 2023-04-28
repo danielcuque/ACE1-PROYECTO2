@@ -6,6 +6,7 @@ mMainMenu macro
         mPrintMsg INICIARSESION         ;; Mostramos los mensajes
         mPrintNumberByDigits 6, 02h
         mPrintMsg SALIR
+        mPrintMsg NEWUSERMSG
         
         mov AH, 08h                     ;; Cargamos la interrupción para leer 1 caracter
         int 21
@@ -15,6 +16,10 @@ mMainMenu macro
 
         cmp AL, 32                      ;; 32 = 2     
         je exit
+
+        cmp AL, 3Fh                    ;; Tecla F5
+        je newUser
+
         jmp start 
 endm
 
@@ -59,7 +64,6 @@ mLoginMenu macro
     start:
         mGetInputKeyboard nameBuffer, USERNAMEMSG
         mGetInputKeyboard passwordBuffer, PASSWORDMSG
-
         jmp end
         jmp start
     end:
