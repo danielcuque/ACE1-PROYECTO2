@@ -1,11 +1,7 @@
 ````plantuml
 @startjson memoryGraph
-{
-"dataSegment":
-[
-{
-}
-]
-}
+{"dataSegment":
+[{
+}]}
 @endjson
 ````

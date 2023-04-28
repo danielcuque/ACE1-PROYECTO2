@@ -323,6 +323,25 @@ ReadFile PROC USES AX BX CX DX
     ret
 ReadFile ENDP
 
+
+;---------------------------------------------------------
+; TraverseDataSegment
+;
+; Descripción:
+; Recorre el segmento de datos para graficar los usuarios y juegos, este método será recursivo
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
+TraverseDataSegment PROC
+    
+    ret
+TraverseDataSegment ENDP
+
 ;---------------------------------------------------------
 ; GenerateMemoryGraph
 ;
@@ -341,15 +360,7 @@ GenerateMemoryGraph PROC
     mWriteSimpleText headerMemoryGraph          ;; Escribimos los encabezados para visualizar el manejo de memoria
 
     ;; TODO: Recorrer memoria
-    mWriteSimpleText LBRACE                     ;; {
 
-    mWriteSimpleText DATASEGMENTSTR
-    mWriteSimpleText LSBRACE                    ;; [
-    mWriteSimpleText LBRACE                     ;; {
-
-    mWriteSimpleText RBRACE                     ;; }
-    mWriteSimpleText RSBRACE                    ;; ]
-    mWriteSimpleText RBRACE                     ;; }
     mWriteSimpleText footerMemoryGraph          ;; Colocamos el footer para cerrar el archivo uml
     mCloseFile                                  ;; Cerramos el archivo
     jmp endProc

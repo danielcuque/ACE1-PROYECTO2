@@ -47,9 +47,10 @@ fileName1 DB 'niv1.aml', 0
 fileName2 DB 'niv2.aml', 0                      ;; Es necesario colocar 0 al final
 fileName3 DB 'niv3.aml', 0
 
-filenameMemoryGraph DB 'docs/uml/README.MD', 0
-headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph'
-footerMemoryGraph DB '@endjson', 0Dh, 0Ah,'````'
+;; ------- CAMBIAR POR .MD --------
+filenameMemoryGraph DB 'docs/uml/README.md', 0
+headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph', 0Dh, 0Ah, '{', '"dataSegment":', 0Dh, 0Ah, '[','{'
+footerMemoryGraph DB '}]}', 0Dh, 0Ah, '@endjson', 0Dh, 0Ah,'````'
 
 ;---------------------------------------------------------
 ; Variable para convertir numeros
@@ -79,7 +80,6 @@ COMMA               DB ','
 DOUBLEQUOTE         DB  '"'
 NEWLINE             DB 0Ah
 
-DATASEGMENTSTR      DB '"dataSegment":'
 MEMADDRESS          DB '"memoryAddress":'
 NEXTUSER            DB '"nextUser":'
 FIRSTGAME           DB '"firstGame":'
@@ -265,7 +265,7 @@ start:
         mov DS, AX
         
 
-        call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
+    call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
     menuProgram:
         mActiveTextMode
         mPrintMsg infoMsg
