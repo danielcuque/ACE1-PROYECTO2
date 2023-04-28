@@ -96,6 +96,11 @@ secondTime      DW 00h
 hundredTime     DW 00h
 
 ;---------------------------------------------------------
+; Variables para el teclado
+;---------------------------------------------------------
+keyBoardBuffer DB 102h dup (0ff, '$')         ;; Guarda el valor que se ingresa por el teclado
+
+;---------------------------------------------------------
 ; Variables para el cronometro
 ;---------------------------------------------------------
 previousSecond DB 00h                   ;; Guarda el segundo anterior

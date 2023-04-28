@@ -289,3 +289,22 @@ ReadFile PROC USES AX BX CX DX
     endRead:
     ret
 ReadFile ENDP
+
+
+;---------------------------------------------------------
+; GenerateMemoryGraph
+;
+; Descripción:
+; Muestra la representación de la memmoria que contiene a todos los usuarios
+;
+; Recibe:
+; -
+;
+; Retorna:
+; Archivo generado
+;---------------------------------------------------------
+
+GenerateMemoryGraph PROC
+    
+    ret
+GenerateMemoryGraph ENDP

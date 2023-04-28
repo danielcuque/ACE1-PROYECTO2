@@ -26,21 +26,3 @@ InsertMainAdmin PROC
     
     ret
 InsertMainAdmin ENDP
-
-;---------------------------------------------------------
-; GenerateMemoryMap
-;
-; Descripción:
-; Muestra la representación de la memmoria que contiene a todos los usuarios
-;
-; Recibe:
-; -
-;
-; Retorna:
-; Archivo generado
-;---------------------------------------------------------
-
-GenerateMemoryMap PROC
-    
-    ret
-GenerateMemoryMap ENDP
