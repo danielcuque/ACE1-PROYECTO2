@@ -26,6 +26,7 @@ errorReadLine       DB 'Error al leer la linea en $'
 errorCloseFile      DB 'Error al cerrar el archivo$'
 errorLoginUser      DB 'El usuario y contrase',0A4h,'a son incorrectas$'
 errorSizeOfNumber   DB 'Numero demasiado grande$'
+errorWriteFile      DB 'Error al escribir el archivo$'
 auxiliarX           DW 00h
 auxiliarY           DW 00h
 
@@ -46,7 +47,7 @@ fileName1 DB 'niv1.aml', 0
 fileName2 DB 'niv2.aml', 0                      ;; Es necesario colocar 0 al final
 fileName3 DB 'niv3.aml', 0
 
-fileMemoryGraph DB 'docs/uml/README.MD', 0
+filenameMemoryGraph DB 'docs/uml/README.MD', 0
 headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph', 0Dh, 0Ah
 footerMemoryGraph DB '@endjson', 0Dh, 0Ah,'````'
 

@@ -1,3 +1,31 @@
+mOpenFileToWrite macro filename
+    mov AH, 3Ch             ;; Función de apertura de archivo
+    mov AL, 02h             ;; Opciones de acceso, en este caso 2 = write
+    lea DX, filename        ;; Movemos el nombre del archivo
+
+    int 21h                 ;; Realizar la interrupción
+    jc errorWrite
+    mov handleObject, AX    ;; Guardamos el handle en la variable
+endm
+
+mWriteSimpleText macro bufferWithText
+    mov AH, 40h                     ;; Función de escritura de archivo
+    mov BX, handleObject            ;; Handle del archivo
+    lea DX, bufferWithText          ;; Texto a escribir
+    mov CX, sizeof bufferWithText   ;; Cantidad de bytes a escribir
+
+    int 21h                         ;; Realizar la interrupción
+
+    jc errorWrite
+endm
+
+mCloseFile macro
+    mov AH, 3Eh ; Función de cierre de archivo
+    mov BX, handleObject
+    int 21h     ; Realizar la interrupción
+    jc errorToClose
+endm
+
 ;---------------------------------------------------------
 ; mReadLine
 ;
@@ -282,41 +310,10 @@ ReadFile PROC USES AX BX CX DX
         mWaitEnter
         jmp endRead
     closeFile:
-        mov BX, handleObject
-        mov AH, 03Eh                    ;; Cargamos a AH para hacer la interrupción de cerrar archivo
-        int 21h                         ;; Cerramos el archivo
-        jc errorToClose                 ;; Mandamos el error si el carry flag se activa
+        mCloseFile
     endRead:
     ret
 ReadFile ENDP
-
-mOpenFileToWrite macro filename
-    mov AH, 3Ch             ;; Función de apertura de archivo
-    mov AL, 02h             ;; Opciones de acceso, en este caso 2 = write
-    lea DX, filename        ;; Movemos el nombre del archivo
-
-    int 21h                 ;; Realizar la interrupción
-    jc errorWrite
-    mov handleObject, AX    ;; Guardamos el handle en la variable
-endm
-
-mWriteSimpleText macro bufferWithText
-    mov AH, 40h                     ;; Función de escritura de archivo
-    mov BX, handleObject            ;; Handle del archivo
-    lea DX, bufferWithText          ;; Texto a escribir
-    mov CX, sizeof bufferWithText   ;; Cantidad de bytes a escribir
-
-    int 21h                         ;; Realizar la interrupción
-
-    jc errorWrite
-endm
-
-mCloseFile macro
-    mov AH, 3Eh ; Función de cierre de archivo
-    mov BX, handleObject
-    int 21h     ; Realizar la interrupción
-    jc errorWrite
-endm
 
 ;---------------------------------------------------------
 ; GenerateMemoryGraph
@@ -332,15 +329,15 @@ endm
 ;---------------------------------------------------------
 
 GenerateMemoryGraph PROC
-    mOpenFileToWrite fileMemoryGraph
+    mOpenFileToWrite filenameMemoryGraph
     mWriteSimpleText headerMemoryGraph
     mWriteSimpleText footerMemoryGraph
     mCloseFile
     jmp endProc
     errorWrite:
-        call PrintCarryFlag
-        mWaitEnter
-
+        mPrintMsg errorWriteFile
+    errorToClose:
+        mPrintMsg errorCloseFile
     endProc:
     ret
 GenerateMemoryGraph ENDP
