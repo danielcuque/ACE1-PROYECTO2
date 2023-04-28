@@ -1,90 +1,141 @@
 ````plantuml 
-@startjson
+@startjson memoryAddress
 {
-  "userList": [
-    {
-      "posición": "000F",
-      "bytesnombre": 1,
-      "valorbytesnombre": 6,
-      "bytespassword": 1,
-      "valorbytespassword": 7,
-      "bytesprimerjuego": 2,
-      "valorprimerjuego": "0037h",
-      "bytessiguienteusuario": 2,
-      "siguienteusuario": "0022h",
-      "nombre" : "aceman",
-      "password" : "test123",
-      "juegos":[
+    "dataSegment": [
         {
-          "posición":"0037h",
-          "bytesmetrica": 1,
-          "metrica": "t",
-          "bytesvalor": 2,
-          "valor": "43800t",
-          "bytessiguientejuego": 2,
-          "siguientejuego": "0000h"
-},
-        {
-          "posición":"0037h",
-          "bytesmetrica": 1,
-          "metrica": "t",
-          "bytesvalor": 2,
-          "valor": "43800t",
-          "bytessiguientejuego": 2,
-          "siguientejuego": "0000h"
-},
-        {
-          "posición":"0037h",
-          "bytesmetrica": 1,
-          "metrica": "t",
-          "bytesvalor": 2,
-          "valor": "43800t",
-          "bytessiguientejuego": 2,
-          "siguientejuego": "0000h"
+            "memoryAddress": "000F",
+            "nextUser": "0022h",
+            "firstGame": "0023h",
+            "credentials": "01",
+            "isUserActive": "01",
+            "nameSize": "06",
+            "nameStr": "Daniel",
+            "passwordSize": "0Dh",
+            "passwordStr": "3024465830102",
+            "games": [
+                {
+                    "memoryAddress": "0023h",
+                    "userAddress": "000F",
+                    "nextGame": "0024h",
+                    "time": "400",
+                    "score": "1000",
+                    "level": "1",
+                    "nextGames": [
+                        {
+                            "memoryAddress": "0023h",
+                            "userAddress": "000F",
+                            "nextGame": "0024h",
+                            "time": "400",
+                            "score": "1000",
+                            "level": "1",
+                            "nextGames": [
+                                {
+                                    "memoryAddress": "0023h",
+                                    "userAddress": "000F",
+                                    "nextGame": "0024h",
+                                    "time": "400",
+                                    "score": "1000",
+                                    "level": "1",
+                                    "nextGames": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "users": [
+                {
+                    "memoryAddress": "000F",
+                    "nextUser": "0022h",
+                    "firstGame": "0023h",
+                    "credentials": "01",
+                    "isUserActive": "01",
+                    "nameSize": "06",
+                    "nameStr": "Daniel",
+                    "passwordSize": "0Dh",
+                    "passwordStr": "3024465830102",
+                    "games": [
+                        {
+                            "memoryAddress": "0023h",
+                            "userAddress": "000F",
+                            "nextGame": "0024h",
+                            "time": "400",
+                            "score": "1000",
+                            "level": "1",
+                            "nextGames": [
+                                {
+                                    "memoryAddress": "0023h",
+                                    "userAddress": "000F",
+                                    "nextGame": "0024h",
+                                    "time": "400",
+                                    "score": "1000",
+                                    "level": "1",
+                                    "nextGames": [
+                                        {
+                                            "memoryAddress": "0023h",
+                                            "userAddress": "000F",
+                                            "nextGame": "0024h",
+                                            "time": "400",
+                                            "score": "1000",
+                                            "level": "1",
+                                            "nextGames": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "users": [
+                        {
+                            "memoryAddress": "000F",
+                            "nextUser": "0022h",
+                            "firstGame": "0023h",
+                            "credentials": "01",
+                            "isUserActive": "01",
+                            "nameSize": "06",
+                            "nameStr": "Daniel",
+                            "passwordSize": "0Dh",
+                            "passwordStr": "3024465830102",
+                            "games": [
+                                {
+                                    "memoryAddress": "0023h",
+                                    "userAddress": "000F",
+                                    "nextGame": "0024h",
+                                    "time": "400",
+                                    "score": "1000",
+                                    "level": "1",
+                                    "nextGames": [
+                                        {
+                                            "memoryAddress": "0023h",
+                                            "userAddress": "000F",
+                                            "nextGame": "0024h",
+                                            "time": "400",
+                                            "score": "1000",
+                                            "level": "1",
+                                            "nextGames": [
+                                                {
+                                                    "memoryAddress": "0023h",
+                                                    "userAddress": "000F",
+                                                    "nextGame": "0024h",
+                                                    "time": "400",
+                                                    "score": "1000",
+                                                    "level": "1",
+                                                    "nextGames": [
+                                                      
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "users": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
-]
-}, {
-      "posición": "0022h",
-      "bytesnombre": 1,
-      "valorbytesnombre": 7,
-      "bytespassword": 1,
-      "valorbytespassword": 8,
-      "primerjuego": 2,
-      "valorprimerjuego": "0000h",
-      "bytessiguienteusuario": 2,
-      "siguienteusuario": "0000h",
-      "nombre" : "player1",
-      "password" : "otropass",
-      "juegos":[
-        {
-          "posición":"0037h",
-          "bytesmetrica": 1,
-          "metrica": "t",
-          "bytesvalor": 2,
-          "valor": "43800t",
-          "bytessiguientejuego": 2,
-          "siguientejuego": [
-            {
-          "posición":"0037h",
-          "bytesmetrica": 1,
-          "metrica": "t",
-          "bytesvalor": 2,
-          "valor": "43800t",
-          "bytessiguientejuego": 2,
-          "siguientejuego": "0000h"
-}
-          ]
-},
-{
-          "posición":"0037h",
-          "bytesmetrica": 1,
-          "metrica": "t",
-          "bytesvalor": 2,
-          "valor": "43800t",
-          "bytessiguientejuego": 2,
-          "siguientejuego": "0000h"
-}
-] }
-] }
 @endjson
 ```

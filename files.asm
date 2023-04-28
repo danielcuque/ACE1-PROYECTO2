@@ -13,8 +13,16 @@ mWriteSimpleText macro bufferWithText
     mov BX, handleObject            ;; Handle del archivo
     lea DX, bufferWithText          ;; Texto a escribir
     mov CX, sizeof bufferWithText   ;; Cantidad de bytes a escribir
-
     int 21h                         ;; Realizar la interrupción
+
+    ;; Colocamos un salto de linea 
+    mov AH, 40h                     ;; Función de escritura de archivo
+    mov BX, handleObject            ;; Handle del archivo
+    lea DX, NEWLINE          ;; Texto a escribir
+    mov CX, sizeof NEWLINE   ;; Cantidad de bytes a escribir
+    int 21h                         ;; Realizar la interrupción
+
+    
 
     jc errorWrite
 endm
@@ -329,15 +337,28 @@ ReadFile ENDP
 ;---------------------------------------------------------
 
 GenerateMemoryGraph PROC
-    mOpenFileToWrite filenameMemoryGraph
-    mWriteSimpleText headerMemoryGraph
-    mWriteSimpleText footerMemoryGraph
-    mCloseFile
+    mOpenFileToWrite filenameMemoryGraph        ;; Creamos el archivo
+    mWriteSimpleText headerMemoryGraph          ;; Escribimos los encabezados para visualizar el manejo de memoria
+
+    ;; TODO: Recorrer memoria
+    mWriteSimpleText LBRACE                     ;; {
+
+    mWriteSimpleText DATASEGMENTSTR
+    mWriteSimpleText LSBRACE                    ;; [
+    mWriteSimpleText LBRACE                     ;; {
+
+    mWriteSimpleText RBRACE                     ;; }
+    mWriteSimpleText RSBRACE                    ;; ]
+    mWriteSimpleText RBRACE                     ;; }
+    mWriteSimpleText footerMemoryGraph          ;; Colocamos el footer para cerrar el archivo uml
+    mCloseFile                                  ;; Cerramos el archivo
     jmp endProc
     errorWrite:
         mPrintMsg errorWriteFile
+        mWaitEnter
     errorToClose:
         mPrintMsg errorCloseFile
+        mWaitEnter
     endProc:
     ret
 GenerateMemoryGraph ENDP

@@ -48,7 +48,7 @@ fileName2 DB 'niv2.aml', 0                      ;; Es necesario colocar 0 al fin
 fileName3 DB 'niv3.aml', 0
 
 filenameMemoryGraph DB 'docs/uml/README.MD', 0
-headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph', 0Dh, 0Ah
+headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph'
 footerMemoryGraph DB '@endjson', 0Dh, 0Ah,'````'
 
 ;---------------------------------------------------------
@@ -70,6 +70,33 @@ HORAKW                    DB 'Hora:'
 RANKKW                    DB 'Rank'
 PLAYERKW                  DB 'Player'
 NKW                       DB 'N'
+
+LBRACE              DB '{'
+RBRACE              DB '}'
+LSBRACE             DB '['
+RSBRACE             DB ']'
+COMMA               DB ','
+DOUBLEQUOTE         DB  '"'
+NEWLINE             DB 0Ah
+
+DATASEGMENTSTR      DB '"dataSegment":'
+MEMADDRESS          DB '"memoryAddress":'
+NEXTUSER            DB '"nextUser":'
+FIRSTGAME           DB '"firstGame":'
+CREDENTIALS         DB '"credentials":'
+ISUSERACTIVE        DB '"isUserActive":'
+NAMESIZE            DB '"nameSize":'
+NAMESTR             DB '"nameStr":'
+PASSWORDSIZE        DB '"passwordSize":'
+PASSWORDSTR         DB '"passwordStr":'
+GAMES               DB '"games":'
+USERADDRESS         DB '"userAddress":'
+NEXTGAME            DB '"nextGame":'
+TIME                DB '"time":'
+SCORE               DB '"score":'
+LEVEL               DB '"level":'
+NEXTGAMES           DB '"nextGames":'
+
 
 ;---------------------------------------------------------
 ; Variables para los menus y login
