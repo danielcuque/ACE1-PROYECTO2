@@ -78,6 +78,8 @@ TOP10PUNTEOGLOBAL         DB '. Top 10 punteos globales', 0Dh, 0Ah,'$'
 APROBARUSUARIO            DB '3. Aprobar usuario', 0Dh, 0Ah,'$'
 INACTIVARUSUARIO          DB '2. Inactivar usuario', 0Dh, 0Ah,'$'
 INICIARSESION             DB '1. Iniciar sesi',0A2h,'n',0Dh, 0Ah,'$'
+USERNAMEMSG               DB 'Ingresar nombre: $ '                  
+PASSWORDMSG               DB 'Ingresar contrase',0A4h,'a: $'
 
 
 ;---------------------------------------------------------
@@ -98,7 +100,8 @@ hundredTime     DW 00h
 ;---------------------------------------------------------
 ; Variables para el teclado
 ;---------------------------------------------------------
-keyBoardBuffer DB 102h dup (0ff, '$')         ;; Guarda el valor que se ingresa por el teclado
+nameBuffer                  DB   10 dup (0Ah, '$')           ;; Guarda el nombre
+passwordBuffer              DB   10 dup (0Ah, '$')           ;; Guarda la ontraseña
 
 ;---------------------------------------------------------
 ; Variables para el cronometro
@@ -191,7 +194,7 @@ UserList DW 0
 ;; Recorrer
 
 .CODE
-
+INCLUDE keyboard.asm
 INCLUDE utils.asm           ;; Funciones auxiliares que pueden ser usadas en cualquier parte del programa
 INCLUDE menu.asm            ;; Menu principal
 INCLUDE time.asm            ;; Lógica para el crónometro
@@ -219,7 +222,8 @@ start:
         mWaitEnter
         mMainMenu
     displayLoginMenu:
-        mMainAdminMenu
+        ; mMainAdminMenu
+        mLoginMenu
         mStartProgram
     main ENDP
 END start

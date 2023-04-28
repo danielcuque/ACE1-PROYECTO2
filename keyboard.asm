@@ -35,7 +35,7 @@ mEmptyBuffer macro buffer
     pop SI
 endm
 
-mGetInputKeyboard macro message
+mGetInputKeyboard macro keyBoardBuffer, message
     push DX
     push AX
     push CX
@@ -47,7 +47,10 @@ mGetInputKeyboard macro message
     mov DX, offset keyBoardBuffer
     mov AH, 0Ah
     int 21h
-
+    ; lea DI, keyBoardBuffer
+    ; add DI, 02h
+    ; mPrintPartialDirection DI
+    ; mWaitEnter
     pop CX
     pop AX
     pop DX
