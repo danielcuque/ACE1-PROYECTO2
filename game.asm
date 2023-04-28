@@ -76,12 +76,12 @@ mStartGame macro fileName
 		call PrintAceman				;; Mostramos el pacman en cada iteracion
 		call ChangeAcemanDirection		;; Solicitamos mover al aceman
 		call MoveAceman					;; Calculamos la nueva posición
+		
+		call VerifyPosition
+
 		mMoveGhosts						;; Movemos a los fantasmas
 
-		mVerifyGhostAcemanPosition redGhost_x, redGhost_y, 13h, 09h
-		mVerifyGhostAcemanPosition orangeGhost_x, orangeGhost_y, 13, 0Bh
-		mVerifyGhostAcemanPosition cyanGhost_x, cyanGhost_y, 15h, 0Bh
-		mVerifyGhostAcemanPosition magentaGhost_x, magentaGhost_y, 15h, 09h
+		call VerifyPosition
 
 		cmp totalDots, 0h				;; Si el total de dots es 0, se termina el juego
 		je endGameSuccess				;; Saltamos al final si se acabaron los dots
@@ -1081,3 +1081,11 @@ PrintOneObject PROC
 	skipObject:
 	ret
 PrintOneObject ENDP
+
+VerifyPosition PROC
+	mVerifyGhostAcemanPosition redGhost_x, redGhost_y, 13h, 09h
+	mVerifyGhostAcemanPosition orangeGhost_x, orangeGhost_y, 13, 0Bh
+	mVerifyGhostAcemanPosition cyanGhost_x, cyanGhost_y, 15h, 0Bh
+	mVerifyGhostAcemanPosition magentaGhost_x, magentaGhost_y, 15h, 09h
+	ret
+VerifyPosition ENDP
