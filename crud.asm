@@ -90,7 +90,7 @@ CheckCredentials ENDP
 ; Inserta un nuevo usuario en el bloque de datos
 ;
 ; Recibe:
-; DH -> Tipo de usuario
+; DH -> Tipo de usuario, 01 = normal | 02 = admin | 03 = admin global
 ; DL -> 01 = activo | 00 = no activo
 ; nameBuffer ->  nombre del usuario
 ; passwordBuffer ->  contraseña del usuario

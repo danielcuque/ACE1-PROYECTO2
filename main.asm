@@ -266,21 +266,16 @@ endm
 start:
     main PROC
         mov AX, @data
-        mov DS, AX
-        
+        mov DS, AX   
 
-    call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
-    menuProgram:
-        mActiveTextMode
+        call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
         mPrintMsg infoMsg
         mWaitEnter
-        mMainMenu
-    displayLoginMenu:
-        ; mMainAdminMenu
-        mLoginMenu
-        mStartProgram
 
-    newUser:
-        jmp exit
+        menuProgram:
+            mActiveTextMode
+            mMainMenu
+            mStartProgram
+            jmp exit
     main ENDP
 END start

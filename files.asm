@@ -499,6 +499,15 @@ TraverseDataSegment PROC
 
     ;; TODO: Recorrer juegos
 
+    mWriteSimpleText RSBRACE
+    mWriteSimpleText COMMA
+    mWriteSimpleText NEWLINE
+    
+    mWriteSimpleText USERS
+    mWriteSimpleText LSBRACE
+
+    ;; TODO: Recorrer siguientes usuarios
+
     push BX
         mov BX, SI
         ; mov numberGotten, BX
@@ -507,12 +516,6 @@ TraverseDataSegment PROC
         call TraverseDataSegment            ;; LLamamos de manera recursiva para ingresar usuarios
     pop BX
 
-    mWriteSimpleText RSBRACE
-    mWriteSimpleText COMMA
-    
-    mWriteSimpleText USERS
-    mWriteSimpleText LSBRACE
-    ;; TODO: Recorrer siguientes usuarios
     mWriteSimpleText RSBRACE
 
     endTraverse:

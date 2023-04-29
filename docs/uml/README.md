@@ -1,7 +1,7 @@
 ````plantuml
 @startjson memoryGraph
 {"dataSegment":
-[{"memoryAddress":"0005760",
+[{"memoryAddress":"0005756",
 "nextUser":"0000000",
 "firstGame":"0000000",
 "credentials":"0000001",
@@ -10,6 +10,7 @@
 "nameStr":"202112145",
 "passwordSize":"0000013",
 "passwordStr":"3024465830102",
-"games":[],"users":[]}]}
+"games":[],
+"users":[]}]}
 @endjson
 ````

@@ -1,27 +1,54 @@
 ;; Metodos para manejar los menús
+NewUserForm PROC
+    mGetInputKeyboard nameBuffer, USERNAMEMSG
+    mPrintMsg newLineChar
+    mGetInputKeyboard passwordBuffer, PASSWORDMSG
+    ret
+NewUserForm ENDP
+
 mMainMenu macro
-    LOCAL start
-    mov AX, 00
+    LOCAL start, newUser, endMainMenu
+
     startMainMenu:
+        mov AX, 00
         mPrintMsg newLineChar
+
         mPrintMsg INICIARSESION         ;; Mostramos los mensajes
+
         mPrintNumberByDigits 6, 02h
         mPrintMsg SALIR
+
         mPrintMsg NEWUSERMSG
         
-        mov AH, 08h                     ;; Cargamos la interrupción para leer 1 caracter
-        int 21
+        mov AH, 10h									;; Generamos la interrupción para obtener entradas del teclado
+	    int 16h
 
-        cmp AL, 31                      ;; 31 = 1
-        je displayLoginMenu 
+        ; mov AH, 00
+        ; mov numberGotten, AX
+        ; mPrintNumberConverted
+        ; mWaitEnter
 
-        cmp AL, 32                      ;; 32 = 2     
+        cmp AL, 31h                      ;; 31 = 1
+        je loginUser 
+
+        cmp AL, 32h                      ;; 32 = 2     
         je exit
 
-        cmp AL, 3Fh                    ;; Tecla F5
+        cmp AH, 3Fh                      ;; Tecla F5
         je newUser
 
         jmp startMainMenu
+    
+    loginUser:
+        mLoginMenu
+        jmp endMainMenu
+        
+    newUser:
+        call NewUserForm
+        mov DH, 00
+        mov DL, 00
+
+    endMainMenu:
 endm
 
 ;Iniciar Juego
@@ -63,8 +90,7 @@ endm
 mLoginMenu macro
     LOCAL start, end
     start:
-        mGetInputKeyboard nameBuffer, USERNAMEMSG
-        mGetInputKeyboard passwordBuffer, PASSWORDMSG
+        call NewUserForm
         call CheckCredentials
         jmp exit
         jmp start
