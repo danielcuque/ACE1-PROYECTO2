@@ -159,6 +159,8 @@ lastPortalInserted  DB 15h                          ;; 20 decimal
 currentPlayerName   DB 'Daniel$'                    ;; Nombre del jugador
 isBackMenu          DB 00                           ;; 00 = continuar | FF = volver al menú principal
 
+currentUserAddress  DB 00h                          ;; Guarda la direccion de memoria del usuario actual
+
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
 ;---------------------------------------------------------
@@ -265,6 +267,7 @@ start:
         mov DS, AX
         
 
+    call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
     call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
     menuProgram:
         mActiveTextMode

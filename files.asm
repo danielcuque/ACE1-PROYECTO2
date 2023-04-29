@@ -364,19 +364,16 @@ WriteInFileNumber ENDP
 ;---------------------------------------------------------
 
 TraverseDataSegment PROC
-    mov BX, [DI]
     cmp BX, 00
     je endTraverse
-    
-    mPrintMsg testStr
-    mWaitEnter
+
+    ; mPrintMsg testStr
+    ; mWaitEnter
     mWriteSimpleText MEMADDRESS
     call WriteInFileNumber
 
     mWriteSimpleText NEXTUSER
 
-    add DI, 02h
-    mov BX, [DI]
     cmp BX, 00
     je skipNextUserAddress
     
@@ -385,9 +382,6 @@ TraverseDataSegment PROC
     mWriteNumber recoveredStr
 
     skipNextUserAddress:
-
-        add DI, 02h
-        mov BX, [DI]
 
         cmp BX, 00
         je skipFirstGame
@@ -419,7 +413,11 @@ GenerateMemoryGraph PROC
     mWriteSimpleText headerMemoryGraph          ;; Escribimos los encabezados para visualizar el manejo de memoria
 
     ;; TODO: Recorrer memoria
-    mov DI, offset dataSegment                  ;; Colocamos el puntero del inicio del usuario en DI
+    mov BX, offset dataSegment                  ;; Colocamos el puntero del inicio del usuario en BX
+    ; mov AX, [BX]
+    ; ; mov numberGotten, AX
+    ; ; mPrintNumberConverted
+    ; ; mWaitEnter
     call TraverseDataSegment
 
     mWriteSimpleText footerMemoryGraph          ;; Colocamos el footer para cerrar el archivo uml
