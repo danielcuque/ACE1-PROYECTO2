@@ -97,7 +97,7 @@ SCORE               DB '"score":'
 LEVEL               DB '"level":'
 NEXTGAMES           DB '"nextGames":'
 
-
+oneCharBuffer DB 0
 ;---------------------------------------------------------
 ; Variables para los menus y login
 ;---------------------------------------------------------

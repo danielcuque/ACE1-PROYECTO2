@@ -26,6 +26,26 @@ mWriteSimpleText macro bufferWithText
     pop AX
 endm
 
+mWriteOneChar macro
+    push AX
+    push BX
+    push CX
+    push DX
+
+    ; xor DX, DX
+
+    mov AH, 40h                     ;; Función de escritura de archivo
+    mov BX, handleObject            ;; Handle del archivo
+    mov DX, offset oneCharBuffer          ;; Texto a escribir
+    mov CX, 01                      ;; Cantidad de bytes a escribir
+    int 21h                         ;; Realizar la interrupción
+
+    pop DX
+    pop CX
+    pop BX
+    pop AX
+endm
+
 mWriteNumber macro bufferWithText
     push AX
     push BX
@@ -432,17 +452,47 @@ TraverseDataSegment PROC
     xor CX, CX
     mov CL, [BX]
 
+    add BX, 01
+
     mWriteSimpleText NAMESTR
     mWriteSimpleText DOUBLEQUOTE
-    saveUsername:
+    saveUsername:   
+            mov DI, BX
+            mov AL, [DI]
+            mov oneCharBuffer, AL
+            mWriteOneChar
+
             inc BX
             loop saveUsername
+
     mWriteSimpleText DOUBLEQUOTE
     mWriteSimpleText COMMA
+    mWriteSimpleText NEWLINE
     
-    add BX, 01
     mWriteSimpleText PASSWORDSIZE
     call Write8BitsNumberInFile
+
+    xor CX, CX
+    mov CL, [BX]
+
+    add BX, 01
+
+    mWriteSimpleText PASSWORDSTR
+    mWriteSimpleText DOUBLEQUOTE
+    savePassword:   
+            mov DI, BX
+            mov AL, [DI]
+            mov oneCharBuffer, AL
+            mWriteOneChar
+
+            inc BX
+            loop savePassword
+            
+    mWriteSimpleText DOUBLEQUOTE
+    mWriteSimpleText COMMA
+    mWriteSimpleText NEWLINE
+
+
 
     ;; TODO: Graficar juegos y otros usuarios
 
