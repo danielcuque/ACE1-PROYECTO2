@@ -23,11 +23,6 @@ mMainMenu macro
         mov AH, 10h									;; Generamos la interrupción para obtener entradas del teclado
 	    int 16h
 
-        ; mov AH, 00
-        ; mov numberGotten, AX
-        ; mPrintNumberConverted
-        ; mWaitEnter
-
         cmp AL, 31h                      ;; 31 = 1
         je loginUser 
 
@@ -47,6 +42,7 @@ mMainMenu macro
         call NewUserForm
         mov DH, 00
         mov DL, 00
+        call InsertNewUser
 
     endMainMenu:
 endm

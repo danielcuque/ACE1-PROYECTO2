@@ -425,6 +425,7 @@ TraverseDataSegment PROC
     cmp BX, 00                      ;; Verifica que la direccion del usuario no sea 0
     je endTraverse                  ;; De lo contrario salta al final del metodo
 
+    mWriteSimpleText LBRACE
     mWriteSimpleText MEMADDRESS     ;; Escribimos la dirección de memoria del usuario
     call Write16BitsNumberInFile
 
@@ -510,13 +511,14 @@ TraverseDataSegment PROC
 
     push BX
         mov BX, SI
-        ; mov numberGotten, BX
-        ; mPrintNumberConverted
-        ; mWaitEnter
+        mov numberGotten, BX
+        mPrintNumberConverted
+        mWaitEnter
         call TraverseDataSegment            ;; LLamamos de manera recursiva para ingresar usuarios
     pop BX
 
     mWriteSimpleText RSBRACE
+    mWriteSimpleText RBRACE
 
     endTraverse:
         ret 
