@@ -9,22 +9,29 @@ mOpenFileToWrite macro filename
 endm
 
 mWriteSimpleText macro bufferWithText
+    push AX
+    push BX
+    push CX
+    push DX
+
     mov AH, 40h                     ;; Función de escritura de archivo
     mov BX, handleObject            ;; Handle del archivo
     lea DX, bufferWithText          ;; Texto a escribir
     mov CX, sizeof bufferWithText   ;; Cantidad de bytes a escribir
     int 21h                         ;; Realizar la interrupción
 
-    ;; Colocamos un salto de linea 
-    ; mov AH, 40h                     ;; Función de escritura de archivo
-    ; mov BX, handleObject            ;; Handle del archivo
-    ; lea DX, NEWLINE                 ;; Texto a escribir
-    ; mov CX, sizeof NEWLINE          ;; Cantidad de bytes a escribir
-    ; int 21h                         ;; Realizar la interrupción
+    pop DX
+    pop CX
+    pop BX
+    pop AX
 endm
 
 mWriteNumber macro bufferWithText
-    
+    push AX
+    push BX
+    push CX
+    push DX
+
     mWriteSimpleText DOUBLEQUOTE
     mov AH, 40h                     ;; Función de escritura de archivo
     mov BX, handleObject            ;; Handle del archivo
@@ -41,7 +48,11 @@ mWriteNumber macro bufferWithText
     lea DX, NEWLINE                 ;; Texto a escribir
     mov CX, sizeof NEWLINE          ;; Cantidad de bytes a escribir
     int 21h    
-
+     
+    pop DX
+    pop CX
+    pop BX
+    pop AX
 endm
 
 mCloseFile macro
@@ -340,14 +351,41 @@ ReadFile PROC USES AX BX CX DX
     ret
 ReadFile ENDP
 
-WriteInFileNumber PROC
-    mov BX,  [DI]
-    mov numberGotten, BX                    ;; Lo convertimos a Numero
-    call NumToStr
+;---------------------------------------------------------
+; Write16BitsNumberInFile
+;
+; Descripción:
+; Escribe un numero en el documento, con sus respetivos "" (comilla doble) para un numero de 16 bits (DW)
+;
+; Recibe:
+; BX ->  Valor del numero
+;
+; Retorna:
+; -
+;---------------------------------------------------------
 
+Write16BitsNumberInFile PROC USES CX
+    xor CX, CX
+    mov CX, [BX]
+    
+    mov numberGotten, CX                    ;; Lo convertimos a numero
+    call NumToStr
     mWriteNumber recoveredStr
+
     ret
-WriteInFileNumber ENDP
+Write16BitsNumberInFile ENDP
+
+Write8BitsNumberInFile PROC USES CX
+    xor CX, CX
+    mov CL, [BX]
+    
+    mov numberGotten, CX                    ;; Lo convertimos a numero
+    call NumToStr
+    mWriteNumber recoveredStr
+
+    ret
+Write8BitsNumberInFile ENDP
+
 
 
 ;---------------------------------------------------------
@@ -368,29 +406,48 @@ TraverseDataSegment PROC
     je endTraverse
 
     mWriteSimpleText MEMADDRESS
-    call WriteInFileNumber
+    call Write16BitsNumberInFile
+
+    add BX, 02h
 
     mWriteSimpleText NEXTUSER
+    call Write16BitsNumberInFile
 
-    cmp BX, 00
-    je skipNextUserAddress
+    add BX, 02h
+    mWriteSimpleText FIRSTGAME
+    call Write16BitsNumberInFile
+
+    add BX, 02h
+    mWriteSimpleText CREDENTIALS
+    call Write8BitsNumberInFile
+
+    add BX, 01
+    mWriteSimpleText ISUSERACTIVE
+    call Write8BitsNumberInFile
+
+    add BX, 01h
+    mWriteSimpleText NAMESIZE
+    call Write8BitsNumberInFile
+
+    xor CX, CX
+    mov CL, [BX]
+
+    mWriteSimpleText NAMESTR
+    mWriteSimpleText DOUBLEQUOTE
+    saveUsername:
+            inc BX
+            loop saveUsername
+    mWriteSimpleText DOUBLEQUOTE
+    mWriteSimpleText COMMA
     
-    call WriteInFileNumber
+    add BX, 01
+    mWriteSimpleText PASSWORDSIZE
+    call Write8BitsNumberInFile
 
-    mWriteNumber recoveredStr
-
-    skipNextUserAddress:
-
-        cmp BX, 00
-        je skipFirstGame
-
-        call WriteInFileNumber
-
-    skipFirstGame:
-        add DI, 02h
+    ;; TODO: Graficar juegos y otros usuarios
 
     endTraverse:
-    ret 
+        ret 
 TraverseDataSegment ENDP
 
 ;---------------------------------------------------------
@@ -411,6 +468,7 @@ GenerateMemoryGraph PROC
     mWriteSimpleText headerMemoryGraph          ;; Escribimos los encabezados para visualizar el manejo de memoria
 
     ;; TODO: Recorrer memoria
+
     lea BX, dataSegment                  ;; Colocamos el puntero del inicio del usuario en BX
     call TraverseDataSegment
 

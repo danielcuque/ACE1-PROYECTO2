@@ -218,9 +218,9 @@ currentBestScore DW     00h         ;; Mostramos el mejor puntaje del jugador ac
 ; "firstGame": "0023h"
 ; "credentials": "01"
 ; "isUserActive": "01"
-; "nameSize": "06"
-; "nameStr": "Daniel"
-; "passwordSize": "0Dh"
+; "nameSize": "09"
+; "nameStr": "202112145"
+; "passwordSize": "13"
 ; "passwordStr": "3024465830102"
 ; "games": [anidar juegos]
 ; "users": [anidar proximos usuarios]
