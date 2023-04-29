@@ -21,12 +21,12 @@ ApproveNewUsers ENDP
 ;---------------------------------------------------------
 
 InsertNewUser PROC
-    mov BX, offset nextPointer
+    mov BX, nextPointer
     cmp BX, 00                            ;; Comparamos si el puntero es nulo
     jne insertNextUser                    ;; Si no lo es, entonces insertamos el usuario siguiente
                                           ;; Ya que significa que existe un usuario antes
 
-    mov BX, offset dataSegment            ;; Si el puntero es nulo, entonces se obtiene la direccion de memoria del inicio del segmento de datos para los usuarios/juegos
+    lea BX, dataSegment            ;; Si el puntero es nulo, entonces se obtiene la direccion de memoria del inicio del segmento de datos para los usuarios/juegos
 
     insertNextUser:
         mov SI, BX                        ;; Colocamos la dirección del puntero en SI
@@ -55,17 +55,17 @@ InsertNewUser PROC
             add SI, 02h                  ;; Luego guardamos que tipo de permisos tiene 01|02|03  
             mov [SI], DL
 
-            inc SI
+            add SI, 01h
             mov [SI], DH                  ;; El siguiente campo es isUserActive, guarda si el usuario ya fue aprobado
 
-            inc SI                        ;; A partir de aquí, tomamos el valor del buffer para el username
+            add SI, 01h                   ;; A partir de aquí, tomamos el valor del buffer para el username
             lea DI, nameBuffer
 
             xor CX, CX
             mov CL, [DI+1]                ;; En la posición del buffer para el nombre está ->  nameBuffer = [cantidadDisponible, caracteresLeidos, ...contenido]
             mov [SI], CL                  ;; Guardamos el tamaño del nombre en la posición siguiente a la de isUserActive
 
-            inc SI                        ;; Nos movemos una vez más
+            add SI, 01h                        ;; Nos movemos una vez más
 
             add DI, 02h                   ;; Nos posicionamos en nameBuffer = [...contenido]
 
@@ -82,6 +82,8 @@ InsertNewUser PROC
         mov CL, [DI+1]                      ;; Caracteres leidos
         mov [SI], CL
 
+        add SI, 01h
+
         add DI, 02h
 
         savePassword:
@@ -92,6 +94,7 @@ InsertNewUser PROC
             loop savePassword
 
         mov nextPointer, SI
+
         call GenerateMemoryGraph
     ret
 InsertNewUser ENDP

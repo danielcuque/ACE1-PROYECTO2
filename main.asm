@@ -268,7 +268,6 @@ start:
         
 
     call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
-    call InsertMainAdmin   ;; Insertamos el usuario administrado antes del todo
     menuProgram:
         mActiveTextMode
         mPrintMsg infoMsg
@@ -280,8 +279,6 @@ start:
         mStartProgram
 
     newUser:
-        ; mPrintMsg testStr
-        ; mWaitEnter
         jmp exit
     main ENDP
 END start

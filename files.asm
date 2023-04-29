@@ -367,8 +367,6 @@ TraverseDataSegment PROC
     cmp BX, 00
     je endTraverse
 
-    ; mPrintMsg testStr
-    ; mWaitEnter
     mWriteSimpleText MEMADDRESS
     call WriteInFileNumber
 
@@ -413,11 +411,7 @@ GenerateMemoryGraph PROC
     mWriteSimpleText headerMemoryGraph          ;; Escribimos los encabezados para visualizar el manejo de memoria
 
     ;; TODO: Recorrer memoria
-    mov BX, offset dataSegment                  ;; Colocamos el puntero del inicio del usuario en BX
-    ; mov AX, [BX]
-    ; ; mov numberGotten, AX
-    ; ; mPrintNumberConverted
-    ; ; mWaitEnter
+    lea BX, dataSegment                  ;; Colocamos el puntero del inicio del usuario en BX
     call TraverseDataSegment
 
     mWriteSimpleText footerMemoryGraph          ;; Colocamos el footer para cerrar el archivo uml
