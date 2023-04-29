@@ -415,38 +415,40 @@ Write8BitsNumberInFile ENDP
 ; Recorre el segmento de datos para graficar los usuarios y juegos, este método será recursivo
 ;
 ; Recibe:
-; -
+; BX ->  dirección de memoria del usuario
 ;
 ; Retorna:
 ; -
 ;---------------------------------------------------------
 
 TraverseDataSegment PROC
-    cmp BX, 00
-    je endTraverse
+    cmp BX, 00                      ;; Verifica que la direccion del usuario no sea 0
+    je endTraverse                  ;; De lo contrario salta al final del metodo
 
-    mWriteSimpleText MEMADDRESS
+    mWriteSimpleText MEMADDRESS     ;; Escribimos la dirección de memoria del usuario
+    call Write16BitsNumberInFile
+
+    add BX, 02h                     ;; Sumamos 2, y nos posicionamos en la dirección del siguiente usuario
+    mov SI, BX                      ;; Guardamos la direccion del siguiente usuario en SI
+
+    mWriteSimpleText NEXTUSER       ;; Escribimos la dirección del siguiente usuario
     call Write16BitsNumberInFile
 
     add BX, 02h
-
-    mWriteSimpleText NEXTUSER
+    mov DI, BX                      ;; Guardamos esa dirección en DI
+    mWriteSimpleText FIRSTGAME      ;; Dirección de memoria del primer juego
     call Write16BitsNumberInFile
 
-    add BX, 02h
-    mWriteSimpleText FIRSTGAME
-    call Write16BitsNumberInFile
-
-    add BX, 02h
+    add BX, 02h                     ;; Escribimos las credenciales, admin, o usuario normal
     mWriteSimpleText CREDENTIALS
     call Write8BitsNumberInFile
 
     add BX, 01
-    mWriteSimpleText ISUSERACTIVE
+    mWriteSimpleText ISUSERACTIVE   ;; Escribimos si el usuario está activo o no
     call Write8BitsNumberInFile
 
     add BX, 01h
-    mWriteSimpleText NAMESIZE
+    mWriteSimpleText NAMESIZE       ;; Tamaño del nombre
     call Write8BitsNumberInFile
 
     xor CX, CX
@@ -454,7 +456,7 @@ TraverseDataSegment PROC
 
     add BX, 01
 
-    mWriteSimpleText NAMESTR
+    mWriteSimpleText NAMESTR        ;; Escribimos el nombre
     mWriteSimpleText DOUBLEQUOTE
     saveUsername:   
             mov DI, BX
@@ -469,7 +471,7 @@ TraverseDataSegment PROC
     mWriteSimpleText COMMA
     mWriteSimpleText NEWLINE
     
-    mWriteSimpleText PASSWORDSIZE
+    mWriteSimpleText PASSWORDSIZE   ;; Tamaño de la contraseña
     call Write8BitsNumberInFile
 
     xor CX, CX
@@ -477,7 +479,7 @@ TraverseDataSegment PROC
 
     add BX, 01
 
-    mWriteSimpleText PASSWORDSTR
+    mWriteSimpleText PASSWORDSTR    ;; Cadena de la contraseña
     mWriteSimpleText DOUBLEQUOTE
     savePassword:   
             mov DI, BX
@@ -497,6 +499,14 @@ TraverseDataSegment PROC
 
     ;; TODO: Recorrer juegos
 
+    push BX
+        mov BX, [SI]
+        ; mov numberGotten, BX
+        ; mPrintNumberConverted
+        ; mWaitEnter
+        call TraverseDataSegment            ;; LLamamos de manera recursiva para ingresar usuarios
+    pop BX
+
     mWriteSimpleText RSBRACE
     mWriteSimpleText COMMA
     
@@ -504,13 +514,6 @@ TraverseDataSegment PROC
     mWriteSimpleText LSBRACE
     ;; TODO: Recorrer siguientes usuarios
     mWriteSimpleText RSBRACE
-
-
-
-
-
-
-    ;; TODO: Graficar juegos y otros usuarios
 
     endTraverse:
         ret 
@@ -534,8 +537,8 @@ GenerateMemoryGraph PROC
     mWriteSimpleText headerMemoryGraph          ;; Escribimos los encabezados para visualizar el manejo de memoria
 
     ;; TODO: Recorrer memoria
-
-    lea BX, dataSegment                  ;; Colocamos el puntero del inicio del usuario en BX
+    lea SI, dataSegment
+    mov BX, [SI]                  ;; Colocamos el puntero del inicio del usuario en BX
     call TraverseDataSegment
 
     mWriteSimpleText footerMemoryGraph          ;; Colocamos el footer para cerrar el archivo uml

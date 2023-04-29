@@ -25,6 +25,7 @@ errorOpenFile       DB 'Error al abrir el archivo$'
 errorReadLine       DB 'Error al leer la linea en $'
 errorCloseFile      DB 'Error al cerrar el archivo$'
 errorLoginUser      DB 'El usuario y contrase',0A4h,'a son incorrectas$'
+errorUserActive     DB 'El usuario no está activo$'
 errorSizeOfNumber   DB 'Numero demasiado grande$'
 errorWriteFile      DB 'Error al escribir el archivo$'
 auxiliarX           DW 00h

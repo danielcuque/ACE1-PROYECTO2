@@ -1,8 +1,44 @@
 ;; En este archivo se manejará todo el crud con los usuarios
+;---------------------------------------------------------
+; ApproveNewUsers
+;
+; Descripción:
+; Muestra la lista de usuarios que tienen que ser aprobados
+;
+; Recibe:
+; -
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
 ApproveNewUsers PROC
     
     ret
 ApproveNewUsers ENDP
+
+;---------------------------------------------------------
+; CheckCredentials
+;
+; Descripción:
+; Sirve para verificar los datos para realizar el login 
+;
+; Recibe:
+; nameBuffer, passwordBuffer -> información para loguearse
+;
+; Retorna:
+; DH ->  00, contraseña o usuario incorrecto
+; DH ->  01, el usuario no está activo
+; DH ->  02, admin global
+; DH ->  03, admin
+; DH ->  04, usuario normal
+;---------------------------------------------------------
+CheckCredentials PROC USES SI DI BX
+    mov SI, offset dataSegment
+
+    ret
+CheckCredentials ENDP
+
 
 ;---------------------------------------------------------
 ; InsertNewUser
