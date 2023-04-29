@@ -492,6 +492,22 @@ TraverseDataSegment PROC
     mWriteSimpleText COMMA
     mWriteSimpleText NEWLINE
 
+    mWriteSimpleText GAMES                  ;; games: []
+    mWriteSimpleText LSBRACE
+
+    ;; TODO: Recorrer juegos
+
+    mWriteSimpleText RSBRACE
+    mWriteSimpleText COMMA
+    
+    mWriteSimpleText USERS
+    mWriteSimpleText LSBRACE
+    ;; TODO: Recorrer siguientes usuarios
+    mWriteSimpleText RSBRACE
+
+
+
+
 
 
     ;; TODO: Graficar juegos y otros usuarios
