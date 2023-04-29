@@ -65,7 +65,8 @@ mLoginMenu macro
     start:
         mGetInputKeyboard nameBuffer, USERNAMEMSG
         mGetInputKeyboard passwordBuffer, PASSWORDMSG
-        jmp end
+        call CheckCredentials
+        jmp exit
         jmp start
     end:
 endm

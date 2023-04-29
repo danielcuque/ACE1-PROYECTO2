@@ -429,13 +429,13 @@ TraverseDataSegment PROC
     call Write16BitsNumberInFile
 
     add BX, 02h                     ;; Sumamos 2, y nos posicionamos en la dirección del siguiente usuario
-    mov SI, BX                      ;; Guardamos la direccion del siguiente usuario en SI
+    mov SI, [BX]                    ;; Guardamos la direccion del siguiente usuario en SI
 
     mWriteSimpleText NEXTUSER       ;; Escribimos la dirección del siguiente usuario
     call Write16BitsNumberInFile
 
     add BX, 02h
-    mov DI, BX                      ;; Guardamos esa dirección en DI
+    mov DI, [BX]                    ;; Guardamos esa dirección en DI
     mWriteSimpleText FIRSTGAME      ;; Dirección de memoria del primer juego
     call Write16BitsNumberInFile
 
@@ -500,7 +500,7 @@ TraverseDataSegment PROC
     ;; TODO: Recorrer juegos
 
     push BX
-        mov BX, [SI]
+        mov BX, SI
         ; mov numberGotten, BX
         ; mPrintNumberConverted
         ; mWaitEnter

@@ -33,10 +33,53 @@ ApproveNewUsers ENDP
 ; DH ->  03, admin
 ; DH ->  04, usuario normal
 ;---------------------------------------------------------
-CheckCredentials PROC USES SI DI BX
-    mov SI, offset dataSegment
+CheckCredentials PROC USES SI DI AX BX CX DX
+    mov SI, offset dataSegment      ;; Nos posicionamos al inicio del todo
+    mov BX, [SI]                    ;; Colocamos el valor que está en la dirección AX en BX
 
-    ret
+    add BX, 02h                     ;; Obtenemos la dirección de memoria de donde está el next user, pero debemos hacer [BX] para obtener el valor, es decir, solo guardamos el índice
+    mov CX, [BX]
+
+    add BX, 06h                     ;; Nos posicionamos en el tamaño del username a analizar
+
+    mov DI, BX
+    mov SI, offset nameBuffer
+    add SI, 02h
+
+    xor DX, DX
+    call CompareStr
+    mov numberGotten, DX
+    mPrintMsg newLineChar
+    mPrintNumberConverted
+    mWaitEnter
+    
+    
+    xor AX, AX
+    mov AL, [DI]
+    inc AX
+    add BX, AX
+
+    mov DI, BX
+    mov SI, offset passwordBuffer
+    add SI, 02h
+
+
+    xor DX, DX
+    call CompareStr
+    mov numberGotten, DX
+    mPrintMsg newLineChar
+    mPrintNumberConverted
+    mWaitEnter
+
+
+    ; xor AX, AX                     
+    ; mov AL, [BX]
+    ; mov numberGotten, AX            
+    ; mPrintNumberConverted
+    ; mWaitEnter
+
+    endProc:
+        ret
 CheckCredentials ENDP
 
 
