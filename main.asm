@@ -24,10 +24,13 @@ newLineChar         DB 0Ah, '$'
 errorOpenFile       DB 'Error al abrir el archivo$'
 errorReadLine       DB 'Error al leer la linea en $'
 errorCloseFile      DB 'Error al cerrar el archivo$'
-errorLoginUser      DB 'El usuario y contrase',0A4h,'a son incorrectas$'
+errorLoginUser      DB 'El usuario y contrase',0A4h,'a son incorrectas',0Dh, 0Ah,'$'
 errorUserActive     DB 'El usuario no está activo$'
 errorSizeOfNumber   DB 'Numero demasiado grande$'
 errorWriteFile      DB 'Error al escribir el archivo$'
+
+pressEToExit        DB 'Presione E para salir$'
+pressEnterToContinue DB 'Presione ENTER para continuar$'
 
 successfulLoginMsg  DB 'Inicio de sesion correcto$'
 auxiliarX           DW 00h
@@ -131,7 +134,8 @@ initialMinutes  DB 00h
 initialSeconds  DB 00h
 initialHundred  DB 00h
 
-timePassed      DW 00
+timePassed      DW 00h
+totalTimePassed DW 00h
 minuteTime      DW 00h
 secondTime      DW 00h
 hundredTime     DW 00h

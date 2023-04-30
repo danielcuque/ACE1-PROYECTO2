@@ -106,8 +106,54 @@ CheckCredentials ENDP
 ; -
 ;---------------------------------------------------------
 
-InsertNewGame PROC
-    lea DI, userLoggedAdress
+InsertNewGame PROC USES BX DI
+    mov BX, nextPointer
+
+    mov SI, BX
+
+    mov [SI], BX
+
+    mov BX, userLoggedAdress
+
+    add BX, 04h
+    mov AX, [BX]
+
+    getNextGameAddress:
+        cmp AX, 0
+        je setNextGameAddress
+
+        mov BX, AX
+        add BX, 02h
+        mov AX, [BX]
+
+        jmp getNextGameAddress
+
+    setNextGameAddress:
+        mov [BX], SI
+    
+    add SI, 02h
+    mov word ptr [SI], 0
+
+    add SI, 02h
+    mov AX, totalPoints
+    mov [SI], AX
+
+    add SI, 02h
+    mov AX, totalTimePassed
+    mov [SI], AX
+
+    add SI, 02h
+    mov AL, numberLevel
+    mov [SI], AL
+
+    inc SI
+    mov BX, userLoggedAdress
+    mov [SI], BX
+
+    add SI, 02h
+    mov nextPointer, SI
+
+    call GenerateMemoryGraph
     ret
 InsertNewGame ENDP
 

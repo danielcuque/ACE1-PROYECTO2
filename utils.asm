@@ -550,6 +550,23 @@ CompareStr PROC USES AX BX CX SI DI
 	ret
 CompareStr ENDP
 
+PrintMenuOptions PROC
+    mov AH, 02				;;
+	mov DH, 10h				;;	fila
+	mov DL, 8h				;;	columna
+	mov BH, 00				;;
+	int 10
+    mPrintMsg pressEToExit
+
+    mov AH, 02				;;
+	mov DH, 12h				;;	fila
+	mov DL, 4h				;;	columna
+	mov BH, 00				;;
+	int 10
+    mPrintMsg pressEnterToContinue
+    ret
+PrintMenuOptions ENDP
+
 ;---------------------------------------------------------
 ; PauseMenu
 ;

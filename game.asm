@@ -100,6 +100,7 @@ mStartGame macro fileName
 
 		jmp continueGame
 	endGameSuccess:
+		call InsertNewGame
 endm
 
 PrintBestScore PROC USES AX BX CX DX
@@ -669,6 +670,7 @@ ChangeAcemanDirection PROC USES AX CX
 
 		call EmptyScreen
 		call PrintInitialInformation
+		call PrintMenuOptions
 		call PauseMenu
 		
 		cmp isBackMenu, 00

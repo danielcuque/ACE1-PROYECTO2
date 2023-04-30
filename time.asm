@@ -102,6 +102,7 @@ CalculateTime PROC USES AX BX CX DX
     mov AX, currentTime             ;; En AX guardamos el tiempo actual
     sub AX, initialTime             ;; Restamos tiempoActual - tiempoInicial = Diferencia
     mov timePassed, AX              ;; Guardamos el tiempo transcurrido entre la hora de inicio y la actual
+    mov totalTimePassed, AX
 
     mov BX, 1770h                   ;; 6000 decimal        
     div BX                          ;; Diferencia / 6000 = minutos
