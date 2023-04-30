@@ -510,10 +510,7 @@ TraverseDataSegment PROC
     ;; TODO: Recorrer siguientes usuarios
 
     push BX
-        mov BX, SI
-        mov numberGotten, BX
-        mPrintNumberConverted
-        mWaitEnter
+        mov BX, SI                          ;; Movemos la dirección de memoria del proximo usuario para que se genere su gráfica, recursivamente
         call TraverseDataSegment            ;; LLamamos de manera recursiva para ingresar usuarios
     pop BX
 
@@ -523,6 +520,23 @@ TraverseDataSegment PROC
     endTraverse:
         ret 
 TraverseDataSegment ENDP
+
+;---------------------------------------------------------
+; TraverseGames
+;
+; Descripción:
+; Grafica los juegos de un jugador
+;
+; Recibe:
+; Dirección de memoria del jugador
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+TraverseGames PROC
+    
+    ret
+TraverseGames ENDP
 
 ;---------------------------------------------------------
 ; GenerateMemoryGraph

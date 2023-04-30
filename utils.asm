@@ -531,7 +531,7 @@ endm
 ; DL ->  1, son iguales
 ;---------------------------------------------------------
 
-CompareStr PROC USES AX BX SI DI
+CompareStr PROC USES AX BX CX SI DI
     mov DX, 00h       
     mov CL, [DI]
     inc DI

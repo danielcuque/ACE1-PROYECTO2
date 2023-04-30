@@ -158,10 +158,11 @@ numberLevel         DB 00h                          ;; Guardamos el nivel actual
 healthAceman        DB 03h
 isGhostBlue         DW 00h                          ;; 00 = no se puede comer | FF = se puede comer y pintar azul
 lastPortalInserted  DB 15h                          ;; 20 decimal
-currentPlayerName   DB 'Daniel$'                    ;; Nombre del jugador
 isBackMenu          DB 00                           ;; 00 = continuar | FF = volver al menú principal
 
-currentUserAddress  DB 00h                          ;; Guarda la direccion de memoria del usuario actual
+currentPlayerName   DB 10h dup('$')                 ;; Nombre del jugador
+userLoggedAdress    DW 00h                          ;; Guarda la direccion de memoria del usuario actual
+currentBestScore    DW     00h         ;; Mostramos el mejor puntaje del jugador actual
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
@@ -211,8 +212,6 @@ cyanGhost_x                 DW      15h             ;; 21 decmal
 ;---------------------------------------------------------
 ; Variables para la lista de usuarios
 ;---------------------------------------------------------
-
-currentBestScore DW     00h         ;; Mostramos el mejor puntaje del jugador actual
 
 ; Estructura para usuarios
 ; "memoryAddress": "000F",

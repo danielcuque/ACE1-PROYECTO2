@@ -20,7 +20,7 @@ mMainMenu macro
 
         mPrintMsg NEWUSERMSG
         
-        mov AH, 10h									;; Generamos la interrupción para obtener entradas del teclado
+        mov AH, 10h					     ;; Generamos la interrupción para obtener entradas del teclado
 	    int 16h
 
         cmp AL, 31h                      ;; 31 = 1
@@ -43,6 +43,7 @@ mMainMenu macro
         mov DH, 00
         mov DL, 00
         call InsertNewUser
+        jmp startMainMenu
 
     endMainMenu:
 endm
