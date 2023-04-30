@@ -522,8 +522,8 @@ endm
 ; Compara dos cadenas para ver si son iguales
 ;
 ; Recibe:
-; SI -> offset de la cadena A, la cadena apunta al tamaño de la misma
-; DI -> offset de la cadena B que se quiere comparar con A
+; DI -> offset de la cadena A, la cadena apunta al tamaño de la misma
+; SI -> offset de la cadena B que se quiere comparar con A
 ; 
 ;
 ; Retorna:
@@ -532,6 +532,10 @@ endm
 ;---------------------------------------------------------
 
 CompareStr PROC USES AX BX CX SI DI
+    xor AX, AX
+    xor BX, BX
+    xor CX, CX
+
     mov DX, 00h       
     mov CL, [DI]
     inc DI

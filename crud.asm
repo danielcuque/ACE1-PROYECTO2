@@ -1,4 +1,5 @@
 ;; En este archivo se manejará todo el crud con los usuarios
+
 ;---------------------------------------------------------
 ; ApproveNewUsers
 ;
@@ -35,7 +36,6 @@ CheckCredentials PROC USES SI DI AX BX CX
     mov BX, [SI]                    ;; Colocamos el valor que está en la dirección AX en BX
 
     verifyUser:
-
         cmp BX, 00
         je endOfList
 
@@ -46,19 +46,22 @@ CheckCredentials PROC USES SI DI AX BX CX
         mov CX, [BX]                    ;; Guardamos la dirección en CX
 
         add BX, 06h                     ;; Nos posicionamos en el tamaño del username a analizar
+        
+        
 
         mov DI, BX
+
         mov SI, offset nameBuffer
         add SI, 02h
 
         xor DX, DX
-        call CompareStr
+        call CompareStr                ;; Comparamos la cadena del buffer con el que está guardado en el datasegment
         
-        cmp DL, 00
+        cmp DL, 00                     ;; Si los usuarios no coinciden, entonces nos saltamos el usuario
         je skipUser
     
         xor AX, AX
-        mov AL, [DI]
+        mov AL, [DI]                    ;; De lo contrario, avanzamos hasta la posición de la contraseña, ya que el usuario coincidió
         inc AX
         add BX, AX
 
@@ -66,12 +69,19 @@ CheckCredentials PROC USES SI DI AX BX CX
         mov SI, offset passwordBuffer
         add SI, 02h
 
-
         xor DX, DX
         call CompareStr
 
-        cmp DL, 00
-        jne successfulLogin
+        cmp DL, 00                      ;; Si la contraseña es incorrecta, entonces nos lanzamos un error
+        je endOfList
+
+        mov BX, userLoggedAdress        ;; Por ultimo, comprobamos si el usuario está activo, o no
+        add BX, 07h
+        mov AL, [BX]
+
+        cmp AL, 00
+        je userIsNotActive
+        jmp successfulLogin
         
         skipUser:
             mov BX, CX
@@ -83,6 +93,13 @@ CheckCredentials PROC USES SI DI AX BX CX
         mPrintMsg successfulLoginMsg
         mWaitEnter
         call SetCurrentUserName
+        jmp endProc
+    
+    userIsNotActive:
+        mov DH, 00h
+        mPrintMsg newLineChar
+        mPrintMsg errorUserActive
+        mWaitEnter
         jmp endProc
 
     endOfList:
@@ -190,8 +207,8 @@ SetCurrentUserName ENDP
 ; Inserta un nuevo usuario en el bloque de datos
 ;
 ; Recibe:
-; DH -> Tipo de usuario, 01 = normal | 02 = admin | 03 = admin global
-; DL -> 01 = activo | 00 = no activo
+; DL -> Tipo de usuario, 01 = normal | 02 = admin | 03 = admin global
+; DH -> 01 = activo | 00 = no activo
 ; nameBuffer ->  nombre del usuario
 ; passwordBuffer ->  contraseña del usuario
 ;
@@ -335,8 +352,8 @@ InsertMainAdmin PROC
         inc DI
         loop setMainAdminPassword
 
-    mov DL, 03
-    mov DH, 01
+    mov DL, 03                  ;; Permisos
+    mov DH, 01                  ;; Activo
 
     call InsertNewUser
     ret

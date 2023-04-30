@@ -25,7 +25,7 @@ errorOpenFile       DB 'Error al abrir el archivo$'
 errorReadLine       DB 'Error al leer la linea en $'
 errorCloseFile      DB 'Error al cerrar el archivo$'
 errorLoginUser      DB 'El usuario y contrase',0A4h,'a son incorrectas',0Dh, 0Ah,'$'
-errorUserActive     DB 'El usuario no está activo$'
+errorUserActive     DB 'El usuario no est',0A0h,' activo$'
 errorSizeOfNumber   DB 'Numero demasiado grande$'
 errorWriteFile      DB 'Error al escribir el archivo$'
 
@@ -150,9 +150,9 @@ nameBuffer                  DB   102h dup (0ffh, '$')           ;; Guarda el nom
 passwordBuffer              DB   102h dup (0ffh, '$')           ;; Guarda la contraseña
 
 ; nameMainAdmin               DB   '202112145'            
-nameMainAdmin               DB   '2'            
+nameMainAdmin               DB   '22'            
 ; passwordMainAdmin           DB   '3024465830102'
-passwordMainAdmin           DB   '3'
+passwordMainAdmin           DB   '33'
 
 ;---------------------------------------------------------
 ; Variables para el cronometro

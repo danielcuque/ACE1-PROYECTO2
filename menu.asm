@@ -49,8 +49,11 @@ mMainMenu macro
     
     loginUser:
         mLoginMenu
-        jmp endMainMenu
-        
+
+        cmp DH, 00              ;; Si el procedure anterior devuelve 0, significa que están malas las credenciales
+        je startMainMenu
+
+        mCheckUserCredentials   ;; Redirigimos hacia el menu que le corresponda
     newUser:
         call UserForm
         mov DH, 00
@@ -88,21 +91,14 @@ mMainAdminMenu macro
         je startProgram 
 
         cmp AL, 36                      ;; 32 = 6     
-        je exit
+        je menuProgram
 
         jmp start
 endm
 
 mLoginMenu macro
-    LOCAL start, end
-    start:
-        call UserForm           ;; Tomamos los campos del usuario
-        call CheckCredentials   ;; Comprobamos sus crendenciales
-
-        cmp DH, 00              ;; Si el procedure anterior devuelve 0, significa que están malas las credenciales
-        je start
-        mCheckUserCredentials   ;; Redirigimos hacia el menu que le corresponda
-    end:
+    call UserForm           ;; Tomamos los campos del usuario
+    call CheckCredentials   ;; Comprobamos sus crendenciales
 endm
 
 mCheckUserCredentials macro
@@ -152,7 +148,7 @@ mNormalUserMenu macro
         je top10PersonalScoreReport 
 
         cmp AL, 34                      ;; 34 = 4     
-        je exit
+        je menuProgram
 
         jmp start
 
@@ -191,7 +187,7 @@ mAdminUserMenu macro
         je startProgram 
 
         cmp AL, 36                      ;; 32 = 6     
-        je exit
+        je menuProgram
 
         jmp start
 endm
