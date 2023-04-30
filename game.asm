@@ -674,12 +674,16 @@ ChangeAcemanDirection PROC USES AX CX
 		call PauseMenu
 		
 		cmp isBackMenu, 00
-		jne endProc
+		je continue
 
-		call PrintMapObject
-		mPrintTotalPoints
-		call PrintHealthAceman
+		call InsertNewGame
 		jmp endProc
+
+		continue:
+			call PrintMapObject
+			mPrintTotalPoints
+			call PrintHealthAceman
+			jmp endProc
 	emptyBuffer:
 		mov AH, 00
 		int 16

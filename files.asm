@@ -552,27 +552,27 @@ TraverseGames PROC USES DI SI
     call Write16BitsNumberInFile        ;; Escribimos dicha información
 
     add BX, 02h
-    mWriteSimpleText USERADDRESS        ;; Escribimos la dirección de memoria del usuario al que pertenece el juego
-    call Write16BitsNumberInFile
-
-    add BX, 02h
     mov SI, [BX]                        ;; Guardamos la dirección de memoria del proximo juego
     mWriteSimpleText NEXTGAME
-    call Write16BitsNumberInFile
-
-    add BX, 02
-    mWriteSimpleText TIME               ;; Escribimos el tiempo en centesimas de segundo
     call Write16BitsNumberInFile
 
     add BX, 02h
     mWriteSimpleText SCORE
     call Write16BitsNumberInFile        ;; Escribimos el puntaje
 
+    add BX, 02
+    mWriteSimpleText TIME               ;; Escribimos el tiempo en centesimas de segundo
+    call Write16BitsNumberInFile
+
     add BX, 01
     mWriteSimpleText LEVEL
     call Write8BitsNumberInFile         ;; Escribimos el numero del nivel que se jugó
 
-    mWriteSimpleText NEXTGAME           ;; Escribimos los juegos siguientes
+    add BX, 02h
+    mWriteSimpleText USERADDRESS        ;; Escribimos la dirección de memoria del usuario al que pertenece el juego
+    call Write16BitsNumberInFile
+
+    mWriteSimpleText NEXTGAMES           ;; Escribimos los juegos siguientes
     mWriteSimpleText LSBRACE            ;; Escribimos [
 
     push BX

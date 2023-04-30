@@ -35,10 +35,11 @@ CheckCredentials PROC USES SI DI AX BX CX
     mov BX, [SI]                    ;; Colocamos el valor que está en la dirección AX en BX
 
     verifyUser:
-        mov userLoggedAdress, BX        ;; Se guarda la dirección del usuario, por si en dado caso se logra loguear
 
         cmp BX, 00
         je endOfList
+
+        mov userLoggedAdress, BX        ;; Se guarda la dirección del usuario, por si en dado caso se logra loguear
 
         add BX, 02h                     ;; Obtenemos la dirección de memoria de donde está el next user, pero debemos hacer [BX] para obtener el valor, es decir, solo guardamos el índice
         xor CX, CX
@@ -106,20 +107,21 @@ CheckCredentials ENDP
 ; -
 ;---------------------------------------------------------
 
-InsertNewGame PROC USES BX DI
-    mov BX, nextPointer
+InsertNewGame PROC USES AX BX CX DX DI SI
+    mov BX, nextPointer                     ;; Obtenemos la primera posición disponible
 
-    mov SI, BX
+    mov SI, BX                              ;; Copiamos ese valor en SI
 
-    mov [SI], BX
+    mov [SI], BX                            ;; Guardamos ese valor en la dirección de memoria de SI
 
-    mov BX, userLoggedAdress
+    mov BX, userLoggedAdress                ;; Obtenemos la dirección de memoria del usuario logueado
+        
 
     add BX, 04h
-    mov AX, [BX]
+    mov AX, [BX]                            ;; Guardamos esa dirección del primero juego del jugador logueado en AX
 
     getNextGameAddress:
-        cmp AX, 0
+        cmp AX, 0                          ;; Si AX, es 0, entonces insertamos el juego
         je setNextGameAddress
 
         mov BX, AX
@@ -129,25 +131,25 @@ InsertNewGame PROC USES BX DI
         jmp getNextGameAddress
 
     setNextGameAddress:
-        mov [BX], SI
+        mov [BX], SI                        ;; Guardamos la dirección del primer juego del jugador 
     
-    add SI, 02h
-    mov word ptr [SI], 0
+    add SI, 02h                             ;; Guardamos el valor del nextgame que por defecto es 0, ya que cuando es nuevo, se inserta en el anterior bucle
+    mov word ptr [SI], 0                    
 
     add SI, 02h
-    mov AX, totalPoints
+    mov AX, totalPoints                     ;; Guardamos los puntos que obtuvo el jugador
     mov [SI], AX
 
     add SI, 02h
-    mov AX, totalTimePassed
+    mov AX, totalTimePassed                 ;; Guardamos lo que se tardó en obtener el puntaje
     mov [SI], AX
 
     add SI, 02h
-    mov AL, numberLevel
+    mov AL, numberLevel                     ;; Guardamos qué nivel se jugó
     mov [SI], AL
 
     inc SI
-    mov BX, userLoggedAdress
+    mov BX, userLoggedAdress                 ;; 
     mov [SI], BX
 
     add SI, 02h

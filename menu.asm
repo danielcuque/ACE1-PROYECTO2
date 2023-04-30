@@ -48,10 +48,6 @@ mMainMenu macro
     endMainMenu:
 endm
 
-;Iniciar Juego
-;Inactivar usuario Aprobar usuario
-;Top 10 tiempos globales Top 10 punteo globales Salir
-
 mMainAdminMenu macro
     LOCAL start
     start:  

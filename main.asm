@@ -144,9 +144,12 @@ hundredTime     DW 00h
 ; Variables para el teclado
 ;---------------------------------------------------------
 nameBuffer                  DB   102h dup (0ffh, '$')           ;; Guarda el nombre
-passwordBuffer              DB   102h dup (0ffh, '$')           ;; Guarda la ontraseña
-nameMainAdmin               DB   '202112145'
-passwordMainAdmin           DB   '3024465830102'
+passwordBuffer              DB   102h dup (0ffh, '$')           ;; Guarda la contraseña
+
+; nameMainAdmin               DB   '202112145'            ;; ----CAMBIAR
+nameMainAdmin               DB   'd'            ;; ----CAMBIAR
+; passwordMainAdmin           DB   '3024465830102'
+passwordMainAdmin           DB   'c'
 
 ;---------------------------------------------------------
 ; Variables para el cronometro
@@ -237,11 +240,11 @@ cyanGhost_x                 DW      15h             ;; 21 decmal
 ; Estructura para juegos
 
 ; "memoryAddress": 0023h
-; "userAddress": "000F"
 ; "nextGame": "0024h"
-; "time": "400"
 ; "score": "1000"
+; "time": "400"
 ; "level": "1"
+; "userAddress": "000F"
 ; "nextGames": []
 
 prevPointer DW 0
