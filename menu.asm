@@ -89,7 +89,12 @@ mLoginMenu macro
     start:
         call NewUserForm
         call CheckCredentials
+        cmp DH, 00
+        je start
+
+        cmp DH, 01
+        je startProgram
+        
         jmp exit
-        jmp start
     end:
 endm

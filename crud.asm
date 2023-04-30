@@ -28,22 +28,17 @@ ApproveNewUsers ENDP
 ;
 ; Retorna:
 ; DH ->  00, contraseña o usuario incorrecto
-; DH ->  01, el usuario no está activo
-; DH ->  02, admin global
-; DH ->  03, admin
-; DH ->  04, usuario normal
+; DH ->  01, login correcto
 ;---------------------------------------------------------
-CheckCredentials PROC USES SI DI AX BX CX DX
+CheckCredentials PROC USES SI DI AX BX CX
     mov SI, offset dataSegment      ;; Nos posicionamos al inicio del todo
     mov BX, [SI]                    ;; Colocamos el valor que está en la dirección AX en BX
-    ; mPrintMsg nameBuffer
-    ; mPrintMsg newLineChar
-    ; mPrintMsg passwordBuffer
-    ; mWaitEnter
 
     verifyUser:
+        mov userLoggedAdress, BX        ;; Se guarda la dirección del usuario, por si en dado caso se logra loguear
+
         cmp BX, 00
-        je endVerification
+        je endOfList
 
         add BX, 02h                     ;; Obtenemos la dirección de memoria de donde está el next user, pero debemos hacer [BX] para obtener el valor, es decir, solo guardamos el índice
         xor CX, CX
@@ -57,10 +52,6 @@ CheckCredentials PROC USES SI DI AX BX CX DX
 
         xor DX, DX
         call CompareStr
-        mov numberGotten, DX
-        mPrintMsg newLineChar
-        mPrintNumberConverted
-        mWaitEnter
         
         cmp DL, 00
         je skipUser
@@ -77,20 +68,26 @@ CheckCredentials PROC USES SI DI AX BX CX DX
 
         xor DX, DX
         call CompareStr
-        mov numberGotten, DX
-        mPrintMsg newLineChar
-        mPrintNumberConverted
-        mWaitEnter
 
         cmp DL, 00
-        jne endVerification
+        jne successfulLogin
         
         skipUser:
             mov BX, CX
             jmp verifyUser
     
-    endVerification:
+    successfulLogin:
+        mov DH, 01
+        mPrintMsg newLineChar
+        mPrintMsg successfulLoginMsg
+        mWaitEnter
+        jmp endProc
 
+    endOfList:
+        mPrintMsg newLineChar
+        mPrintMsg errorLoginUser
+        mWaitEnter
+        mov DH, 00        
 
     endProc:
         ret

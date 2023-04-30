@@ -28,6 +28,8 @@ errorLoginUser      DB 'El usuario y contrase',0A4h,'a son incorrectas$'
 errorUserActive     DB 'El usuario no está activo$'
 errorSizeOfNumber   DB 'Numero demasiado grande$'
 errorWriteFile      DB 'Error al escribir el archivo$'
+
+successfulLoginMsg  DB 'Inicio de sesion correcto$'
 auxiliarX           DW 00h
 auxiliarY           DW 00h
 
@@ -103,7 +105,7 @@ oneCharBuffer DB 0
 ;---------------------------------------------------------
 ; Variables para los menus y login
 ;---------------------------------------------------------
-INICIARJUEGO                    DB '1. Iniciar juego', 0Dh, 0Ah,'$'
+INICIARJUEGO              DB '1. Iniciar juego', 0Dh, 0Ah,'$'
 TOP10TIEMPOSPERSONALES    DB '. Top 10 tiempos personales', 0Dh, 0Ah,'$'
 TOP10PUNTEOPERSONAL       DB '. Top 10 punteo personal', 0Dh, 0Ah,'$'
 SALIR                     DB '. Salir', 0Dh, 0Ah,'$'
@@ -136,7 +138,7 @@ hundredTime     DW 00h
 ; Variables para el teclado
 ;---------------------------------------------------------
 nameBuffer                  DB   102h dup (0ffh, '$')           ;; Guarda el nombre
-passwordBuffer              DB   102h dup (0ffh, '$')          ;; Guarda la ontraseña
+passwordBuffer              DB   102h dup (0ffh, '$')           ;; Guarda la ontraseña
 nameMainAdmin               DB   '202112145'
 passwordMainAdmin           DB   '3024465830102'
 
@@ -162,7 +164,7 @@ isBackMenu          DB 00                           ;; 00 = continuar | FF = vol
 
 currentPlayerName   DB 10h dup('$')                 ;; Nombre del jugador
 userLoggedAdress    DW 00h                          ;; Guarda la direccion de memoria del usuario actual
-currentBestScore    DW     00h         ;; Mostramos el mejor puntaje del jugador actual
+currentBestScore    DW 00h         ;; Mostramos el mejor puntaje del jugador actual
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
