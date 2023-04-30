@@ -98,6 +98,7 @@ mLoginMenu macro
     start:
         call UserForm           ;; Tomamos los campos del usuario
         call CheckCredentials   ;; Comprobamos sus crendenciales
+        
         cmp DH, 00              ;; Si el procedure anterior devuelve 0, significa que están malas las credenciales
         je start
 
@@ -121,8 +122,76 @@ mCheckUserCredentials macro
 endm
 
 mNormalUserMenu macro
-    
+    LOCAL start, top10PersonalTimeReport, top10PersonalScoreReport
+    start:  
+        mPrintMsg newLineChar
+
+        mPrintMsg INICIARJUEGO
+
+        mPrintNumberByDigits 6, 02h
+        mPrintMsg TOP10TIEMPOSPERSONALES
+
+
+        mPrintNumberByDigits 6, 03h
+        mPrintMsg TOP10PUNTEOPERSONAL
+
+
+        mPrintNumberByDigits 6, 04h
+        mPrintMsg SALIR
+        
+        mov AH, 08h                     ;; Cargamos la interrupción para leer 1 caracter
+        int 21
+
+        cmp AL, 31                      ;; 31 = 1
+        je startProgram 
+
+        cmp AL, 32                      ;; 32 = 2
+        je top10PersonalTimeReport 
+
+        cmp AL, 32                      ;; 33 = 3
+        je top10PersonalScoreReport 
+
+        cmp AL, 34                      ;; 34 = 4     
+        je exit
+
+        jmp start
+
+        top10PersonalTimeReport:
+            call GeneratePersonalScoreReport
+            jmp start
+        top10PersonalScoreReport:
+            jmp start
+
 endm
+
 mAdminUserMenu macro
-    
+    LOCAL start
+    start:  
+        mPrintMsg newLineChar
+
+        mPrintMsg INICIARJUEGO
+
+        mPrintMsg INACTIVARUSUARIO
+
+        mPrintMsg APROBARUSUARIO
+
+        mPrintNumberByDigits 6, 04H
+        mPrintMsg TOP10TIEMPOSGLOBALES
+
+        mPrintNumberByDigits 6, 05H
+        mPrintMsg TOP10PUNTEOGLOBAL
+
+        mPrintNumberByDigits 6, 06H
+        mPrintMsg SALIR
+        
+        mov AH, 08h                     ;; Cargamos la interrupción para leer 1 caracter
+        int 21
+
+        cmp AL, 31                      ;; 31 = 1
+        je startProgram 
+
+        cmp AL, 36                      ;; 32 = 6     
+        je exit
+
+        jmp start
 endm

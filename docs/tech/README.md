@@ -9,6 +9,10 @@
 ## Objetivo del proyecto
 El objetivo es implementar un juego similar a Pacman, en el cual se debe recolectar la mayor cantidad de puntos posibles, evitando a los enemigos que se mueven de forma aleatoria. El juego termina cuando se recolectan todos los puntos o cuando el jugador es alcanzado por un enemigo más de tres veces.
 
+# Indice
+1. [Directivas de ensamblador](#directivas-de-ensamblador)
+2. [Diagrama de memoria](#diagrama-de-memoria)
+
 ## Directivas de ensamblador
 ```asm
 .MODEL small
@@ -178,3 +182,4 @@ Este procedure se encarga de generar un numero aleatorio, recibe como parametro 
 Este procedure se encarga de calcular el temporizador, recibe como parametro el tiempo que se quiere temporizar, y se encarga de verificar si el temporizador ya terminó, o si se quiere pausar el juego.
 
 
+# Diagrama de memoria

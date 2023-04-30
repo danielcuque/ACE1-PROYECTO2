@@ -102,13 +102,13 @@ mReadLine macro
     
     start:
 
-        mov BX, handleObject       ;; Movemos a BX le atributo del handler
+        mov BX, handleObject        ;; Movemos a BX le atributo del handler
         mov CX, 1                   ;; Leemos caracter por caracter
         mov DX, DI
 
         mov AH, 3Fh                 ;; Usamos la interrupción para leer el archivo
-        int 21h                     ;; 
-        jc errorWhenReadLine                     ;; Si no se puede leer el archivo, nos saltamos a fail
+        int 21h                     
+        jc errorWhenReadLine        ;; Si no se puede leer el archivo, nos saltamos a fail
 
         cmp AX, 0
         je endOfFile
@@ -213,11 +213,11 @@ endm
 ; Tablero de juego lleno
 ;---------------------------------------------------------
 
-ReadFile PROC USES AX BX CX DX
+ReadFile PROC USES AX BX CX DX SI DI
     xor CX, CX
 
     mov AL, 00                          ;; Modo de lectura
-    mov AH, 3dh                         ;; Función para abrir el archivo
+    mov AH, 3Dh                         ;; Función para abrir el archivo
     int 21h                             ;; Provocamos la interrupción
     jc errorToOpen
 
@@ -357,6 +357,7 @@ ReadFile PROC USES AX BX CX DX
         mWaitEnter
         jmp endRead
     errorWhenReadLine:
+        call PrintCarryFlag
         mPrintMsg errorReadLine
         mPrintMsg fileLineBuffer
         mWaitEnter
@@ -623,8 +624,8 @@ GenerateMemoryGraph PROC
 GenerateMemoryGraph ENDP
 
 
-GenerateTop10Personal PROC
-    mOpenFileToWrite fileTop10Personales
+GeneratePersonalScoreReport PROC
+    mOpenFileToWrite filePersonalTimeReport
 
     mWriteNumber simpleSeparatorText
     mWriteNumber infoMsg
@@ -637,4 +638,4 @@ GenerateTop10Personal PROC
     errorToClose:
     endProc:
     ret
-GenerateTop10Personal ENDP
+GeneratePersonalScoreReport ENDP

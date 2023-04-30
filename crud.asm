@@ -161,22 +161,27 @@ InsertNewGame PROC USES AX BX CX DX DI SI
 InsertNewGame ENDP
 
 SetCurrentUserName PROC USES AX CX BX SI DI
+
+    mResetVarWithDollarSign currentPlayerName
+
     mov BX, userLoggedAdress
     add BX, 08
+
     xor CX, CX
-    mov CL, BL
-
-    mov DI, offset currentPlayerName
-    inc BX
-    mov SI, 0  
+    mov CL, [BX]
     
-    mov DI, BX
-    setUsername:
-        mov AL, [DI]
-        mov currentPlayerName[SI], AL
-        inc SI
-        inc DI
+    mov numberGotten, CX
+    mPrintNumberConverted
+    mWaitEnter
 
+    inc BX
+    lea SI, currentPlayerName
+    
+    setUsername:
+        mov AL, [BX]
+        mov [SI],  AL
+        inc BX
+        inc SI
         loop setUsername
     ret
 SetCurrentUserName ENDP

@@ -54,7 +54,8 @@ fileName2 DB 'niv2.aml', 0                      ;; Es necesario colocar 0 al fin
 fileName3 DB 'niv3.aml', 0
 filenameMemoryGraph DB 'docs/uml/README.md', 0
 
-fileTop10Personales DB 'reports/top10personal.txt'
+filePersonalTimeReport DB 'reports/PersonalTimeReport.txt'
+filePersonalScoreReport DB 'reports/PersonalScoreReport.txt'
 
 
 headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph', 0Dh, 0Ah, '{', '"dataSegment":', 0Dh, 0Ah, '['
@@ -148,8 +149,10 @@ hundredTime     DW 00h
 nameBuffer                  DB   102h dup (0ffh, '$')           ;; Guarda el nombre
 passwordBuffer              DB   102h dup (0ffh, '$')           ;; Guarda la contraseña
 
-nameMainAdmin               DB   '202112145'            
-passwordMainAdmin           DB   '3024465830102'
+; nameMainAdmin               DB   '202112145'            
+nameMainAdmin               DB   '2'            
+; passwordMainAdmin           DB   '3024465830102'
+passwordMainAdmin           DB   '3'
 
 ;---------------------------------------------------------
 ; Variables para el cronometro
