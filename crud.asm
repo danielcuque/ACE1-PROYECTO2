@@ -169,10 +169,6 @@ SetCurrentUserName PROC USES AX CX BX SI DI
 
     xor CX, CX
     mov CL, [BX]
-    
-    mov numberGotten, CX
-    mPrintNumberConverted
-    mWaitEnter
 
     inc BX
     lea SI, currentPlayerName

@@ -98,19 +98,17 @@ mLoginMenu macro
     start:
         call UserForm           ;; Tomamos los campos del usuario
         call CheckCredentials   ;; Comprobamos sus crendenciales
-        
+
         cmp DH, 00              ;; Si el procedure anterior devuelve 0, significa que están malas las credenciales
         je start
-
         mCheckUserCredentials   ;; Redirigimos hacia el menu que le corresponda
-        jmp exit
     end:
 endm
 
 mCheckUserCredentials macro
     mov BX, userLoggedAdress
-    add BX, 07h                 ;; Nos posicionamos en el campo de credenciales del jugador para ver que permisos tiene
-    xor AX, AX
+    add BX, 06h                 ;; Nos posicionamos en el campo de credenciales del jugador para ver que permisos tiene
+    xor AX, AX                  
     mov AL, [BX]
 
     cmp AL, 01
@@ -118,6 +116,8 @@ mCheckUserCredentials macro
 
     cmp AL, 02
     je adminUserMenu
+
+    mPrintMsg testStr
     jmp globalAdminMenu
 endm
 
