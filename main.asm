@@ -148,10 +148,8 @@ hundredTime     DW 00h
 nameBuffer                  DB   102h dup (0ffh, '$')           ;; Guarda el nombre
 passwordBuffer              DB   102h dup (0ffh, '$')           ;; Guarda la contraseña
 
-; nameMainAdmin               DB   '202112145'            ;; ----CAMBIAR
-nameMainAdmin               DB   'd'            ;; ----CAMBIAR
-; passwordMainAdmin           DB   '3024465830102'
-passwordMainAdmin           DB   'c'
+nameMainAdmin               DB   '202112145'            
+passwordMainAdmin           DB   '3024465830102'
 
 ;---------------------------------------------------------
 ; Variables para el cronometro
@@ -175,7 +173,7 @@ isBackMenu          DB 00                           ;; 00 = continuar | FF = vol
 
 currentPlayerName   DB 10h dup('$')                 ;; Nombre del jugador
 userLoggedAdress    DW 00h                          ;; Guarda la direccion de memoria del usuario actual
-currentBestScore    DW 00h         ;; Mostramos el mejor puntaje del jugador actual
+currentBestScore    DW 00h                          ;; Mostramos el mejor puntaje del jugador actual
 
 ;---------------------------------------------------------
 ; Variables para las palabras reservadas
@@ -287,6 +285,12 @@ start:
         menuProgram:
             mActiveTextMode
             mMainMenu
+        normalUserMenu:
+            mNormalUserMenu
+        adminUserMenu:
+            mAdminUserMenu
+        globalAdminMenu:
+            mMainAdminMenu
             mStartProgram
             jmp exit
     main ENDP

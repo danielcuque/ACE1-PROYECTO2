@@ -40,9 +40,6 @@ CheckCredentials PROC USES SI DI AX BX CX
         je endOfList
 
         mov userLoggedAdress, BX        ;; Se guarda la dirección del usuario, por si en dado caso se logra loguear
-        mov numberGotten, BX
-        mPrintNumberConverted
-        mWaitEnter
 
         add BX, 02h                     ;; Obtenemos la dirección de memoria de donde está el next user, pero debemos hacer [BX] para obtener el valor, es decir, solo guardamos el índice
         xor CX, CX
@@ -85,6 +82,7 @@ CheckCredentials PROC USES SI DI AX BX CX
         mPrintMsg newLineChar
         mPrintMsg successfulLoginMsg
         mWaitEnter
+        call SetCurrentUserName
         jmp endProc
 
     endOfList:
@@ -161,6 +159,27 @@ InsertNewGame PROC USES AX BX CX DX DI SI
     call GenerateMemoryGraph
     ret
 InsertNewGame ENDP
+
+SetCurrentUserName PROC USES AX CX BX SI DI
+    mov BX, userLoggedAdress
+    add BX, 08
+    xor CX, CX
+    mov CL, BL
+
+    mov DI, offset currentPlayerName
+    inc BX
+    mov SI, 0  
+    
+    mov DI, BX
+    setUsername:
+        mov AL, [DI]
+        mov currentPlayerName[SI], AL
+        inc SI
+        inc DI
+
+        loop setUsername
+    ret
+SetCurrentUserName ENDP
 
 
 ;---------------------------------------------------------
@@ -315,7 +334,7 @@ InsertMainAdmin PROC
         inc DI
         loop setMainAdminPassword
 
-    mov DL, 01
+    mov DL, 03
     mov DH, 01
 
     call InsertNewUser

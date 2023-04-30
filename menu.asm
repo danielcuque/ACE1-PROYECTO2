@@ -1,10 +1,23 @@
 ;; Metodos para manejar los menús
-NewUserForm PROC
+;---------------------------------------------------------
+; UserForm
+;
+; Descripción:
+; Genera la interrupción para poder cargar la información del usuario
+;
+; Recibe:
+; Descripción de los registros de entrada
+;
+; Retorna:
+; Descripción de los registros de salida
+;---------------------------------------------------------
+
+UserForm PROC
     mGetInputKeyboard nameBuffer, USERNAMEMSG
     mPrintMsg newLineChar
     mGetInputKeyboard passwordBuffer, PASSWORDMSG
     ret
-NewUserForm ENDP
+UserForm ENDP
 
 mMainMenu macro
     LOCAL start, newUser, endMainMenu
@@ -39,7 +52,7 @@ mMainMenu macro
         jmp endMainMenu
         
     newUser:
-        call NewUserForm
+        call UserForm
         mov DH, 00
         mov DL, 00
         call InsertNewUser
@@ -83,14 +96,33 @@ endm
 mLoginMenu macro
     LOCAL start, end
     start:
-        call NewUserForm
-        call CheckCredentials
-        cmp DH, 00
+        call UserForm           ;; Tomamos los campos del usuario
+        call CheckCredentials   ;; Comprobamos sus crendenciales
+        cmp DH, 00              ;; Si el procedure anterior devuelve 0, significa que están malas las credenciales
         je start
 
-        cmp DH, 01
-        je startProgram
-        
+        mCheckUserCredentials   ;; Redirigimos hacia el menu que le corresponda
         jmp exit
     end:
+endm
+
+mCheckUserCredentials macro
+    mov BX, userLoggedAdress
+    add BX, 07h                 ;; Nos posicionamos en el campo de credenciales del jugador para ver que permisos tiene
+    xor AX, AX
+    mov AL, [BX]
+
+    cmp AL, 01
+    je normalUserMenu
+
+    cmp AL, 02
+    je adminUserMenu
+    jmp globalAdminMenu
+endm
+
+mNormalUserMenu macro
+    
+endm
+mAdminUserMenu macro
+    
 endm
