@@ -56,8 +56,8 @@ mMainMenu macro
         mCheckUserCredentials   ;; Redirigimos hacia el menu que le corresponda
     newUser:
         call UserForm
-        mov DH, 00
-        mov DL, 00
+        mov DH, 00              ;; Estado
+        mov DL, 01              ;; Credenciales
         call InsertNewUser
         jmp startMainMenu
 
@@ -164,20 +164,20 @@ mNormalUserMenu macro
         je startProgram 
 
         cmp AL, 32                      ;; 32 = 2
-        je PersonalTimeReport 
+        je personalTimeReport 
 
         cmp AL, 32                      ;; 33 = 3
-        je PersonalScoreReport 
+        je personalScoreReport 
 
         cmp AL, 34                      ;; 34 = 4     
         je menuProgram
 
         jmp start
 
-        PersonalTimeReport:
+        personalTimeReport:
             call GeneratePersonalScoreReport
             jmp start
-        PersonalScoreReport:
+        personalScoreReport:
             jmp start
 
 endm
@@ -188,10 +188,6 @@ mAdminUserMenu macro
         mPrintMsg newLineChar
 
         mPrintMsg INICIARJUEGO
-
-        mPrintMsg INACTIVARUSUARIO
-
-        mPrintMsg APROBARUSUARIO
 
         mPrintNumberByDigits 6, 02H
         mPrintMsg TOP10TIEMPOSPERSONALES

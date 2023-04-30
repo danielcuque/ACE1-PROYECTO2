@@ -634,8 +634,13 @@ GeneratePersonalScoreReport PROC
     mWriteNumber simpleSeparatorText
 
     mCloseFile
-    errorWrite:
+    errorToOpen:
+        mPrintMsg errorOpenFile
+        mWaitEnter
+        jmp endRead
     errorToClose:
+        mPrintMsg errorCloseFile
+        mWaitEnter
     endProc:
     ret
 GeneratePersonalScoreReport ENDP

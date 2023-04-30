@@ -159,6 +159,7 @@ passwordMainAdmin           DB   '33'
 
 bufferPlayerName            DB 10h dup('$')                 ;; Nombre del jugador para mostrarlo durante la aprobación/desaprobación
 APPROVEOPTIONSMSG           DB '1 - Aprobar',0Dh, 0Ah,'2 - Siguiente',0Dh, 0Ah, '3 - Regresar',0Dh, 0Ah, '$'
+CREDENTIALESMSG             DB '1 - Usuario normal',0Dh, 0Ah, '2 - Usuario administrador', 0Dh, 0Ah, '$'
 
 
 ;---------------------------------------------------------

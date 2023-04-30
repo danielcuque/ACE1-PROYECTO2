@@ -52,13 +52,37 @@ ApproveNewUsers PROC USES DI SI AX BX CX DX
         
         changeUserState:
             mov AL, 01
-            mov [BX], AL
+            mov [BX], AL        
+            dec BX                  ;; Nos movemos hacia las credenciales del usuario
+            setCredentials:
+                mPrintMsg newLineChar
+                mPrintMsg CREDENTIALESMSG
+                xor AX, AX
 
+                mov AH, 10h
+                int 16h
+
+                cmp AL, 31h             ;; Tecla = 1
+                je changeToNormal
+
+                cmp AL, 32h             ;; Tecla = 2
+                je changeToAdmin
+
+                jmp setCredentials
+            changeToNormal:
+                mov AL, 01
+                mov [BX], AL
+                jmp skipUser
+            changeToAdmin:
+                mov AL, 01
+                mov [BX], AL
+            
         skipUser:
             mov BX, CX        
             jmp approveUsersLoop
 
     endProc:
+    call GenerateMemoryGraph
     ret
 ApproveNewUsers ENDP
 
@@ -84,20 +108,16 @@ PrintUserName PROC USES AX BX CX DI SI
     inc BX              ;; Nos posicionamos en el tamaño del nombre
     mov CL, [BX]        ;; Movemos el tamaño del nombre a CL
     
-    mov numberGotten, CX
-    mPrintNumberConverted
-    mWaitEnter
-    
     inc BX              ;; Nos colocamos en el primer caracter del nombre
 
     lea SI, offset bufferPlayerName
-    ; fillBuffer:
-    ;     mov AL, [BX]            ;; Copiamos el caracter en AL
-    ;     mov [SI], AL            ;; Movemos ese caracter al buffer
+    fillBuffer:
+        mov AL, [BX]            ;; Copiamos el caracter en AL
+        mov [SI], AL            ;; Movemos ese caracter al buffer
 
-    ;     inc BX                  ;; Incrementamos las posiciones del buffer y de la infor del usuario
-    ;     inc SI
-    ;     loop fillBuffer
+        inc BX                  ;; Incrementamos las posiciones del buffer y de la infor del usuario
+        inc SI
+        loop fillBuffer
         
     mPrintMsg newLineChar
     mPrintMsg USERMSG
