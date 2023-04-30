@@ -93,18 +93,18 @@ mStartGame macro fileName
 		continueSequence:
 
 		cmp healthAceman, 0h			;; Si se le acabaron las vidas a Aceman, termina el juego
-		je menuProgram
+		je backToMenu
 
 		cmp isBackMenu, 00
 		jne backToMenu
 
 		jmp continueGame
-	endGameSuccess:
-		call InsertNewGame
-		jmp endMacro
 	backToMenu:
+		call InsertNewGame
 		mActiveTextMode
 		mCheckUserCredentials
+	endGameSuccess:
+		call InsertNewGame
 	endMacro:
 
 endm

@@ -112,8 +112,10 @@ mMainAdminMenu macro
             call ApproveNewUsers
             jmp start
         globalTimeReport:
+            call GenerateGlobalTimeReport
             jmp start
         globalScoreReport:
+            call GenerateGlobalScoreReport
             jmp start
         endMainAdminMenu:
             jmp start
@@ -175,9 +177,10 @@ mNormalUserMenu macro
         jmp start
 
         personalTimeReport:
-            call GeneratePersonalScoreReport
+            call GeneratePersonalTimeReport
             jmp start
         personalScoreReport:
+            call GeneratePersonalScoreReport
             jmp start
 
 endm

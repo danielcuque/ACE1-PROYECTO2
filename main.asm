@@ -17,7 +17,7 @@ testStr db 'testeando $'
 ; Variables de propósito general, 
 ; o que no van a ser de utilidad en otra parte del codigo
 ; ------------------------------------------------------------
-infoMsg             DB 'Universidad de San Carlos de Guatemala', 0Dh, 0Ah,'Facultad de Ingenieria', 0Dh, 0Ah,'Escuela de Ciencias y Sistemas', 0Dh, 0Ah,'Arquitectura de computadores y ensambladores 1', 0Dh, 0Ah,'Seccion B', 0Dh, 0Ah,'Daniel Estuardo Cuque Ruiz' , 0Dh, 0Ah,'202112145', 0Dh, 0Ah, '$'
+infoMsg             DB 'Universidad de San Carlos de Guatemala', 0Dh, 0Ah,'Facultad de Ingenieria', 0Dh, 0Ah,'Escuela de Ciencias y Sistemas', 0Dh, 0Ah,'Arquitectura de computadores y ensambladores 1', 0Dh, 0Ah,'Seccion B', 0Dh, 0Ah,'Daniel Estuardo Cuque Ruiz' , 0Dh, 0Ah,'202112145', '$'
 developerName       DB 'Daniel Cuque | 202112145$'
 colonChar           DB ':$'
 newLineChar         DB 0Ah, '$'
@@ -52,12 +52,12 @@ handleObject DW 0
 fileName1 DB 'niv1.aml', 0                  
 fileName2 DB 'niv2.aml', 0                      ;; Es necesario colocar 0 al final
 fileName3 DB 'niv3.aml', 0
-filenameMemoryGraph DB 'docs/uml/README.md', 0
+filenameMemoryGraph     DB 'docs/uml/README.md', 0
 
-filePersonalTimeReport DB 'reports/PersonalTimeReport.txt'
-filePersonalScoreReport DB 'reports/PersonalScoreReport.txt'
-fileGlobalScoreReport DB 'reports/GlobalScoreReport.txt'
-fileGlobalTimeReport DB 'reports/GlobalTimeReport.txt'
+filePersonalTimeReport  DB 'reports/TIEMPOPR.txt', 0
+filePersonalScoreReport DB 'reports/PUNTPR.txt', 0
+fileGlobalScoreReport   DB 'reports/TIEMPOSGL.txt', 0
+fileGlobalTimeReport    DB 'reports/PUNTGL.txt', 0
 
 
 headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph', 0Dh, 0Ah, '{', '"dataSegment":', 0Dh, 0Ah, '['
@@ -73,8 +73,8 @@ counterToGetIndexGotten DW 0
 ;---------------------------------------------------------
 ; Variables para los reportes
 ;---------------------------------------------------------
-simpleSeparatorText       DB 15h dup('-')
-doubleSeparatorText       DB 15h dup('=')
+simpleSeparatorText       DB 32h dup('-')
+doubleSeparatorText       DB 32h dup('=')
 TIPOKW                    DB 'Tipo:'
 SENTIDOKW                 DB 'Sentido:'
 FECHAKW                   DB 'Fecha:'

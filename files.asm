@@ -8,6 +8,14 @@ mOpenFileToWrite macro filename
     mov handleObject, AX    ;; Guardamos el handle en la variable
 endm
 
+mReportHeader macro
+    mWriteNumberWithoutDoubleQuote simpleSeparatorText
+    mWriteNumberWithoutDoubleQuote infoMsg
+    mWriteNumberWithoutDoubleQuote simpleSeparatorText
+    mWriteNumberWithoutDoubleQuote developerName
+    mWriteNumberWithoutDoubleQuote simpleSeparatorText
+endm
+
 mWriteSimpleText macro bufferWithText
     push AX
     push BX
@@ -61,6 +69,32 @@ mWriteNumber macro bufferWithText
     int 21h
     mWriteSimpleText DOUBLEQUOTE 
     mWriteSimpleText COMMA
+
+    ;; Colocamos un salto de linea 
+    mov AH, 40h                     ;; Función de escritura de archivo
+    mov BX, handleObject            ;; Handle del archivo
+    lea DX, NEWLINE                 ;; Texto a escribir
+    mov CX, sizeof NEWLINE          ;; Cantidad de bytes a escribir
+    int 21h    
+     
+    pop DX
+    pop CX
+    pop BX
+    pop AX
+endm
+
+mWriteNumberWithoutDoubleQuote macro bufferWithText
+    push AX
+    push BX
+    push CX
+    push DX
+
+    mov AH, 40h                     ;; Función de escritura de archivo
+    mov BX, handleObject            ;; Handle del archivo
+    lea DX, bufferWithText          ;; Texto a escribir
+    mov CX, sizeof bufferWithText   ;; Cantidad de bytes a escribir
+    dec CX
+    int 21h
 
     ;; Colocamos un salto de linea 
     mov AH, 40h                     ;; Función de escritura de archivo
@@ -605,9 +639,8 @@ GenerateMemoryGraph PROC
     mOpenFileToWrite filenameMemoryGraph        ;; Creamos el archivo
     mWriteSimpleText headerMemoryGraph          ;; Escribimos los encabezados para visualizar el manejo de memoria
 
-    ;; TODO: Recorrer memoria
     lea SI, dataSegment
-    mov BX, [SI]                  ;; Colocamos el puntero del inicio del usuario en BX
+    mov BX, [SI]                                ;; Colocamos el puntero del inicio del usuario en BX
     call TraverseDataSegment
 
     mWriteSimpleText footerMemoryGraph          ;; Colocamos el footer para cerrar el archivo uml
@@ -616,6 +649,7 @@ GenerateMemoryGraph PROC
     errorWrite:
         mPrintMsg errorWriteFile
         mWaitEnter
+        jmp endProc
     errorToClose:
         mPrintMsg errorCloseFile
         mWaitEnter
@@ -624,23 +658,79 @@ GenerateMemoryGraph PROC
 GenerateMemoryGraph ENDP
 
 
-GeneratePersonalScoreReport PROC
+GeneratePersonalTimeReport PROC
     mOpenFileToWrite filePersonalTimeReport
 
-    mWriteNumber simpleSeparatorText
-    mWriteNumber infoMsg
-    mWriteNumber simpleSeparatorText
-    mWriteNumber developerName
-    mWriteNumber simpleSeparatorText
+    mReportHeader
 
     mCloseFile
-    errorToOpen:
-        mPrintMsg errorOpenFile
+    jmp endProc
+    
+    errorWrite:
+        call PrintCarryFlag
+        mPrintMsg errorWriteFile
         mWaitEnter
-        jmp endRead
+        jmp endProc
+    errorToClose:
+        mPrintMsg errorCloseFile
+        mWaitEnter
+    endProc:
+    ret
+GeneratePersonalTimeReport ENDP
+
+GeneratePersonalScoreReport PROC
+    mOpenFileToWrite filePersonalScoreReport
+
+    mCloseFile
+    errorWrite:
+        call PrintCarryFlag
+        mPrintMsg errorWriteFile
+        mWaitEnter
+        jmp endProc
     errorToClose:
         mPrintMsg errorCloseFile
         mWaitEnter
     endProc:
     ret
 GeneratePersonalScoreReport ENDP
+
+GenerateGlobalScoreReport PROC
+    mOpenFileToWrite fileGlobalScoreReport
+
+    mReportHeader
+
+    mCloseFile
+    jmp endProc
+    
+    errorWrite:
+        call PrintCarryFlag
+        mPrintMsg errorWriteFile
+        mWaitEnter
+        jmp endProc
+    errorToClose:
+        mPrintMsg errorCloseFile
+        mWaitEnter
+    endProc:
+    ret
+GenerateGlobalScoreReport ENDP
+
+GenerateGlobalTimeReport PROC
+    mOpenFileToWrite fileGlobalTimeReport
+
+    mReportHeader
+
+    mCloseFile
+    jmp endProc
+    
+    errorWrite:
+        call PrintCarryFlag
+        mPrintMsg errorWriteFile
+        mWaitEnter
+        jmp endProc
+    errorToClose:
+        mPrintMsg errorCloseFile
+        mWaitEnter
+    endProc:
+    ret
+GenerateGlobalTimeReport ENDP
+
