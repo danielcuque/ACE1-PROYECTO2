@@ -56,6 +56,8 @@ filenameMemoryGraph DB 'docs/uml/README.md', 0
 
 filePersonalTimeReport DB 'reports/PersonalTimeReport.txt'
 filePersonalScoreReport DB 'reports/PersonalScoreReport.txt'
+fileGlobalScoreReport DB 'reports/GlobalScoreReport.txt'
+fileGlobalTimeReport DB 'reports/GlobalTimeReport.txt'
 
 
 headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph', 0Dh, 0Ah, '{', '"dataSegment":', 0Dh, 0Ah, '['
@@ -125,6 +127,7 @@ INICIARSESION             DB '1. Iniciar sesi',0A2h,'n',0Dh, 0Ah,'$'
 USERNAMEMSG               DB 'Ingresar nombre: $ '                  
 PASSWORDMSG               DB 'Ingresar contrase',0A4h,'a: $'
 NEWUSERMSG                DB 'F5 para solicitar nuevo usuario',0Dh, 0Ah,'$'
+USERMSG                   DB 'Usuario: $'
 
 
 ;---------------------------------------------------------
@@ -153,6 +156,10 @@ passwordBuffer              DB   102h dup (0ffh, '$')           ;; Guarda la con
 nameMainAdmin               DB   '22'            
 ; passwordMainAdmin           DB   '3024465830102'
 passwordMainAdmin           DB   '33'
+
+bufferPlayerName            DB 10h dup('$')                 ;; Nombre del jugador para mostrarlo durante la aprobación/desaprobación
+APPROVEOPTIONSMSG           DB '1 - Aprobar',0Dh, 0Ah,'2 - Siguiente',0Dh, 0Ah, '3 - Regresar',0Dh, 0Ah, '$'
+
 
 ;---------------------------------------------------------
 ; Variables para el cronometro

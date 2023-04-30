@@ -1,5 +1,4 @@
 ;; En este archivo se manejará todo el crud con los usuarios
-
 ;---------------------------------------------------------
 ; ApproveNewUsers
 ;
@@ -13,10 +12,99 @@
 ; -
 ;---------------------------------------------------------
 
-ApproveNewUsers PROC
-    
+ApproveNewUsers PROC USES DI SI AX BX CX DX
+    mov SI, offset dataSegment
+    mov BX, [SI]
+   
+    approveUsersLoop:
+        cmp BX, 00
+        je endProc
+        
+        add BX, 02h
+        xor CX, CX
+        mov CX, [BX]                ;; Guardamos el proximo usuario
+
+        add BX, 05h
+
+        xor DX, DX
+        mov DL, [BX]                ;; Guardamos en DL el estado del usuario
+        cmp DL, 00                  ;; 00 = inactivo, 01 = activo
+        jne skipUser
+
+        getNewState:   
+            call PrintUserName
+            mPrintMsg APPROVEOPTIONSMSG
+            xor AX, AX
+
+            mov AH, 10h
+            int 16h
+
+            cmp AL, 31h             ;; Tecla = 1
+            je changeUserState
+
+            cmp AL, 32h             ;; Tecla = 2
+            je skipUser
+
+            cmp AL, 33h             ;; Tecla = 3
+            je endProc
+
+            jmp getNewState
+        
+        changeUserState:
+            mov AL, 01
+            mov [BX], AL
+
+        skipUser:
+            mov BX, CX        
+            jmp approveUsersLoop
+
+    endProc:
     ret
 ApproveNewUsers ENDP
+
+;---------------------------------------------------------
+; PrintUserName
+;
+; Descripción:
+; Muestra en pantalla el nombre del usuario 
+;
+; Recibe:
+; BX -> Dirección en memoria del usuario posicionado en 
+;
+; Retorna:
+; -
+;---------------------------------------------------------
+
+PrintUserName PROC USES AX BX CX DI SI
+    xor CX, CX
+    xor AX, AX
+
+    mResetVarWithDollarSign bufferPlayerName        ;; Reiniciamos el buffer
+
+    inc BX              ;; Nos posicionamos en el tamaño del nombre
+    mov CL, [BX]        ;; Movemos el tamaño del nombre a CL
+    
+    mov numberGotten, CX
+    mPrintNumberConverted
+    mWaitEnter
+    
+    inc BX              ;; Nos colocamos en el primer caracter del nombre
+
+    lea SI, offset bufferPlayerName
+    ; fillBuffer:
+    ;     mov AL, [BX]            ;; Copiamos el caracter en AL
+    ;     mov [SI], AL            ;; Movemos ese caracter al buffer
+
+    ;     inc BX                  ;; Incrementamos las posiciones del buffer y de la infor del usuario
+    ;     inc SI
+    ;     loop fillBuffer
+        
+    mPrintMsg newLineChar
+    mPrintMsg USERMSG
+    mPrintMsg bufferPlayerName ;; Mostramos el nombre
+    mPrintMsg newLineChar
+    ret
+PrintUserName ENDP
 
 ;---------------------------------------------------------
 ; CheckCredentials
@@ -47,8 +135,6 @@ CheckCredentials PROC USES SI DI AX BX CX
 
         add BX, 06h                     ;; Nos posicionamos en el tamaño del username a analizar
         
-        
-
         mov DI, BX
 
         mov SI, offset nameBuffer

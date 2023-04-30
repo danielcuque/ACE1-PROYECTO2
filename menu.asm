@@ -90,10 +90,33 @@ mMainAdminMenu macro
         cmp AL, 31                      ;; 31 = 1
         je startProgram 
 
-        cmp AL, 36                      ;; 32 = 6     
-        je menuProgram
+        cmp AL, 32h
+        je toInactiveUsers               ;; 2
 
+        cmp AL, 33h                      ;; 3
+        je toActiveUsers
+
+        cmp AL, 34h                      ;; 4
+        je globalTimeReport
+
+        cmp AL, 35h                      ;; 5
+        je globalScoreReport
+
+        cmp AL, 36                       ;; 32 = 6     
+        je menuProgram
         jmp start
+
+        toInactiveUsers:
+            jmp start
+        toActiveUsers:
+            call ApproveNewUsers
+            jmp start
+        globalTimeReport:
+            jmp start
+        globalScoreReport:
+            jmp start
+        endMainAdminMenu:
+            jmp start
 endm
 
 mLoginMenu macro
@@ -141,20 +164,20 @@ mNormalUserMenu macro
         je startProgram 
 
         cmp AL, 32                      ;; 32 = 2
-        je top10PersonalTimeReport 
+        je PersonalTimeReport 
 
         cmp AL, 32                      ;; 33 = 3
-        je top10PersonalScoreReport 
+        je PersonalScoreReport 
 
         cmp AL, 34                      ;; 34 = 4     
         je menuProgram
 
         jmp start
 
-        top10PersonalTimeReport:
+        PersonalTimeReport:
             call GeneratePersonalScoreReport
             jmp start
-        top10PersonalScoreReport:
+        PersonalScoreReport:
             jmp start
 
 endm
@@ -169,6 +192,12 @@ mAdminUserMenu macro
         mPrintMsg INACTIVARUSUARIO
 
         mPrintMsg APROBARUSUARIO
+
+        mPrintNumberByDigits 6, 02H
+        mPrintMsg TOP10TIEMPOSPERSONALES
+
+        mPrintNumberByDigits 6, 03H
+        mPrintMsg TOP10PUNTEOPERSONAL
 
         mPrintNumberByDigits 6, 04H
         mPrintMsg TOP10TIEMPOSGLOBALES
@@ -185,8 +214,8 @@ mAdminUserMenu macro
         cmp AL, 31                      ;; 31 = 1
         je startProgram 
 
-        cmp AL, 36                      ;; 32 = 6     
+        cmp AL, 36h                     ;; 32 = 6     
         je menuProgram
-
         jmp start
+    
 endm
