@@ -113,7 +113,6 @@ mCheckUserCredentials macro
     cmp AL, 02
     je adminUserMenu
 
-    mPrintMsg testStr
     jmp globalAdminMenu
 endm
 

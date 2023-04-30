@@ -49,7 +49,7 @@ PrintHealthAceman ENDP
 ;---------------------------------------------------------
 
 mStartGame macro fileName
-	LOCAL continueGame, continueSequence, endGameSuccess, gameOver
+	LOCAL continueGame, continueSequence, endGameSuccess, gameOver, endMacro, backToMenu
     mResetVars
     mov DX, offset fileName			;; Leemos el nivel 1 del juego
     call ReadFile
@@ -96,11 +96,17 @@ mStartGame macro fileName
 		je menuProgram
 
 		cmp isBackMenu, 00
-		jne menuProgram
+		jne backToMenu
 
 		jmp continueGame
 	endGameSuccess:
 		call InsertNewGame
+		jmp endMacro
+	backToMenu:
+		mActiveTextMode
+		mCheckUserCredentials
+	endMacro:
+
 endm
 
 PrintBestScore PROC USES AX BX CX DX
@@ -355,8 +361,6 @@ GetMapObject ENDP
 
 mVerifyGhostAcemanPosition macro ghostX, ghostY, initialGhostPositionX, initialGhostPositionY
 	LOCAL endVerification, changeAcemanHealth, changePoints
-	; mPrintMsg testStr
-	; mWaitEnter
 
 	push AX
 	push BX
