@@ -105,6 +105,8 @@ TIME                DB '"time":'
 SCORE               DB '"score":'
 LEVEL               DB '"level":'
 NEXTGAMES           DB '"nextGames":'
+CENTESIMAS          DB '"centesimas de s",'
+UNIDADT             DB '"timeUnit":'
 
 oneCharBuffer DB 0
 ;---------------------------------------------------------

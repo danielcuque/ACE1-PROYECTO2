@@ -40,6 +40,9 @@ CheckCredentials PROC USES SI DI AX BX CX
         je endOfList
 
         mov userLoggedAdress, BX        ;; Se guarda la dirección del usuario, por si en dado caso se logra loguear
+        mov numberGotten, BX
+        mPrintNumberConverted
+        mWaitEnter
 
         add BX, 02h                     ;; Obtenemos la dirección de memoria de donde está el next user, pero debemos hacer [BX] para obtener el valor, es decir, solo guardamos el índice
         xor CX, CX
@@ -149,7 +152,7 @@ InsertNewGame PROC USES AX BX CX DX DI SI
     mov [SI], AL
 
     inc SI
-    mov BX, userLoggedAdress                 ;; 
+    mov BX, userLoggedAdress                 ;; Guardamos la dirección de memoria del usuario al que pertenece el juego
     mov [SI], BX
 
     add SI, 02h

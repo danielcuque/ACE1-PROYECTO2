@@ -516,8 +516,6 @@ TraverseDataSegment PROC
     mWriteSimpleText USERS
     mWriteSimpleText LSBRACE
 
-    ;; TODO: Recorrer siguientes usuarios
-
     push BX
         mov BX, SI                          ;; Movemos la dirección de memoria del proximo usuario para que se genere su gráfica, recursivamente
         call TraverseDataSegment            ;; LLamamos de manera recursiva para ingresar usuarios
@@ -560,15 +558,18 @@ TraverseGames PROC USES DI SI
     mWriteSimpleText SCORE
     call Write16BitsNumberInFile        ;; Escribimos el puntaje
 
+    mWriteSimpleText UNIDADT
+    mWriteSimpleText CENTESIMAS
+
     add BX, 02
     mWriteSimpleText TIME               ;; Escribimos el tiempo en centesimas de segundo
     call Write16BitsNumberInFile
 
-    add BX, 01
+    add BX, 02
     mWriteSimpleText LEVEL
     call Write8BitsNumberInFile         ;; Escribimos el numero del nivel que se jugó
 
-    add BX, 02h
+    add BX, 01h
     mWriteSimpleText USERADDRESS        ;; Escribimos la dirección de memoria del usuario al que pertenece el juego
     call Write16BitsNumberInFile
 
