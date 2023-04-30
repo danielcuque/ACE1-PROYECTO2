@@ -459,6 +459,7 @@ TraverseDataSegment PROC
 
     mWriteSimpleText NAMESTR        ;; Escribimos el nombre
     mWriteSimpleText DOUBLEQUOTE
+    push DI
     saveUsername:   
             mov DI, BX
             mov AL, [DI]
@@ -467,6 +468,7 @@ TraverseDataSegment PROC
 
             inc BX
             loop saveUsername
+    pop DI
 
     mWriteSimpleText DOUBLEQUOTE
     mWriteSimpleText COMMA
@@ -482,6 +484,8 @@ TraverseDataSegment PROC
 
     mWriteSimpleText PASSWORDSTR    ;; Cadena de la contraseña
     mWriteSimpleText DOUBLEQUOTE
+
+    push DI
     savePassword:   
             mov DI, BX
             mov AL, [DI]
@@ -490,6 +494,7 @@ TraverseDataSegment PROC
 
             inc BX
             loop savePassword
+    pop DI
             
     mWriteSimpleText DOUBLEQUOTE
     mWriteSimpleText COMMA
@@ -499,6 +504,10 @@ TraverseDataSegment PROC
     mWriteSimpleText LSBRACE
 
     ;; TODO: Recorrer juegos
+    push BX
+        mov BX, DI
+        call TraverseGames
+    pop BX
 
     mWriteSimpleText RSBRACE
     mWriteSimpleText COMMA
@@ -528,13 +537,52 @@ TraverseDataSegment ENDP
 ; Grafica los juegos de un jugador
 ;
 ; Recibe:
-; Dirección de memoria del jugador
+; BX -> Dirección de memoria del primer juego
 ;
 ; Retorna:
 ; -
 ;---------------------------------------------------------
-TraverseGames PROC
-    
+TraverseGames PROC USES DI SI
+    cmp BX, 00
+    je endTraverse
+
+    mWriteSimpleText LBRACE             ;; Escribimos {
+    mWriteSimpleText MEMADDRESS         ;; Escribimos la dirección de memoria de la información del juego
+
+    call Write16BitsNumberInFile        ;; Escribimos dicha información
+
+    add BX, 02h
+    mWriteSimpleText USERADDRESS        ;; Escribimos la dirección de memoria del usuario al que pertenece el juego
+    call Write16BitsNumberInFile
+
+    add BX, 02h
+    mov SI, [BX]                        ;; Guardamos la dirección de memoria del proximo juego
+    mWriteSimpleText NEXTGAME
+    call Write16BitsNumberInFile
+
+    add BX, 02
+    mWriteSimpleText TIME               ;; Escribimos el tiempo en centesimas de segundo
+    call Write16BitsNumberInFile
+
+    add BX, 02h
+    mWriteSimpleText SCORE
+    call Write16BitsNumberInFile        ;; Escribimos el puntaje
+
+    add BX, 01
+    mWriteSimpleText LEVEL
+    call Write8BitsNumberInFile         ;; Escribimos el numero del nivel que se jugó
+
+    mWriteSimpleText NEXTGAME           ;; Escribimos los juegos siguientes
+    mWriteSimpleText LSBRACE            ;; Escribimos [
+
+    push BX
+        mov BX, SI
+        call TraverseGames
+    pop BX
+    mWriteSimpleText RSBRACE            ;; Escribimos ]
+    mWriteSimpleText RBRACE
+
+    endTraverse:
     ret
 TraverseGames ENDP
 

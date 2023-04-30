@@ -94,7 +94,7 @@ CheckCredentials PROC USES SI DI AX BX CX
 CheckCredentials ENDP
 
 ;---------------------------------------------------------
-; InsertNewGam
+; InsertNewGame
 ;
 ; Descripción:
 ; Toma la dirección del usuario logueado, y en base a eso, se inserta el juego
