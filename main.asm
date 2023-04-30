@@ -271,6 +271,8 @@ mStartProgram macro
         mStartGame fileName1
         mStartGame fileName2
         mStartGame fileName3
+        mActiveTextMode             ;; Después de terminar los 3 niveles, se regresa al menu del usuario correspondiente
+        mCheckUserCredentials
     exit:
         mActiveTextMode
         mExit
