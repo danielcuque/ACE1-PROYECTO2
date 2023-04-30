@@ -572,3 +572,20 @@ GenerateMemoryGraph PROC
     endProc:
     ret
 GenerateMemoryGraph ENDP
+
+
+GenerateTop10Personal PROC
+    mOpenFileToWrite fileTop10Personales
+
+    mWriteNumber simpleSeparatorText
+    mWriteNumber infoMsg
+    mWriteNumber simpleSeparatorText
+    mWriteNumber developerName
+    mWriteNumber simpleSeparatorText
+
+    mCloseFile
+    errorWrite:
+    errorToClose:
+    endProc:
+    ret
+GenerateTop10Personal ENDP

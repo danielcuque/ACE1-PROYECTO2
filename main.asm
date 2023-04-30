@@ -49,9 +49,11 @@ handleObject DW 0
 fileName1 DB 'niv1.aml', 0                  
 fileName2 DB 'niv2.aml', 0                      ;; Es necesario colocar 0 al final
 fileName3 DB 'niv3.aml', 0
-
-;; ------- CAMBIAR POR .MD --------
 filenameMemoryGraph DB 'docs/uml/README.md', 0
+
+fileTop10Personales DB 'reports/top10personal.txt'
+
+
 headerMemoryGraph DB '````plantuml', 0Dh, 0Ah, '@startjson memoryGraph', 0Dh, 0Ah, '{', '"dataSegment":', 0Dh, 0Ah, '['
 footerMemoryGraph DB ']}', 0Dh, 0Ah, '@endjson', 0Dh, 0Ah,'````'
 

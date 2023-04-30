@@ -4,3 +4,4 @@ examples/
 *.json
 *.aml
 *.plantuml
+*.txt
