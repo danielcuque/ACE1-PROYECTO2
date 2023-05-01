@@ -8,12 +8,50 @@ mOpenFileToWrite macro filename
     mov handleObject, AX    ;; Guardamos el handle en la variable
 endm
 
-mReportHeader macro
+mHeaderReport macro
     mWriteNumberWithoutDoubleQuote simpleSeparatorText
     mWriteNumberWithoutDoubleQuote infoMsg
     mWriteNumberWithoutDoubleQuote simpleSeparatorText
     mWriteNumberWithoutDoubleQuote developerName
     mWriteNumberWithoutDoubleQuote simpleSeparatorText
+endm
+
+mDescriptionReport macro sort, direction, type
+    mWriteSimpleText TIPOKW                 ;; Tipo: <ordenamiento>
+    mWriteSimpleText sort                   ;; Tipo de ordenamiento
+
+    mWriteSimpleText TABULADORKW            ;; Sentido: < ^ v >
+    mWriteSimpleText SENTIDOKW
+    mWriteSimpleText direction
+
+    mWriteSimpleText NEWLINE
+
+    mWriteSimpleText FECHAKW                ;; Fecha: 
+    mWriteSimpleText FECHASTR
+
+    mWriteSimpleText TABULADORKW
+
+    mWriteSimpleText HORAKW                 ;; Hora
+    mWriteSimpleText HORASTR                 ;; Hora
+
+    mWriteSimpleText NEWLINE
+    mWriteSimpleText doubleSeparatorText
+    mWriteSimpleText NEWLINE
+
+    mWriteSimpleText RANKKW
+    mWriteSimpleText TABULADORKW
+
+    mWriteSimpleText PLAYERKW
+    mWriteSimpleText TABULADORKW
+
+    mWriteSimpleText NKW
+    mWriteSimpleText TABULADORKW
+
+    mWriteSimpleText type
+
+    mWriteSimpleText NEWLINE
+    mWriteSimpleText simpleSeparatorText
+    mWriteSimpleText NEWLINE
 endm
 
 mWriteSimpleText macro bufferWithText
@@ -661,7 +699,8 @@ GenerateMemoryGraph ENDP
 GeneratePersonalTimeReport PROC
     mOpenFileToWrite filePersonalTimeReport
 
-    mReportHeader
+    mHeaderReport
+
 
     mCloseFile
     jmp endProc
@@ -681,6 +720,8 @@ GeneratePersonalTimeReport ENDP
 GeneratePersonalScoreReport PROC
     mOpenFileToWrite filePersonalScoreReport
 
+    mHeaderReport
+
     mCloseFile
     errorWrite:
         call PrintCarryFlag
@@ -697,7 +738,8 @@ GeneratePersonalScoreReport ENDP
 GenerateGlobalScoreReport PROC
     mOpenFileToWrite fileGlobalScoreReport
 
-    mReportHeader
+    mHeaderReport
+    mDescriptionReport BUBBLESORTKW, ASCENDENTEKW, PUNTOSKW
 
     mCloseFile
     jmp endProc
@@ -717,7 +759,9 @@ GenerateGlobalScoreReport ENDP
 GenerateGlobalTimeReport PROC
     mOpenFileToWrite fileGlobalTimeReport
 
-    mReportHeader
+    mHeaderReport
+    ;;sort, direction, type
+    mDescriptionReport BUBBLESORTKW, ASCENDENTEKW, TIEMPOKW
 
     mCloseFile
     jmp endProc

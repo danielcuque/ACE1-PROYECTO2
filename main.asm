@@ -75,13 +75,30 @@ counterToGetIndexGotten DW 0
 ;---------------------------------------------------------
 simpleSeparatorText       DB 32h dup('-')
 doubleSeparatorText       DB 32h dup('=')
-TIPOKW                    DB 'Tipo:'
-SENTIDOKW                 DB 'Sentido:'
-FECHAKW                   DB 'Fecha:'
-HORAKW                    DB 'Hora:'
+TABULADORKW               DB 09
+TIPOKW                    DB 'Tipo: '
+SENTIDOKW                 DB 'Sentido: '
+FECHAKW                   DB 'Fecha: '
+HORAKW                    DB 'Hora: '
 RANKKW                    DB 'Rank'
 PLAYERKW                  DB 'Player'
 NKW                       DB 'N'
+
+;; Ordenamientos
+BUBBLESORTKW              DB 'Bubble'
+COCKTAILSORTKW            DB 'Cocktail'
+PRIMESORTKW               DB 'Prime'
+
+;; Sentidos
+ASCENDENTEKW              DB 'Ascendente'
+DESCENDENTEKW             DB 'Descendente'
+
+;; Metricas
+TIEMPOKW                  DB 'Tiempo'
+PUNTOSKW                  DB 'Puntos'
+
+FECHASTR                  DB 0Ah dup('0')
+HORASTR                   DB 08h dup('0')
 
 LBRACE              DB '{'
 RBRACE              DB '}'
