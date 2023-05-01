@@ -51,4 +51,3 @@ mGetInputKeyboard macro keyBoardBuffer, message
     pop AX
     pop DX
 endm
-

@@ -10,6 +10,111 @@
 ## Objetivo del proyecto
 El objetivo es implementar un juego similar a Pacman, en el cual se debe recolectar la mayor cantidad de puntos posibles, evitando a los enemigos que se mueven de forma aleatoria. El juego termina cuando se recolectan todos los puntos o cuando el jugador es alcanzado por un enemigo más de tres veces.
 
+## Indice
+1. [Sistema de usuarios](#sistema-de-usuarios)
+2. [Requerimientos](#requerimientos)
+3. [Descripción del juego](#descripción-del-juego)
+
+## Sistema de usuarios
+El juego cuenta con un sistema de usuarios, en el cual se puede registrar un usuario, y se puede iniciar sesión con un usuario existente. El sistema de usuarios permite guardar el puntaje de cada usuario, y permite mostrar el puntaje más alto de todos los usuarios. Asi como generar reportes
+
+## Menu de inicio de sesión
+Dentro del menu de inicio, habrán tres opciones
+- **Iniciar sesión**: Permite iniciar sesión con un usuario existente.
+- **Salir**: Permite salir de la aplicación.
+- **Registrarse**: Permite registrar un nuevo usuario.
+
+<img src= "./assets/u1.png" width="200">
+
+## Creación de usuario
+Para crear un usuario, es necesario ingresar el nombre de usuario, y la contraseña. 
+
+<img src= "./assets/u2.png" width="200">
+
+## Inicio de sesión
+Para iniciar sesión, es necesario que el usuario exista, que la contraseña sea correcta, y que su estado sea ACTIVO. 
+
+De lo contrario se mostrará el siguiente mensaje de error.
+
+<img src= "./assets/u3.png" width="200">
+
+Si el usuario existe, y la contraseña es correcta, se mostrará el siguiente mensaje de éxito.
+<img src= "./assets/u4.png" width="200">
+
+## Menú de administrador global
+El menú de administrador global permite realizar las siguientes acciones:
+- Iniciar juego
+- Inactivar usuario
+- Activar usuario
+- Generar reportes globales
+- Cerrar sesión
+
+<img src= "./assets/u5.png" width="200">
+
+El juego se detalla en la sección [Descripción del juego](#descripción-del-juego)
+
+## Inactivar usuario
+Para inactivar un usuario, es necesario ingresar el nombre de usuario del usuario que se desea inactivar. Si el usuario existe, y su estado es ACTIVO, se mostrará el siguiente mensaje de éxito.
+
+
+## Activar usuario
+Se muestra una lista de todos los usuarios, y se pueden realizar tres acciones:
+- Activar usuario
+- Siguiente
+- Regresar
+
+También se mostrará el nombre del usuario
+
+<img src= "./assets/u6.png" width="100">
+
+Si se activa un usuario, se solicitará establecer que tipo de usuario será, y se mostrará el siguiente mensaje de éxito.
+
+<img src= "./assets/u7.png" width="200">
+
+## Menu de usuario normal
+El menú de usuario normal permite realizar las siguientes acciones:
+- Iniciar juego
+- Generar reportes personales
+- Cerrar sesión
+
+<img src= "./assets/u8.png" width="200">
+
+## Menu de usuario administrador
+El menú de usuario administrador permite realizar las siguientes acciones:
+- Iniciar juego
+- Generar reportes tanto personales como globales
+- Cerrar sesión
+
+<img src= "./assets/u9.png" width="200">
+
+
+## Reportes
+Los reportes se pueden generar tanto para un usuario en específico, como para todos los usuarios. Los reportes se generan en formato .txt, y se guardan en la carpeta `reports` en la raíz del proyecto.
+
+Cuando se selecciona la opción de generar reportes, se muestra un menú con las siguientes opciones:
+
+### Tipo de ordenamiento
+Se puede seleccionar el tipo de ordenamiento que se desea utilizar para generar el reporte. Las opciones son:
+- Bubble sort
+- Cocktail sort
+- Prime sort
+
+<img src= "./assets/u11.png" width="200">
+
+### Métrica 
+Se puede seleccionar la métrica que se desea utilizar para generar el reporte. Las opciones son:
+- Puntaje
+- Tiempo
+
+<img src= "./assets/u10.png" width="200">
+
+### Dirección del ordenamiento
+Se puede seleccionar la dirección del ordenamiento que se desea utilizar para generar el reporte. Las opciones son:
+- Ascendente
+- Descendente
+
+<img src= "./assets/u12.png" width="200">
+
 ## Descripción del juego
 El juego consiste en un laberinto en el cual se encuentran distribuidos puntos y enemigos. El jugador debe recolectar todos los puntos para ganar. El jugador puede moverse en cuatro direcciones: arriba, abajo, izquierda y derecha. Los enemigos se mueven de forma aleatoria en el laberinto. El jugador puede perder si es alcanzado por un enemigo más de tres veces.
 
