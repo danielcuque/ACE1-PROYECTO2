@@ -54,6 +54,7 @@ ApproveNewUsers PROC USES DI SI AX BX CX DX
             mov AL, 01
             mov [BX], AL        
             dec BX                  ;; Nos movemos hacia las credenciales del usuario
+
             setCredentials:
                 mPrintMsg newLineChar
                 mPrintMsg CREDENTIALESMSG
@@ -69,12 +70,13 @@ ApproveNewUsers PROC USES DI SI AX BX CX DX
                 je changeToAdmin
 
                 jmp setCredentials
+
             changeToNormal:
                 mov AL, 01
                 mov [BX], AL
                 jmp skipUser
             changeToAdmin:
-                mov AL, 01
+                mov AL, 02
                 mov [BX], AL
             
         skipUser:

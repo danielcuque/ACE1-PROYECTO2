@@ -2,7 +2,7 @@
 @startjson memoryGraph
 {"dataSegment":
 [{"memoryAddress":"0006294",
-"nextUser":"0000000",
+"nextUser":"0006308",
 "firstGame":"0000000",
 "credentials":"0000003",
 "isUserActive":"0000001",
@@ -11,6 +11,16 @@
 "passwordSize":"0000002",
 "passwordStr":"33",
 "games":[],
-"users":[]}]}
+"users":[{"memoryAddress":"0006308",
+"nextUser":"0000000",
+"firstGame":"0000000",
+"credentials":"0000002",
+"isUserActive":"0000001",
+"nameSize":"0000001",
+"nameStr":"d",
+"passwordSize":"0000001",
+"passwordStr":"c",
+"games":[],
+"users":[]}]}]}
 @endjson
 ````
