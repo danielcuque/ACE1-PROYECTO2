@@ -100,6 +100,14 @@ PUNTOSKW                  DB 'Puntos'
 FECHASTR                  DB 0Ah dup('0')
 HORASTR                   DB 08h dup('0')
 
+metricaMsg                DB '1. Tiempo', 0Dh, 0Ah, '2. Puntaje',0Dh, 0Ah,'$'
+sortTypeMsg               DB '1. Bubble sort', 0Dh, 0Ah, '2. Cocktail sort', 0Dh, 0Ah, '3. Prime sort', 0Dh, 0Ah, '$'
+directionMsg              DB '1. Ascendente',0Dh, 0Ah,'2. Descendente',0Dh, 0Ah,'$'
+
+metricaValue DB 0
+sortTypeValue DB 0
+directionValue DB 0
+
 LBRACE              DB '{'
 RBRACE              DB '}'
 LSBRACE             DB '['

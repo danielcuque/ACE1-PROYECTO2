@@ -64,63 +64,6 @@ mMainMenu macro
     endMainMenu:
 endm
 
-mMainAdminMenu macro
-    LOCAL start
-    start:  
-        mPrintMsg newLineChar
-
-        mPrintMsg INICIARJUEGO
-
-        mPrintMsg INACTIVARUSUARIO
-
-        mPrintMsg APROBARUSUARIO
-
-        mPrintNumberByDigits 6, 04H
-        mPrintMsg TOP10TIEMPOSGLOBALES
-
-        mPrintNumberByDigits 6, 05H
-        mPrintMsg TOP10PUNTEOGLOBAL
-
-        mPrintNumberByDigits 6, 06H
-        mPrintMsg SALIR
-        
-        mov AH, 08h                     ;; Cargamos la interrupción para leer 1 caracter
-        int 21
-
-        cmp AL, 31                      ;; 31 = 1
-        je startProgram 
-
-        cmp AL, 32h
-        je toInactiveUsers               ;; 2
-
-        cmp AL, 33h                      ;; 3
-        je toActiveUsers
-
-        cmp AL, 34h                      ;; 4
-        je globalTimeReport
-
-        cmp AL, 35h                      ;; 5
-        je globalScoreReport
-
-        cmp AL, 36                       ;; 32 = 6     
-        je menuProgram
-        jmp start
-
-        toInactiveUsers:
-            jmp start
-        toActiveUsers:
-            call ApproveNewUsers
-            jmp start
-        globalTimeReport:
-            call GenerateGlobalTimeReport
-            jmp start
-        globalScoreReport:
-            call GenerateGlobalScoreReport
-            jmp start
-        endMainAdminMenu:
-            jmp start
-endm
-
 mLoginMenu macro
     call UserForm           ;; Tomamos los campos del usuario
     call CheckCredentials   ;; Comprobamos sus crendenciales
@@ -177,9 +120,11 @@ mNormalUserMenu macro
         jmp start
 
         personalTimeReport:
+            mReportMenu
             call GeneratePersonalTimeReport
             jmp start
         personalScoreReport:
+            mReportMenu
             call GeneratePersonalScoreReport
             jmp start
 
@@ -213,8 +158,137 @@ mAdminUserMenu macro
         cmp AL, 31                      ;; 31 = 1
         je startProgram 
 
+
         cmp AL, 36h                     ;; 32 = 6     
         je menuProgram
         jmp start
     
+endm
+
+mMainAdminMenu macro
+    LOCAL start
+    start:  
+        mPrintMsg newLineChar
+
+        mPrintMsg INICIARJUEGO
+
+        mPrintMsg INACTIVARUSUARIO
+
+        mPrintMsg APROBARUSUARIO
+
+        mPrintNumberByDigits 6, 04H
+        mPrintMsg TOP10TIEMPOSGLOBALES
+
+        mPrintNumberByDigits 6, 05H
+        mPrintMsg TOP10PUNTEOGLOBAL
+
+        mPrintNumberByDigits 6, 06H
+        mPrintMsg SALIR
+        
+        mov AH, 08h                     ;; Cargamos la interrupción para leer 1 caracter
+        int 21
+
+        cmp AL, 31                      ;; 31 = 1
+        je startProgram 
+
+        cmp AL, 32h
+        je toInactiveUsers               ;; 2
+
+        cmp AL, 33h                      ;; 3
+        je toActiveUsers
+
+        cmp AL, 34h                      ;; 4
+        je globalTimeReport
+
+        cmp AL, 35h                      ;; 5
+        je globalScoreReport
+
+        cmp AL, 36                       ;; 32 = 6     
+        je menuProgram
+        jmp start
+
+        toInactiveUsers:
+            jmp start
+        toActiveUsers:
+            call ApproveNewUsers
+            jmp start
+        globalTimeReport:
+            mReportMenu
+            call GenerateGlobalTimeReport
+            jmp start
+        globalScoreReport:
+            mReportMenu
+            call GenerateGlobalScoreReport
+            jmp start
+        endMainAdminMenu:
+            jmp start
+endm
+
+;---------------------------------------------------------
+; mReportMenu
+;
+; Descripción:
+; Establece los valores para realizar los ordenamientos
+;
+; Recibe:
+;
+; Retorna:
+; metricaValue, sortTypeValue, directionValue
+;---------------------------------------------------------
+
+mReportMenu macro
+    LOCAL metricaLoop, directionLoop, typeLoop, setMetric, setDirection, setType
+        metricaLoop:
+            mPrintMsg newLineChar
+            mPrintMsg metricaMsg
+            xor AX, AX
+            mov AH, 08h                     ;; Cargamos la interrupción para leer 1 caracter
+            int 21
+
+            cmp AL, 30
+            jb metricaLoop
+
+            cmp AL, 33                      ;; Menor a 3      
+            jb setMetric
+
+        setMetric:
+            sub AL, 30h                     ;; Restamos 30h para obtener el valor numerico del teclado
+            mov metricaValue, AL
+        
+        typeLoop:
+            mPrintMsg newLineChar
+            mPrintMsg sortTypeMsg
+            xor AX, AX
+            mov AH, 08h                     ;; Cargamos la interrupción para leer 1 caracter
+            int 21
+
+            cmp AL, 30
+            jb typeLoop
+
+            cmp AL, 34h                      ;; menor a 4
+            jb setType
+            jmp typeLoop
+
+        setType:
+            sub AL, 30h                     
+            mov sortTypeValue, AL
+        
+        directionLoop:
+            mPrintMsg newLineChar
+            mPrintMsg directionMsg
+
+            xor AX, AX
+            mov AH, 08h                     ;; Cargamos la interrupción para leer 1 caracter
+            int 21
+
+            cmp AL, 30
+            jb directionLoop
+
+            cmp AL, 33                      ;; Menor a 3
+            jb setDirection
+            
+            jmp directionLoop
+        setDirection:
+            sub AL, 30h
+            mov directionValue, AL
 endm
