@@ -282,7 +282,7 @@ cyanGhost_x                 DW      15h             ;; 21 decmal
 ; "level": "1"
 ; "userAddress": "000F"
 ; "nextGames": []
-
+memoryAddressArray DW 50h dup('$')
 prevPointer DW 0
 nextPointer DW 0                  ;; Apunta hacia donde tiene que insertar nuevamente el usuario. De inicio es la dirección 4415
 dataSegment DW 0                       

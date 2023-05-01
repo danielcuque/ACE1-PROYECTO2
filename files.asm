@@ -16,13 +16,14 @@ mHeaderReport macro
     mWriteNumberWithoutDoubleQuote simpleSeparatorText
 endm
 
-mDescriptionReport macro
+mDescriptionReport macro sort, direction, type
     mWriteSimpleText TIPOKW                 ;; Tipo: <ordenamiento>
-    ; mWriteSimpleText sort                   ;; Tipo de ordenamiento
+
+    mWriteSimpleText sort                   ;; Tipo de ordenamiento
 
     mWriteSimpleText TABULADORKW            ;; Sentido: < ^ v >
     mWriteSimpleText SENTIDOKW
-    ; mWriteSimpleText direction
+    mWriteSimpleText direction
 
     mWriteSimpleText NEWLINE
 
@@ -760,8 +761,7 @@ GenerateGlobalTimeReport PROC
     mOpenFileToWrite fileGlobalTimeReport
 
     mHeaderReport
-    ;;sort, direction, type
-    mDescriptionReport
+    mDescriptionReport BUBBLESORTKW, ASCENDENTEKW, TIEMPOKW
 
     mCloseFile
     jmp endProc

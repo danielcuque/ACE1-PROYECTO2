@@ -75,6 +75,7 @@ ApproveNewUsers PROC USES DI SI AX BX CX DX
                 mov AL, 01
                 mov [BX], AL
                 jmp skipUser
+                
             changeToAdmin:
                 mov AL, 02
                 mov [BX], AL

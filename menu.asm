@@ -131,7 +131,7 @@ mNormalUserMenu macro
 endm
 
 mAdminUserMenu macro
-    LOCAL start
+    LOCAL start,personalTimeReport, personalScoreReport, globalTimeReport, globalScoreReport
     start:  
         mPrintMsg newLineChar
 
@@ -158,11 +158,39 @@ mAdminUserMenu macro
         cmp AL, 31                      ;; 31 = 1
         je startProgram 
 
+        cmp AL, 32h
+        je personalTimeReport               ;; 2
+
+        cmp AL, 33h                      ;; 3
+        je personalScoreReport
+
+        cmp AL, 34h                      ;; 4
+        je globalTimeReport
+
+        cmp AL, 35h                      ;; 5
+        je globalScoreReport
 
         cmp AL, 36h                     ;; 32 = 6     
         je menuProgram
+        
         jmp start
-    
+
+        personalTimeReport:
+            mReportMenu
+            call GeneratePersonalTimeReport
+            jmp start
+        personalScoreReport:
+            mReportMenu
+            call GeneratePersonalScoreReport
+            jmp start
+        globalTimeReport:
+            mReportMenu
+            call GenerateGlobalScoreReport
+            jmp start
+        globalScoreReport:
+            mReportMenu
+            call GenerateGlobalTimeReport
+            jmp start
 endm
 
 mMainAdminMenu macro
