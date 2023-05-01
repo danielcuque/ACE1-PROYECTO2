@@ -11,6 +11,7 @@ El objetivo es implementar un juego similar a Pacman, en el cual se debe recolec
 
 # Indice
 1. [Directivas de ensamblador](#directivas-de-ensamblador)
+2. [Archivos utilizados en el programa](#filesasm)
 2. [Diagrama de memoria](#diagrama-de-memoria)
 
 ## Directivas de ensamblador
@@ -183,3 +184,36 @@ Este procedure se encarga de calcular el temporizador, recibe como parametro el 
 
 
 # Diagrama de memoria
+Para poder guardar a los usuarios, fue necesario utilizar dos puntero, una varible que inicialice el segmento de datos
+
+El esquema que se trabajó para representar los datos fue
+### **Campos de usuario**
+- memoryAddress: 2 bytes
+- nextUser: 2 bytes
+- firstGame: 2 bytes
+- credentials: 1 byte
+- isUserActive: 1 byte
+- nameSize: 1 byte
+- nameStr: n bytes
+- passwordSize: 1 byte
+- passwordStr: n bytes
+
+### **Campos de juego**
+- memoryAddress: 2 bytes
+- nextGame: 2 bytes
+- score: 2 bytes
+- time: 2 bytes
+- level: 1 byte
+- userAddress: 2 bytes
+
+Al iniciar el programa, la variable `nextPointer` y `dataSegment` están inicializadas en 0, cuando se inserta un usuario, se comprueba si `nextPointer` es diferente de 0, se trabaja con un offset hacia la variable dataSegment y se guarda el primer usuario.
+
+Al final de inserta un usuario, se guarda la proxima dirección libre a utilizar, para que cuando se inserte, ya sea un usuario o un juego, se pueda guardar en la siguiente dirección libre.
+
+Para poder guardar los juegos, se utiliza la misma lógica, se comprueba si `nextPointer` es diferente de 0, se trabaja con un offset hacia la variable dataSegment y se guarda el primer juego.
+
+Además, para poder guardar los juegos de un usuario, se utiliza la variable `firstGame`, que guarda la dirección del primer juego de un usuario, y se utiliza para poder recorrer la lista de juegos de un usuario.
+
+Para poder guardar el `nextUser` del usuario anterior, se coloca el valor en DI, se compara si es 0, de ser 0, entonces guarda la dirección del usuario actual en ese espacio de memoria, y se actualiza el puntero `nextPointer` con la dirección del usuario actual.
+
+![Diagrama](https://plantuml.gitlab-static.net/png/U9orqyjk0Y4K1k0zJz6mxeBR47MbQHiVm7HbN921MXg7CHpipVJT2qD7YuaBadROaF_CEV0jc4DGFhn0xsuwq_N-O-dL_XaTiLP1hSosCoxW6LeVSIuljFO60Cym8KGAoV0jmiwyXqSmVaod8gLFraDOgixaE7qfRhtHSQXLEpWLU2fOI3CMRR2lvnOwp8z3LlRpd4vFQKY7Ci8ePLGqATuhWBVUwzyDb1ULeOaJ9eHi9fnGCYYsSLwyqdeJzuTuaxI_mix02tP3P2MRLh9foTRNkFd7ajlM4NymbqJ6_vaeI-AzSjRiQfntbSuiAfqZgCB9AfsJqla0uQ2yxlz4klaQ5veRfzFZHjzmw1mG)
