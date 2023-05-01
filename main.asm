@@ -20,6 +20,8 @@ testStr db 'testeando $'
 infoMsg             DB 'Universidad de San Carlos de Guatemala', 0Dh, 0Ah,'Facultad de Ingenieria', 0Dh, 0Ah,'Escuela de Ciencias y Sistemas', 0Dh, 0Ah,'Arquitectura de computadores y ensambladores 1', 0Dh, 0Ah,'Seccion B', 0Dh, 0Ah,'Daniel Estuardo Cuque Ruiz' , 0Dh, 0Ah,'202112145', '$'
 developerName       DB 'Daniel Cuque | 202112145$'
 colonChar           DB ':$'
+COLONKW             DB ':'
+SLASHKW             DB '/'
 newLineChar         DB 0Ah, '$'
 errorOpenFile       DB 'Error al abrir el archivo$'
 errorReadLine       DB 'Error al leer la linea en $'
@@ -97,8 +99,6 @@ DESCENDENTEKW             DB 'Descendente'
 TIEMPOKW                  DB 'Tiempo'
 PUNTOSKW                  DB 'Puntos'
 
-FECHASTR                  DB 0Ah dup('0')
-HORASTR                   DB 08h dup('0')
 
 metricaMsg                DB '1. Tiempo', 0Dh, 0Ah, '2. Puntaje',0Dh, 0Ah,'$'
 sortTypeMsg               DB '1. Bubble sort', 0Dh, 0Ah, '2. Cocktail sort', 0Dh, 0Ah, '3. Prime sort', 0Dh, 0Ah, '$'
@@ -177,10 +177,10 @@ hundredTime     DW 00h
 nameBuffer                  DB   102h dup (0ffh, '$')           ;; Guarda el nombre
 passwordBuffer              DB   102h dup (0ffh, '$')           ;; Guarda la contraseña
 
-; nameMainAdmin               DB   '202112145'            
-nameMainAdmin               DB   '22'            
-; passwordMainAdmin           DB   '3024465830102'
-passwordMainAdmin           DB   '33'
+nameMainAdmin               DB   '202112145'            
+; nameMainAdmin               DB   '22'            
+passwordMainAdmin           DB   '3024465830102'
+; passwordMainAdmin           DB   '33'
 
 bufferPlayerName            DB 10h dup('$')                 ;; Nombre del jugador para mostrarlo durante la aprobación/desaprobación
 APPROVEOPTIONSMSG           DB '1 - Aprobar',0Dh, 0Ah,'2 - Siguiente',0Dh, 0Ah, '3 - Regresar',0Dh, 0Ah, '$'

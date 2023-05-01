@@ -8,6 +8,32 @@ mOpenFileToWrite macro filename
     mov handleObject, AX    ;; Guardamos el handle en la variable
 endm
 
+mWriteNumberWithoutDoubleQuote macro bufferWithText
+    push AX
+    push BX
+    push CX
+    push DX
+
+    mov AH, 40h                     ;; Función de escritura de archivo
+    mov BX, handleObject            ;; Handle del archivo
+    lea DX, bufferWithText          ;; Texto a escribir
+    mov CX, sizeof bufferWithText   ;; Cantidad de bytes a escribir
+    dec CX
+    int 21h
+
+    ;; Colocamos un salto de linea 
+    mov AH, 40h                     ;; Función de escritura de archivo
+    mov BX, handleObject            ;; Handle del archivo
+    lea DX, NEWLINE                 ;; Texto a escribir
+    mov CX, sizeof NEWLINE          ;; Cantidad de bytes a escribir
+    int 21h    
+     
+    pop DX
+    pop CX
+    pop BX
+    pop AX
+endm
+
 mHeaderReport macro
     mWriteNumberWithoutDoubleQuote simpleSeparatorText
     mWriteNumberWithoutDoubleQuote infoMsg
@@ -15,6 +41,7 @@ mHeaderReport macro
     mWriteNumberWithoutDoubleQuote developerName
     mWriteNumberWithoutDoubleQuote simpleSeparatorText
 endm
+
 
 mDescriptionReport macro sort, direction, type
     mWriteSimpleText TIPOKW                 ;; Tipo: <ordenamiento>
@@ -28,12 +55,12 @@ mDescriptionReport macro sort, direction, type
     mWriteSimpleText NEWLINE
 
     mWriteSimpleText FECHAKW                ;; Fecha: 
-    mWriteSimpleText FECHASTR
+    call WriteDate
 
     mWriteSimpleText TABULADORKW
 
     mWriteSimpleText HORAKW                  ;; Hora
-    mWriteSimpleText HORASTR                 ;; Hora
+    call WriteHour
 
     mWriteSimpleText NEWLINE
     mWriteSimpleText doubleSeparatorText
@@ -47,8 +74,10 @@ mDescriptionReport macro sort, direction, type
 
     mWriteSimpleText NKW
     mWriteSimpleText TABULADORKW
+    mWriteSimpleText TABULADORKW
+    mWriteSimpleText TABULADORKW
 
-    ; mWriteSimpleText type
+    mWriteSimpleText type
 
     mWriteSimpleText NEWLINE
     mWriteSimpleText simpleSeparatorText
@@ -108,32 +137,6 @@ mWriteNumber macro bufferWithText
     int 21h
     mWriteSimpleText DOUBLEQUOTE 
     mWriteSimpleText COMMA
-
-    ;; Colocamos un salto de linea 
-    mov AH, 40h                     ;; Función de escritura de archivo
-    mov BX, handleObject            ;; Handle del archivo
-    lea DX, NEWLINE                 ;; Texto a escribir
-    mov CX, sizeof NEWLINE          ;; Cantidad de bytes a escribir
-    int 21h    
-     
-    pop DX
-    pop CX
-    pop BX
-    pop AX
-endm
-
-mWriteNumberWithoutDoubleQuote macro bufferWithText
-    push AX
-    push BX
-    push CX
-    push DX
-
-    mov AH, 40h                     ;; Función de escritura de archivo
-    mov BX, handleObject            ;; Handle del archivo
-    lea DX, bufferWithText          ;; Texto a escribir
-    mov CX, sizeof bufferWithText   ;; Cantidad de bytes a escribir
-    dec CX
-    int 21h
 
     ;; Colocamos un salto de linea 
     mov AH, 40h                     ;; Función de escritura de archivo
@@ -701,6 +704,7 @@ GeneratePersonalTimeReport PROC
     mOpenFileToWrite filePersonalTimeReport
 
     mHeaderReport
+    mDescriptionReport BUBBLESORTKW, ASCENDENTEKW, PUNTOSKW
 
 
     mCloseFile
@@ -722,6 +726,7 @@ GeneratePersonalScoreReport PROC
     mOpenFileToWrite filePersonalScoreReport
 
     mHeaderReport
+    mDescriptionReport BUBBLESORTKW, ASCENDENTEKW, PUNTOSKW
 
     mCloseFile
     errorWrite:
@@ -740,7 +745,7 @@ GenerateGlobalScoreReport PROC
     mOpenFileToWrite fileGlobalScoreReport
 
     mHeaderReport
-    ; mDescriptionReport BUBBLESORTKW, ASCENDENTEKW, PUNTOSKW
+    mDescriptionReport BUBBLESORTKW, ASCENDENTEKW, PUNTOSKW
 
     mCloseFile
     jmp endProc
@@ -778,3 +783,74 @@ GenerateGlobalTimeReport PROC
     ret
 GenerateGlobalTimeReport ENDP
 
+WriteRecoveredStr PROC USES AX BX CX DX
+
+    xor AX, AX
+    mov AH, 40h                     ;; Función de escritura de archivo
+    mov BX, handleObject            ;; Handle del archivo
+    lea DX, recoveredStr            ;; Texto a escribir
+    add DX, 05
+    mov CX, 02h                     ;; Cantidad de bytes a escribir
+    int 21h
+
+    ret
+WriteRecoveredStr ENDP
+
+
+WriteHour PROC USES AX BX CX DX DI SI
+    mov AH, 2Ch
+    int 21h
+    ;; CH -> Hora
+    ;; CL -> Minutos 
+    ;; DH -> Segundos
+    ;; DL -> Milisegundos
+
+    mov numberGotten, 00
+    mov byte ptr numberGotten, CH       ;; Pasamos las horas a str
+    call NumToStr                       ;; Convertimos el numero a str
+
+    call WriteRecoveredStr
+    mWriteSimpleText COLONKW
+
+    mov numberGotten, 00
+    mov byte ptr numberGotten, CL   ;; Pasamos las horas a str
+    call NumToStr  
+
+    call WriteRecoveredStr   
+    mWriteSimpleText COLONKW
+
+    mov numberGotten, 00
+    mov byte ptr numberGotten, DH       ;; Pasamos las horas a str
+    call NumToStr  
+    call WriteRecoveredStr
+
+    ret
+WriteHour ENDP
+
+WriteDate PROC USES AX BX CX DX DI SI
+    mov AH, 2Ah
+    int 21h
+    ;; CX  year
+    ;; DH, DL  month, day
+    ;; AL  day of week (Sunday  0, Monday  1, etc.)
+
+    mov numberGotten, 00
+    mov byte ptr numberGotten, DL
+    call NumToStr
+    call WriteRecoveredStr              ;; Escribimos el día
+
+    mWriteSimpleText SLASHKW
+
+    mov numberGotten, 00
+    mov byte ptr numberGotten, DH
+    call NumToStr
+    call WriteRecoveredStr              ;; Escribimos el mes
+
+    mWriteSimpleText SLASHKW
+
+    mov numberGotten, CX
+    call NumToStr 
+    call WriteRecoveredStr              ;; Escribimos el año
+    
+    ret
+WriteDate ENDP
